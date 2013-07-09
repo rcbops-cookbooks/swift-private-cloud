@@ -1,0 +1,180 @@
+@version: 3.3
+
+#######################################
+# Sources
+#######################################
+# SWIFT SOURCE
+source s_swift {
+       syslog(flags("no-multi-line"));
+       unix-stream("/dev/log" flags("no-multi-line"));
+       #unix-dgram("/dev/log" flags("no-multi-line"));
+       file("/proc/kmsg" program_override("kernel: "));
+};
+
+
+#######################################
+# Destinations
+#######################################
+# SWIFT LOGGING 
+#
+# Proxy 
+destination d_healthchk { file("/var/log/swift/healthchk.log"); };
+destination d_local0 { file("/var/log/swift/proxy.log"); };
+destination d_local0_err { file("/var/log/swift/proxy.error"); };
+#destination d_local0_hourly { file("/var/log/swift/hourly/$YEAR$MONTH$DAY$HOUR"); };
+# Object, Container, Account
+destination d_local1 { file("/var/log/swift/storage.log"); };
+destination d_local1_err { file("/var/log/swift/storage.error"); };
+destination d_local2 { file("/var/log/swift/jobs.log"); };
+destination d_local2_err { file("/var/log/swift/jobs.error"); };
+# Swift Drive Audits
+destination d_local3 { file("/var/log/swift/drive-audit.log"); };
+destination d_local3_err { file("/var/log/swift/drive-audit.error"); };
+# python-slogging for log-processor 
+destination d_local4 { file("/var/log/swift/swift-log-processor.log"); };
+destination d_local4_err { file("/var/log/swift/swift-log-processor.error"); };
+
+# Remote Syslog-ng Server
+destination d_remote { 
+  tcp("<%= @remote_syslog_ip %>" port(514) log_fifo_size(1000) );
+};
+
+
+#######################################
+# Filters
+#######################################
+# SWIFT LOGGING FILTERS 
+#
+# Proxy
+filter f_local0 { facility(local0) and level(info,debug) and
+            not ( match("GET /healthcheck HTTP/1.0" value("MSG")))
+                or match("GET /healthcheck HTTP/1.1" value("MSG"))
+                or match("GET /lbstats%3Bcsv%3Bnorefresh HTTP/1.1" value("MSG"))
+                or match("GET /lbstats%3Bcsv%3Bnorefresh HTTP/1.0" value("MSG")); };
+
+filter f_local0_err { facility(local0) and not level(info,debug) and
+            not ( match("GET /healthcheck HTTP/1.0" value("MSG"))
+                or match("GET /healthcheck HTTP/1.1" value("MSG"))
+                or match("GET /lbstats%3Bcsv%3Bnorefresh HTTP/1.1" value("MSG"))
+                or match("GET /lbstats%3Bcsv%3Bnorefresh HTTP/1.0" value("MSG"))); };
+
+filter f_healthchk { match("GET /healthcheck HTTP/1.0" value("MSG"))
+            or match("GET /healthcheck HTTP/1.1" value("MSG"))
+            or match("GET /lbstats%3Bcsv%3Bnorefresh HTTP/1.1" value("MSG"))
+            or match("GET /lbstats%3Bcsv%3Bnorefresh HTTP/1.0" value("MSG")); };
+
+# Object, Container, Account
+filter f_local1 { facility(local1) and level(info,debug); };
+filter f_local1_err { facility(local1) and not level(info,debug); };
+filter f_local2 { facility(local2) and level(info,debug); };
+filter f_local2_err { facility(local2) and not level(info,debug); };
+# Swift drive Audits
+filter f_local3 { facility(local3) and level(info,debug); };
+filter f_local3_err { facility(local3) and not level(info,debug); };
+# python-slogging for log-processor 
+filter f_local4 { facility(local4) and level(info,debug); };
+filter f_local4_err { facility(local4) and not level(info,debug); };
+
+
+###############################
+# Log paths
+###############################
+# SWIFT LOGGING 
+#
+# local0.info                        -/var/log/swift/proxy.log
+# write to local file and to remove log server
+log {  
+        source(s_swift);
+        filter(f_local0);
+        destination(d_local0);
+        destination(d_remote);
+        #destination(d_local0_hourly);
+};
+
+# local0.error                        -/var/log/swift/proxy.error
+# write to local file and to remove log server
+log {  
+        source(s_swift);
+        filter(f_local0_err);
+        destination(d_local0_err);
+        destination(d_remote);
+};
+
+# Puts all health check into a local file
+log {  
+        source(s_swift);
+        filter(f_healthchk);
+        destination(d_healthchk);
+};
+
+# local1.info                        -/var/log/swift/storage.log
+# write to local file and to remote log server
+log {
+        source(s_swift);
+        filter(f_local1);
+        destination(d_local1);
+        destination(d_remote);
+};
+
+# local1.error                        -/var/log/swift/storage.error
+# write to local file and to remote log server
+log {
+        source(s_swift);
+        filter(f_local1_err);
+        destination(d_local1_err);
+        destination(d_remote);
+};
+
+# local2.info                        -/var/log/swift/jobs.log
+# write to local file and to remote log server
+log {
+        source(s_swift);
+        filter(f_local2);
+        destination(d_local2);
+        destination(d_remote);
+};
+
+# local2.error                        -/var/log/swift/jobs.error
+# write to local file and to remote log server
+log {
+        source(s_swift);
+        filter(f_local2_err);
+        destination(d_local2_err);
+        destination(d_remote);
+};
+
+# local3.info                        -/var/log/swift/drive-audit.log
+# write to local file and to remote log server
+log {
+        source(s_swift);
+        filter(f_local3);
+        destination(d_local3);
+        destination(d_remote);
+};
+
+# local3.error                        -/var/log/swift/drive-audit.error
+# write to local file and to remote log server
+log {
+        source(s_swift);
+        filter(f_local3_err);
+        destination(d_local3_err);
+        destination(d_remote);
+};
+
+# local4.info                        -/var/log/swift/slogging.log
+# write to local file and to remote log server
+log {  
+        source(s_swift);
+        filter(f_local4);
+        destination(d_local4);
+        destination(d_remote);
+};
+
+# local4.error                        -/var/log/swift/slogging.error 
+# write to local file and to remote log server
+log {  
+        source(s_swift);
+        filter(f_local4_err);
+        destination(d_local4_err);
+        destination(d_remote);
+};

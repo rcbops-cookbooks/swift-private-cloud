@@ -1,0 +1,101 @@
+[DEFAULT]
+bind_ip = <%= @bind_host %>
+bind_port = <%= @bind_port %>
+workers = 12
+
+[pipeline:main]
+pipeline = catch_errors proxy-logging healthcheck cache ratelimit authtoken keystoneauth proxy-server
+
+[app:proxy-server]
+use = egg:swift#proxy
+set log_facility = LOG_LOCAL0
+node_timeout = 60
+conn_timeout = 3.5
+allow_account_management = false
+
+[filter:authtoken]
+# Folsom
+paste.filter_factory = keystone.middleware.auth_token:filter_factory
+# Grizzly
+#paste.filter_factory = keystoneclient.middleware.auth_token:filter_factory
+# Delaying the auth decision is required to support token-less
+# usage for anonymous referrers ('.r:*') or for tempurl/formpost
+# middleware.
+delay_auth_decision = 1
+auth_host = <%= @keystone_api_ipaddress %>
+auth_port = <%= @keystone_admin_port %>
+auth_protocol = <%= @keystone_auth_protocol %>
+admin_tenant_name = <%= @service_tenant_name %>
+admin_user = <%= @service_user %>
+admin_password = <%= @service_pass %>
+#auth_uri = $KEYSTONE_AUTH_PROTO://$KEYSTONE_IP:5000/
+signing_dir = /var/cache/swift
+cache = swift.cache
+
+[filter:keystoneauth]
+# Folsom
+paste.filter_factory = keystone.middleware.swift_auth:filter_factory
+# Grizzly
+#use = egg:swift#keystoneauth
+operator_roles = admin, swiftoperator
+
+[filter:informant]
+use = egg:informant#informant
+# statsd_host = $INFORMANT_IP
+# statsd_port = 8125
+# standard statsd sample rate 0.0 <= 1
+statsd_sample_rate = 0.75
+
+[filter:catch_errors]
+use = egg:swift#catch_errors
+
+[filter:healthcheck]
+use = egg:swift#healthcheck
+
+[filter:cache]
+use = egg:swift#memcache
+memcache_serialization_support = 2
+memcache_servers = <%= @memcache_servers %>
+
+[filter:ratelimit]
+use = egg:swift#ratelimit
+account_ratelimit = 200000.0
+container_ratelimit_0 = 100
+
+[filter:proxy-logging]
+use = egg:swift#proxy_logging
+
+[filter:staticweb]
+use = egg:swift#staticweb
+#cache_timeout = 300
+
+[filter:tempurl]
+use = egg:swift#tempurl
+# Please see the proxy-server.conf
+# manpage for more details
+#incoming_remove_headers =
+#incoming_allow_headers =
+#outgoing_remove_headers =
+#outgoing_allow_headers =
+
+[filter:formpost]
+use = egg:swift#formpost
+
+[filter:domain_remap]
+use = egg:swift#domain_remap
+#storage_domain = example.com
+#path_root = v1
+#reseller_prefixes = AUTH
+
+[filter:cname_lookup]
+use = egg:swift#cname_lookup
+#storage_domain = example.com
+#lookup_depth = 1
+
+[filter:name_check]
+use = egg:swift#name_check
+# Please see the proxy-server.conf
+# manpage for more details
+#forbidden_chars =
+#maximum_length = 
+#forbidden_regexp
