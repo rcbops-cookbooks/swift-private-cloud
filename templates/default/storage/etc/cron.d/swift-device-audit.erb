@@ -1,0 +1,5 @@
+# By default it will send mail to the swiftops alias below
+# which in turn redirects it to the proper location 
+#MAILTO="swiftops"
+#* * * * * root /usr/bin/swift-drive-audit /etc/swift/drive-audit.conf 2>&1 | logger
+#* * * * * root /usr/local/bin/swift-drive-audit-nextgen /etc/swift/drive-audit.conf 2>&1 | logger

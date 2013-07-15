@@ -1,0 +1,9 @@
+/var/log/rsyncd.log {
+    rotate 7
+    daily
+    delaycompress
+    missingok
+    postrotate
+        /usr/sbin/invoke-rc.d rsync reload >/dev/null
+    endscript
+}

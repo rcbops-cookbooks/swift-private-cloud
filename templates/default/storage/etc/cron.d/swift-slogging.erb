@@ -1,0 +1,12 @@
+# This cron runs scripts provided by python-slogging
+# to gather some statistics and then upload them to 
+# an account on the cluster itself 
+# Only enable the below if python-slogging has been 
+# installed and configured properly
+#
+# Storage - Account stats
+##0 * * * * swift swift-account-stats-logger /etc/swift/log-processor.conf
+##20 * * * * swift swift-log-uploader /etc/swift/log-processor.conf stats
+# Storage - Container stats
+##20 * * * * swift swift-container-stats-logger /etc/swift/log-processor.conf
+##40 * * * * swift swift-log-uploader /etc/swift/log-processor.conf container-stats

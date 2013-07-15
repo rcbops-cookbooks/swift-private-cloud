@@ -27,6 +27,6 @@ end
 template "/etc/syslog-ng/conf.d/swift-ng.conf" do
   source "syslog-ng/swift-ng.conf.erb"
   variables(
-    :remote_syslog_ip => node["swift-private-cloud"]["syslog"]["ip"]
+    :remote_syslog_ip => node["swift-private-cloud"]["swift_common"]["syslog_ip"]
   )
 end
