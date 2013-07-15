@@ -1,0 +1,23 @@
+# After making any changes, please run "service procps start" (or, from
+# a Debian package maintainer script "invoke-rc.d procps start").
+
+# Disable TIME_WAIT
+net.ipv4.tcp_tw_recycle=1
+net.ipv4.tcp_tw_reuse=1
+
+# Local Ports Range
+net.ipv4.ip_local_port_range=1024 61000
+
+# Disable syn cookies
+net.ipv4.tcp_syncookies=0
+
+# Only needed if iptables is being used 
+# For Iptables connection tracking (6GB) with hashsize = conntrack_max/8 (modprobe.d/firewall.conf)
+# net.netfilter.nf_conntrack_max=393216
+
+# Intel Corporation 10G ixgbe
+# https://raw.github.com/pfq/PFQ/master/driver/ixgbe-3.3.9/scripts/set_irq_affinity.sh
+# https://raw.github.com/pfq/PFQ/master/driver/ixgbe-3.8.21/scripts/set_irq_affinity.sh 
+# Stop irqbalance and disable from starting up at boot time
+# Set IRQ affinity using the script above on the desired interface 
+# Set MTU to 9000 (Switch MUST have jumbo packets enabled)
