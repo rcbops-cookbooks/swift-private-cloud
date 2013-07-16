@@ -1,0 +1,36 @@
+[DEFAULT]
+swift_account = <%= @processing_account %>
+proxy_server_conf = /etc/swift/internal-proxy-server.conf
+user = swift
+log_name = log-processor
+log_facility = LOG_LOCAL4
+
+[log-processor]
+container_name = log_processing_data
+log_name = log-processor
+log_facility = LOG_LOCAL4
+# log_level = INFO
+# lookback_hours = 120
+# lookback_window = 120
+
+[log-processor-access]
+container_name = log_data
+log_dir = /var/log/swift/hourly/
+source_filename_pattern = ^
+    (?P<year>[0-9]{4})
+    (?P<month>[0-1][0-9])
+    (?P<day>[0-3][0-9])
+    (?P<hour>[0-2][0-9])
+    .*$
+class_path = slogging.access_processor.AccessLogProcessor
+
+[log-processor-stats]
+container_name = account_stats
+log_dir = /var/log/swift/stats/
+class_path = slogging.stats_processor.StatsLogProcessor
+
+[log-processor-container-stats]
+container_name = container_stats
+log_dir = /var/log/swift/stats/
+processable = false
+
