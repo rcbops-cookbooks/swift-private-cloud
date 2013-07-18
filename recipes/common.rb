@@ -20,6 +20,12 @@
 include_recipe "swift-lite::ntp"
 include_recipe "swift-lite::sysctl"
 
+# /etc/cron.d
+service "swift-storage-cron" do
+  service_name "crond"
+  action :nothing
+end
+
 # /etc/apt
 template "/etc/apt/preferences" do
   source "common/etc/apt/preferences.erb"
