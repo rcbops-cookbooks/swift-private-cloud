@@ -26,12 +26,6 @@ include_recipe "swift-private-cloud::object-server"
 resources("template[/etc/rsyncd.conf]").cookbook "swift-private-cloud"
 resources("template[/etc/rsyncd.conf]").source "storage/etc/rsyncd.conf.erb"
 
-# /etc/cron.d
-service "swift-storage-cron" do
-  service_name "crond"
-  action :nothing
-end
-
 template "/etc/cron.d/storage_drivecheck" do
   source "storage/etc/cron.d/storage_drivecheck.erb"
   notifies :reload, "service[swift-storage-cron]", :delayed
