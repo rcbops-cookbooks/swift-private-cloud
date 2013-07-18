@@ -15,9 +15,9 @@ allow_account_management = false
 
 [filter:authtoken]
 # Folsom
-paste.filter_factory = keystone.middleware.auth_token:filter_factory
+#paste.filter_factory = keystone.middleware.auth_token:filter_factory
 # Grizzly
-#paste.filter_factory = keystoneclient.middleware.auth_token:filter_factory
+paste.filter_factory = keystoneclient.middleware.auth_token:filter_factory
 # Delaying the auth decision is required to support token-less
 # usage for anonymous referrers ('.r:*') or for tempurl/formpost
 # middleware.
@@ -34,9 +34,9 @@ cache = swift.cache
 
 [filter:keystoneauth]
 # Folsom
-paste.filter_factory = keystone.middleware.swift_auth:filter_factory
+#paste.filter_factory = keystone.middleware.swift_auth:filter_factory
 # Grizzly
-#use = egg:swift#keystoneauth
+use = egg:swift#keystoneauth
 operator_roles = admin, swiftoperator
 
 [filter:informant]
@@ -97,5 +97,5 @@ use = egg:swift#name_check
 # Please see the proxy-server.conf
 # manpage for more details
 #forbidden_chars =
-#maximum_length = 
+#maximum_length =
 #forbidden_regexp
