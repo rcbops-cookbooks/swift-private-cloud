@@ -10,6 +10,7 @@ recipe            "swift-private-cloud::object-server", "Installs the swift obje
 recipe            "swift-private-cloud::container-server", "Installs the swift container server"
 recipe            "swift-private-cloud::storage-server", "Installs the swift account, object, container servers, ntp, and sysctl"
 recipe            "swift-private-cloud::proxy-server", "Installs the swift proxy server, ntp, and sysctl"
+recipe            "swift-private-cloud::admin-server", "Installs the swift admin server bits"
 
 %w{ centos ubuntu }.each do |os|
   supports os

@@ -1,0 +1,35 @@
+# You may add here your
+# server {
+#   ...
+# }
+# statements for each of your virtual hosts
+
+server {
+    listen   80;
+    server_name  localhost;
+
+    access_log  /var/log/nginx/localhost_access.log;
+    error_log  /var/log/nginx/localhost.error;
+
+    location / {
+        root   /var/www/nginx-default;
+        index  index.html index.htm;
+	    autoindex on;
+    }
+
+    location /ring {
+        root /srv;
+        autoindex on;
+    }
+
+    location /doc {
+        root   /usr/share;
+        autoindex on;
+    }
+
+    location /images {
+        root   /usr/share;
+        autoindex on;
+    }
+}
+

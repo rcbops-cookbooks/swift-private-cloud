@@ -30,12 +30,12 @@ end
 
 template "/etc/cron.d/memcache-restart" do
   source "proxy/etc/cron.d/memcache-restart.erb"
-  notifies :reload, "service[swift-storage-cron]", :delayed
+  notifies :reload, "service[swift-proxy-cron]", :delayed
 end
 
 template "/etc/cron.d/swift-access-log-uploader" do
   source "proxy/etc/cron.d/swift-access-log-uploader.erb"
-  notifies :reload, "service[swift-storage-cron]", :delayed
+  notifies :reload, "service[swift-proxy-cron]", :delayed
 end
 
 # /etc/default
