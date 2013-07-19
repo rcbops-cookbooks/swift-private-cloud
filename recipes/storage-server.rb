@@ -68,9 +68,9 @@ template "/etc/logrotate.d/rsync" do
 end
 
 # /etc/sysctl.d
-template "/etc/sysctl.d/31-swift-storage.conf" do
-  source "storage/etc/sysctl.d/31-swift-storage.conf.erb"
-end
+# template "/etc/sysctl.d/31-swift-storage.conf" do
+#   source "storage/etc/sysctl.d/31-swift-storage.conf.erb"
+# end
 
 # /etc/udev/rules.d
 template "/etc/udev/rules.d/10_swift.rules" do
