@@ -17,6 +17,8 @@
 # limitations under the License.
 #
 
+free_memory = node["memory"]["free"].to_i
+
 # common
 default["swift-private-cloud"]["common"]["ssh_user"] = "swiftops"
 default["swift-private-cloud"]["common"]["ssh_key"] = "/tmp/id_rsa_swiftops.priv"
@@ -37,6 +39,21 @@ default["swift-private-cloud"]["proxy"]["memcache_maxmem"] = 512
 default["swift-private-cloud"]["proxy"]["sim_connections"] = 1024
 default["swift-private-cloud"]["proxy"]["memcache_server_list"] = "127.0.0.1:11211"
 default["swift-private-cloud"]["proxy"]["authtoken_factory"] = "keystoneclient.middleware.auth_token:filter_factory"
+default["swift-private-cloud"]["proxy"]["sysctl"] =  {
+  "net.ipv4.tcp_tw_recycle" => "1",
+  "net.ipv4.tcp_tw_reuse" => "1",
+  "net.ipv4.ip_local_port_range" => "1024 61000",
+  "net.ipv4.tcp_syncookies" => 0
+}
+
+# storage
+default["swift-private-cloud"]["storage"]["sysctl"] =  {
+  "net.ipv4.tcp_tw_recycle" => "1",
+  "net.ipv4.tcp_tw_reuse" => "1",
+  "net.ipv4.ip_local_port_range" => "1024 61000",
+  "net.ipv4.tcp_syncookies" => "0",
+  "vm.min_free_kbytes" => (free_memory/2 > 1048576) ? 1048576 : (free_memory/2).to_i
+}
 
 # mailing
 default["swift-private-cloud"]["mailing"]["email_addr"] = "me@mydomain.com"

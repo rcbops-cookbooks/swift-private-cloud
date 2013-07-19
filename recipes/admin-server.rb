@@ -19,7 +19,6 @@
 
 include_recipe "swift-lite::management-server"
 include_recipe "swift-lite::ntp-server"
-include_recipe "swift-lite::sysctl"
 include_recipe "swift-private-cloud::logging"
 
 # /etc/cron.d
