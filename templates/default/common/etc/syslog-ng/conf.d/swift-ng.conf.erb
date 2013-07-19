@@ -36,6 +36,7 @@ destination d_local4_err { file("/var/log/swift/swift-log-processor.error"); };
 
 # Remote Syslog-ng Server
 destination d_remote { 
+  # TODO: recipe search to find management server instead of attribute
   tcp("<%= @remote_syslog_ip %>" port(514) log_fifo_size(1000) );
 };
 

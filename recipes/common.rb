@@ -19,6 +19,7 @@
 
 include_recipe "swift-lite::ntp"
 include_recipe "swift-lite::sysctl"
+include_recipe "swift-private-cloud::logging"
 
 # /etc/cron.d
 service "swift-storage-cron" do
@@ -119,15 +120,12 @@ template "/etc/swift/mime.types" do
 end
 
 # /etc/syslog-ng
-directory "/etc/syslog-ng/conf.d" do
-  recursive true
-end
-
 template "/etc/syslog-ng/conf.d/swift-ng.conf" do
   source "common/etc/syslog-ng/conf.d/swift-ng.conf.erb"
   variables(
     :remote_syslog_ip => node["swift-private-cloud"]["swift_common"]["syslog_ip"]
   )
+  notifies :reload, "service[syslog-ng]", :delayed
 end
 
 # /etc
