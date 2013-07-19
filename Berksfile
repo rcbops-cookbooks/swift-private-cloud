@@ -1,6 +1,6 @@
 metadata
 
-cookbook 'swift-lite', git: 'git://github.com/rcbops-cookbooks/swift-lite', branch: 'grizzly'
+cookbook 'swift-lite', git: 'git://github.com/rcbops-cookbooks/swift-lite', branch: 'master'
 cookbook 'dsh', git: 'git://github.com/rcbops-cookbooks/dsh', branch: 'grizzly'
 cookbook 'osops-utils', git: 'git://github.com/rcbops-cookbooks/osops-utils', branch: 'grizzly'
 cookbook 'sysctl', git: 'git://github.com/rcbops-cookbooks/sysctl', branch: 'grizzly'
