@@ -33,20 +33,50 @@ template "/etc/apt/preferences" do
   only_if { platform_family?("debian") }
 end
 
-template "/etc/apt/sources.list.d/linux.dell.com.sources.list" do
-  source "common/etc/apt/sources.list.d/linux.dell.com.sources.list.erb"
+apt_repository "dell" do
+  uri "http://linux.dell.com/repo/community/deb/latest"
+  distribution "/"
+  key "1285491434D8786F"
+  keyserver "pool.sks-keyservers.net"
   only_if { platform_family?("debian") }
 end
 
-template "/etc/apt/sources.list.d/megaraid.list" do
-  source "common/etc/apt/sources.list.d/megaraid.list.erb"
+apt_repository "megaraid" do
+  uri "http://hwraid.le-vert.net/ubuntu"
+  distribution node["lsb"]["codename"]
+  components ["main"]
   only_if { platform_family?("debian") }
 end
 
-template "/etc/apt/sources.list.d/openstack_swift.list" do
-  source "common/etc/apt/sources.list.d/openstack_swift.list.erb"
+apt_repository "cloudarchive-proposed" do
+  uri "http://ubuntu-cloud.archive.canonical.com/ubuntu"
+  distribution "precise-proposed/grizzly"
+  components ["main"]
   only_if { platform_family?("debian") }
 end
+
+apt_repository "cloudarchive-updates" do
+  uri "http://ubuntu-cloud.archive.canonical.com/ubuntu"
+  distribution "precise-updates/grizzly"
+  components ["main"]
+  only_if { platform_family?("debian") }
+end
+
+
+# template "/etc/apt/sources.list.d/linux.dell.com.sources.list" do
+#   source "common/etc/apt/sources.list.d/linux.dell.com.sources.list.erb"
+#   only_if { platform_family?("debian") }
+# end
+
+# template "/etc/apt/sources.list.d/megaraid.list" do
+#   source "common/etc/apt/sources.list.d/megaraid.list.erb"
+#   only_if { platform_family?("debian") }
+# end
+
+# template "/etc/apt/sources.list.d/openstack_swift.list" do
+#   source "common/etc/apt/sources.list.d/openstack_swift.list.erb"
+#   only_if { platform_family?("debian") }
+# end
 
 # /etc/cron.d
 service "swift-common-cron" do
