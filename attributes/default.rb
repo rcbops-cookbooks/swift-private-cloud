@@ -26,7 +26,7 @@ default["swift-private-cloud"]["common"]["swift_generic"] = "swift python-swift 
 default["swift-private-cloud"]["common"]["swift_proxy"] = "swift-proxy python-keystone python-keystoneclient memcached python-memcache"
 default["swift-private-cloud"]["common"]["swift_storage"] = "swift-account swift-container swift-object"
 default["swift-private-cloud"]["common"]["swift_others"] = "python-suds"
-default["swift-private-cloud"]["common"]["apt_options"] = "-y -qq --force-yes -o Dpkg::Options::=--force-confdef"
+default["swift-private-cloud"]["common"]["apt_options"] = "-y -qq --force-yes -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold"
 
 # swift_common
 default["swift-private-cloud"]["swift_common"]["swift_hash"] = "supercrypthash"
