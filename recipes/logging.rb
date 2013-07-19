@@ -21,6 +21,7 @@ package "syslog-ng"
 
 service "syslog" do
   action [:disable, :stop]
+  only_if { platform_family?("rhel") }
 end
 
 service "rsyslog" do
