@@ -20,6 +20,7 @@
 include_recipe "swift-lite::management-server"
 include_recipe "swift-lite::ntp-server"
 include_recipe "swift-private-cloud::logging"
+include_recipe "git::server"
 
 # /etc/cron.d
 service "swift-admin-cron" do
