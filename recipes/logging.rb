@@ -36,7 +36,7 @@ end
 # drop fix for conf.d in older rhel epel syslog-ng (3.2)
 # needs restart instead of reload for includes
 directory "/etc/syslog-ng/conf.d" do
-  mode "0644"
+  mode "0755"
 end
 
 template "/etc/syslog-ng/syslog-ng.conf" do
@@ -47,5 +47,5 @@ template "/etc/syslog-ng/syslog-ng.conf" do
 end
 
 directory "/var/log/swift" do
-  mode "0644"
+  mode "0744"
 end
