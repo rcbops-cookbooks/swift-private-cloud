@@ -119,33 +119,56 @@ Some example roles have been provided in contrib/roles
 
 Small "starter" config:
 
- * spc-starter-controller
-   * dsh
-   * syslog collector
-   * keystone
-   * object-expirer
-   * central ntpd
- * spc-starter-proxy
-   * swift-proxy
-   * memcache
- * spc-starter-storage
-   * swift-object
-   * swift-container
-   * swift-account
+  * spc-starter-controller
+    * dsh
+    * syslog collector
+    * keystone
+    * object-expirer
+    * central ntpd
+  * spc-starter-proxy
+    * swift-proxy
+    * memcache
+  * spc-starter-storage
+    * swift-object
+    * swift-container
+    * swift-account
 
 Larger "scalable" config:
 
- * spc-scalable-controller
+  * spc-scalable-controller
     * as starter, minus syslog
- * spc-scalable-proxy
+  * spc-scalable-proxy
     * as starter
- * spc-scalable-syslog
+  * spc-scalable-syslog
     * syslog collector
- * spc-scalable-storage
+  * spc-scalable-storage
     * as starter
 
 Example Deployment
 ==================
+
+"Starter":
+
+  * 2 nodes with runlist of "role[spc-starter-proxy]"
+  * 3 (or more) nodes with runlist of "role[spc-starter-storage]"
+  * 1 node with runlist of "role[spc-starter-controller]"
+
+Environment (minimum)
+
+~~~~
+    ...
+    "override_attributes": {
+        "swift-private-cloud": {
+            "swift_common": {
+                "admin_ip": "<ip of controller>",
+                "syslog_ip": "<ip of controller>"
+            }
+        }
+    }
+    ...
+~~~~
+
+
 
 
 License and Author
