@@ -22,6 +22,7 @@ include_recipe "swift-private-cloud::packages"
 include_recipe "swift-lite::management-server"
 include_recipe "swift-lite::ntp-server"
 include_recipe "swift-private-cloud::logging"
+include_recipe "swift-private-cloud::mail"
 include_recipe "git::server"
 
 # /etc/cron.d
@@ -47,10 +48,16 @@ template "/etc/default/git-daemon" do
 end
 
 # /etc/exim4
-directory "/etc/exim4" # install exim!
-
-template "/etc/exim4/update-exim4.conf.relay" do
+template "/etc/exim4/update-exim4.conf.conf" do
   source "admin/etc/exim4/update-exim4.conf.conf.relay.erb"
+  notifies :run, "execute[update-exim-config]", :delayed
+  only_if { platform_family?("debian") }
+end
+
+template "/etc/exim/exim.conf" do
+  source "admin/etc/exim4/exim.conf.erb"
+  notifies :restart, "service[#{node['exim']['platform']['service']}]", :delayed
+  only_if { platform_family?("rhel") }
 end
 
 # /etc/nginx

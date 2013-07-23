@@ -21,6 +21,7 @@ include_recipe "swift-private-cloud::attr-remap"
 include_recipe "swift-private-cloud::packages"
 include_recipe "swift-lite::ntp"
 include_recipe "swift-private-cloud::logging"
+include_recipe "swift-private-cloud::mail"
 include_recipe "swift-private-cloud::sysctl"
 
 # /etc/cron.d
@@ -52,14 +53,24 @@ template "/etc/default/megaclisas-statusd" do
 end
 
 # /etc/exim4
-directory "/etc/exim4" # install exim!
-
 template "/etc/exim4/update-exim4.conf.conf" do
   source "common/etc/exim4/update-exim4.conf.conf.erb"
   variables(
     :outdomain => node["swift-private-cloud"]["mailing"]["outgoing_domain"],
     :smarthost => node["swift-private-cloud"]["mailing"]["smarthost"]
   )
+  notifies :run, "execute[update-exim-config]", :delayed
+  only_if { platform_family?("debian") }
+end
+
+template "/etc/exim/exim.conf" do
+  source "common/etc/exim4/exim.conf.erb"
+  variables(
+    :outdomain => node["swift-private-cloud"]["mailing"]["outgoing_domain"],
+    :smarthost => node["swift-private-cloud"]["mailing"]["smarthost"]
+  )
+  notifies :restart, "service[#{node['exim']['platform']['service']}]", :delayed
+  only_if { platform_family?("rhel") }
 end
 
 # /etc/logrotate.d
