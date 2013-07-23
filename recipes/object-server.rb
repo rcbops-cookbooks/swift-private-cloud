@@ -17,6 +17,7 @@
 # limitations under the License.
 #
 
+include_recipe "swift-private-cloud::common"
 include_recipe "swift-lite::object-server"
 
 resources("template[/etc/swift/object-server.conf]").cookbook "swift-private-cloud"

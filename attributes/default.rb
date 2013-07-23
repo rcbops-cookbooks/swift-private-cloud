@@ -28,8 +28,13 @@ default["swift-private-cloud"]["common"]["swift_storage"] = "swift-account swift
 default["swift-private-cloud"]["common"]["swift_others"] = "python-suds"
 default["swift-private-cloud"]["common"]["apt_options"] = "-y -qq --force-yes -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold"
 
+# network
+#default["swift-private-cloud"]["network"]["management"] = "cidr"
+#default["swift-private-cloud"]["network"]["exnet"] = "cidr"
+
 # swift_common
-default["swift-private-cloud"]["swift_common"]["swift_hash"] = "supercrypthash"
+default["swift-private-cloud"]["swift_common"]["swift_hash_prefix"] = "secretswifthash"
+default["swift-private-cloud"]["swift_common"]["swift_hash_suffix"] = ""
 default["swift-private-cloud"]["swift_common"]["admin_ip"] = "127.16.0.252"
 default["swift-private-cloud"]["swift_common"]["syslog_ip"] = "172.16.0.252"
 
@@ -68,13 +73,10 @@ default["swift-private-cloud"]["versioning"]["repository_base"] = "/srv/git"
 default["swift-private-cloud"]["versioning"]["repository_name"] = "swift-cluster-configs"
 
 # keystone
-default["swift-private-cloud"]["keystone"]["keystone_ip"] = "172.16.0.252"
-default["swift-private-cloud"]["keystone"]["keystone_port"] = 35357
-default["swift-private-cloud"]["keystone"]["keystone_auth_proto"] = "http"
-default["swift-private-cloud"]["keystone"]["keystone_auth_port"] = "5000"
+default["swift-private-cloud"]["keystone"]["auth_uri"] = "http://172.16.0.252:5000/v2.0"
 default["swift-private-cloud"]["keystone"]["keystone_admin_tenant"] = "services"
 default["swift-private-cloud"]["keystone"]["keystone_admin_user"] = "tokenvalidator"
-default["swift-private-cloud"]["keystone"]["keystone_admin_key"] = "noswifthere"
+default["swift-private-cloud"]["keystone"]["keystone_admin_password"] = "noswifthere"
 
 # dispersion
 default["swift-private-cloud"]["dispersion"]["dis_tenant"] = "dispersion"

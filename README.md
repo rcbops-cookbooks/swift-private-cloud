@@ -70,6 +70,9 @@ Attributes
      * swift_storage - space separated list of packages to install on storage
      * swift_others - other random packages to install on all boxes
      * apt_options - default apt options when installing packages
+   * network
+     * management - cidr of management ip range [REQUIRED]
+     * exnet - cidr of exnet ip range [REQUIRED]
    * swift_common
      * admin_ip - ip of the admin box (with git ring repo and suchlike)
      * syslog_ip - ip of upstream syslog server (boxes will stream logs here)
