@@ -17,8 +17,6 @@
 # limitations under the License.
 #
 
-Chef::Log.warn(node["osops_networks"])
-
 
 # swift-lite will set the /etc/swift/swift.conf
 node.default["swift"]["hash_path_suffix"] = node["swift-private-cloud"]["swift_common"]["swfit_hash_suffix"]
@@ -37,4 +35,7 @@ node.default["memcached"]["services"] ||= {}
 node.default["memcached"]["services"]["cache"] ||= {}
 node.default["memcached"]["services"]["cache"]["network"] = "swift-storage"
 
-Chef::Log.warn(node["osops_networks"])
+# set the git repo location where the git cookbook expects it
+node.default["git"] ||= {}
+node.default["git"]["server"] ||= {}
+node.default["git"]["server"]["base_path"] = node["swift-private-cloud"]["versioning"]["repository_base"]

@@ -83,6 +83,3 @@ default["swift-private-cloud"]["dispersion"]["dis_tenant"] = "dispersion"
 default["swift-private-cloud"]["dispersion"]["dis_user"] = "reporter"
 default["swift-private-cloud"]["dispersion"]["dis_key"] = "blahblah"
 default["swift-private-cloud"]["dispersion"]["dis_coverage"] = 1
-
-# git
-default["git"]["server"]["base_path"] = "/srv/git"
