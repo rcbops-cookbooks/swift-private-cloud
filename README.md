@@ -76,7 +76,8 @@ Attributes
    * swift_common
      * admin_ip - ip of the admin box (with git ring repo and suchlike)
      * syslog_ip - ip of upstream syslog server (boxes will stream logs here)
-     * swift_hash - something probably wrong.. should have suffix/prefix
+     * swift_hash_prefix - swift hash prefix (preferred over suffix)
+     * swift_hash_suffix - hash suffix (compatibility only)
    * proxy
      * pipeline - proxy-server.conf pipline
      * memcache_maxmem - memcache per proxy, this is maxmem (default 512M)
@@ -164,7 +165,12 @@ Environment (minimum)
         "swift-private-cloud": {
             "swift_common": {
                 "admin_ip": "<ip of controller>",
-                "syslog_ip": "<ip of controller>"
+                "syslog_ip": "<ip of controller>",
+                "swift_hash_prefix": "<some random string>"
+            },
+            "network": {
+                "managmenet": "<cidr of private management net>",
+                "exnet": "<cidr of lb public net>"
             }
         }
     }
