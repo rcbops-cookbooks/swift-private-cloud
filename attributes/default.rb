@@ -33,8 +33,8 @@ default["swift-private-cloud"]["common"]["apt_options"] = "-y -qq --force-yes -o
 #default["swift-private-cloud"]["network"]["exnet"] = "cidr"
 
 # swift_common
-default["swift-private-cloud"]["swift_common"]["swift_hash_prefix"] = "secretswifthash"
-default["swift-private-cloud"]["swift_common"]["swift_hash_suffix"] = ""
+default["swift-private-cloud"]["swift_common"]["swift_hash_prefix"] = nil
+default["swift-private-cloud"]["swift_common"]["swift_hash_suffix"] = nil
 default["swift-private-cloud"]["swift_common"]["admin_ip"] = nil
 default["swift-private-cloud"]["swift_common"]["syslog_ip"] = nil
 

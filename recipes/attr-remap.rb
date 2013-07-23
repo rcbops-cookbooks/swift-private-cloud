@@ -19,8 +19,8 @@
 
 
 # swift-lite will set the /etc/swift/swift.conf
-node.default["swift"]["hash_path_suffix"] = node["swift-private-cloud"]["swift_common"]["swfit_hash_suffix"]
-node.default["swift"]["hash_path_prefix"] = node["swift-private-cloud"]["swift_common"]["swfit_hash_prefix"]
+node.default["swift"]["swift_hash_suffix"] = node["swift-private-cloud"]["swift_common"]["swift_hash_suffix"]
+node.default["swift"]["swift_hash_prefix"] = node["swift-private-cloud"]["swift_common"]["swift_hash_prefix"]
 
 # make exnet and public map to the right underlying networks
 node.default["osops_networks"] ||= {}
