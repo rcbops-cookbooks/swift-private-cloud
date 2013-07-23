@@ -83,3 +83,18 @@ default["swift-private-cloud"]["dispersion"]["dis_tenant"] = "dispersion"
 default["swift-private-cloud"]["dispersion"]["dis_user"] = "reporter"
 default["swift-private-cloud"]["dispersion"]["dis_key"] = "blahblah"
 default["swift-private-cloud"]["dispersion"]["dis_coverage"] = 1
+
+# exim
+if platform_family?("rhel")
+  default["exim"]["platform"] = {
+    "packages" => ["exim"],
+    "service" => "exim",
+    "replaces" => "postfix"
+  }
+elsif platform_family?("debian")
+  default["exim"]["platform"] = {
+    "packages" => ["exim4"],
+    "service" => "exim4",
+    "replaces" => "postfix"
+  }
+end
