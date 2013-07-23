@@ -18,7 +18,16 @@ description, and link to a gist containing the entire logfile
 Description
 ===========
 
-Installs packages and configuration for OpenStack Swift in the Private Cloud
+Installs packages and configuration for OpenStack Swift in the Private
+Cloud.  This is a highly opinionated configuration of swift.  It
+likely is not suitable for you.
+
+A better choice might be wrapping or builing around
+https://github.com/rcbops-cookbooks/swift-lite, a non-opinionated bare
+bones swift install.
+
+That's what this cookbook is, essentially, a opinionation wrapper
+around swift-lite.
 
 Requirements
 ============
@@ -28,7 +37,7 @@ Client:
  * Ubuntu >= 12.04
 
 Chef:
- * 0.10.8
+ * >= 0.11
 
 Other variants of Ubuntu and Fedora may work, something crazy like
 Solaris probably will not.  YMMV, objects in mirror, etc.
@@ -46,50 +55,53 @@ Generally this means that it does not do things that could potentially
 cause cluster data loss, preferring to leave that to experienced
 system administrators.
 
+This cookbook leverages the rcbops swift-lite cookbook to do the heavy
+swift lifting.
+
 Attributes
 ==========
 
- * node[:swift][:swift_hash] - swift_hash_path_suffix in /etc/swift/swift.conf
+ * swift-private-cloud
+   * common
+     * ssh_user - unix admin user.  default: "swiftops"
+     * ssh_key - ???
+     * swift_generic - space separated list of packges to install on all boxes
+     * swift_proxy - space separated list of packages to install on proxies
+     * swift_storage - space separated list of packages to install on storage
+     * swift_others - other random packages to install on all boxes
+     * apt_options - default apt options when installing packages
+   * swift_common
+     * admin_ip - ip of the admin box (with git ring repo and suchlike)
+     * syslog_ip - ip of upstream syslog server (boxes will stream logs here)
+     * swift_hash - something probably wrong.. should have suffix/prefix
+   * proxy
+     * pipeline - proxy-server.conf pipline
+     * memcache_maxmem - memcache per proxy, this is maxmem (default 512M)
+     * sim_connections - ???
+     * memcache_server_list - space separated list of memcache servers "server:port server:port"
+     * authtoken_factory - defaults to keystone
+     * sysctl - key/value sysctl pairs, like { "net.ipv4.tcp_tw_recycle" => "1" }
+   * storage
+     * sysctl - key/value sysctl pairs, like { "net.ipv4.tcp_tw_recycle" => "1" }
+   * mailing
+     * email_addr - address to send notifications from
+     * pager_addr - ???
+     * smarthost - ip of smarthost
+     * outgoing_domain - domain suffix
+   * versioning
+     * versioning_system - rcs to use for ring control.  only git supported now
+     * repository_base - where to drop the git
+     * repository_name - what repo to check out for ring updatres
+   * keystone
+     * keystone_ip - lb vip of keystone
+     * keystone_port - management port
+     * ... this all seems broken to me
+   * dispersion
+     * dis_tenant - tenant for dispersion reports
+     * dis_user - user for dispersion reports
+     * dis_key - password/key for dispersion user
+     * dis_coverage - 1
 
- * node[:swift][:audit_hour] - Hour to run swift_auditor on storage nodes (default 5)
-
- * node["swift"]["uid"] - uid of swift user (will be created before installing packages)
-
-The following values can override values from search.  If deploying
-keystone using the rcbops cookbooks, these need not be set, as they
-will be determined from the keystone configuration.
-
- * node[:keystone][:admin_port]
-
- * node[:keystone][:admin_token]
-
- * node[:keystone][:admin_user]
-
-In addition, there are some attributes used by osops-utils to find
-interfaces on particular devices.
-
- * node[:osops_networks][:swift_storage] - CIDR of the storage network (what
-   address to bind storage nodes to, primarily.
-
- * node[:osops_network][:swift_replication] - CIDR of the replication
-   network.  This could be the same CIDR as the swift network.
-
- * node[:osops_networks][:swift_proxy] - CIDR of the network that that
-   the proxy listens on.
-
-If installing more than one swift proxy (which is likely), you will
-need to set the proxy vip which will get published in keystone.  This
-attribute is:
-
- * node["vips"]["swift-proxy"]: "http(s?)://x.x.x.x:port"
-
-It is your responsibility to ensure it is ssl terminated (as
-appropriate to your environment).  I might suggest ZXTM or new
-HA-proxy with ssl, or HA-proxy with stud.
-
-Packages can be force upgraded using the following key:
-
- * node["swift"]["package_action"] = "upgrade"
 
 Deps
 ====
@@ -103,92 +115,72 @@ Deps
 Roles
 =====
 
- * swift-account-server - storage node for account data
- * swift-container-server - storage node for container data
- * swift-object-server - storage node for object server
- * swift-proxy-server - proxy for swift storge nodes
+Some example roles have been provided in contrib/roles
 
-In small environments, it is likely that all storage machines will
-have all these roles, with a load balancer ahead of it.
+Small "starter" config:
 
-In larger environments, where it is cost effective to split the proxy
-and storage layer, storage nodes will carry
-swift-{account,container,object}-server roles, and there will be
-dedicated hosts with the swift-proxy-server role.
+  * spc-starter-controller
+    * dsh
+    * syslog collector
+    * keystone
+    * object-expirer
+    * central ntpd
+  * spc-starter-proxy
+    * swift-proxy
+    * memcache
+  * spc-starter-storage
+    * swift-object
+    * swift-container
+    * swift-account
 
-In really really huge environments, it's possible that the storage
-node will be split into swift-{container,account}-server nodes and
-swift-object-server nodes.
+Larger "scalable" config:
 
-Examples
-========
+  * spc-scalable-controller
+    * as starter, minus syslog
+  * spc-scalable-proxy
+    * as starter
+  * spc-scalable-syslog
+    * syslog collector
+  * spc-scalable-storage
+    * as starter
 
-Example environment:
+Example Deployment
+==================
 
+"Starter":
 
-    {
-        "override_attributes": {
-            "swift": {
-                "swift_hash": "107c0568ea84",
-            },
-            "osops_networks": {
-                "swift_storage": "192.168.122.0/24",
-                "swift_replication": "192.168.122.0/24",
-                "swift_proxy": "all"
+  * 2 nodes with runlist of "role[spc-starter-proxy]"
+  * 3 (or more) nodes with runlist of "role[spc-starter-storage]"
+  * 1 node with runlist of "role[spc-starter-controller]"
+
+Environment (minimum)
+
+~~~~
+    ...
+    "override_attributes": {
+        "swift-private-cloud": {
+            "swift_common": {
+                "admin_ip": "<ip of controller>",
+                "syslog_ip": "<ip of controller>"
             }
-        },
-        "cookbook_versions": {
-        },
-        "description": "",
-        "default_attributes": {
-        },
-        "name": "swift",
-        "chef_type": "environment",
-        "json_class": "Chef::Environment"
+        }
     }
-
-This sets up defaults for a swauth-based cluster with the storage
-network on 192.168.122.0/24, replicating on same, and proxy listening
-on all available interfaces.
-
-More complete examples are in contrib/environment
+    ...
+~~~~
 
 
-Run list for proxy server:
-
-    "run_list": [
-        "role[swift-setup]",
-        "role[swift-proxy-server]"
-    ]
-
-Run list for combined object, container, and account server:
-
-    "run_list": [
-        "role[swift-object-server]",
-        "role[swift-account-server]",
-        "role[swift-container-server]"
-    ]
-
-This obviously depends on a previously deployed keystone server using
-the rcbops cookbooks.  Consult the keystone README.md for details on
-deploying keystone with that cookbook.
-
-This also wants relatively new swift.  You can use the newest
-backported versions of swift by adding recipe[osops-utils::packages],
-or by adding a package repo to point to newer swift before running any
-of the proxy or server recipes.
-
-The names of the roles are important, and example roles (which can be
-extened) are in contrib/roles.
 
 
 License and Author
 ==================
 
-Author:: Ron Pedde (<ron.pedde@rackspace.com>)
-Author:: Will Kelly (<will.kelly@rackspace.com>)
-
-Copyright:: 2012, 2013 Rackspace US, Inc.
+|                     |                                         |
+|:--------------------|:----------------------------------------|
+| **Authors**         | Ron Pedde (<ron.pedde@rackspace.com>)   |
+|                     | Will Kelly (<will.kelly@rackspace.com>) |
+|                     | Chris Laco (<chris.laco@rackspace.com>) |
+|                     |                                         |
+| **Copyright**       | 2012, 2013 Rackspace US, Inc.           |
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
