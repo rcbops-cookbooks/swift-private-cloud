@@ -17,6 +17,7 @@
 # limitations under the License.
 #
 
+include_recipe "swift-private-cloud::packages"
 include_recipe "swift-lite::ntp"
 include_recipe "swift-private-cloud::logging"
 include_recipe "swift-private-cloud::sysctl"
@@ -26,57 +27,6 @@ service "swift-storage-cron" do
   service_name "crond"
   action :nothing
 end
-
-# /etc/apt
-template "/etc/apt/preferences" do
-  source "common/etc/apt/preferences.erb"
-  only_if { platform_family?("debian") }
-end
-
-apt_repository "dell" do
-  uri "http://linux.dell.com/repo/community/deb/latest"
-  distribution "/"
-  key "1285491434D8786F"
-  keyserver "pool.sks-keyservers.net"
-  only_if { platform_family?("debian") }
-end
-
-apt_repository "megaraid" do
-  uri "http://hwraid.le-vert.net/ubuntu"
-  distribution node["lsb"]["codename"]
-  components ["main"]
-  only_if { platform_family?("debian") }
-end
-
-apt_repository "cloudarchive-proposed" do
-  uri "http://ubuntu-cloud.archive.canonical.com/ubuntu"
-  distribution "precise-proposed/grizzly"
-  components ["main"]
-  only_if { platform_family?("debian") }
-end
-
-apt_repository "cloudarchive-updates" do
-  uri "http://ubuntu-cloud.archive.canonical.com/ubuntu"
-  distribution "precise-updates/grizzly"
-  components ["main"]
-  only_if { platform_family?("debian") }
-end
-
-
-# template "/etc/apt/sources.list.d/linux.dell.com.sources.list" do
-#   source "common/etc/apt/sources.list.d/linux.dell.com.sources.list.erb"
-#   only_if { platform_family?("debian") }
-# end
-
-# template "/etc/apt/sources.list.d/megaraid.list" do
-#   source "common/etc/apt/sources.list.d/megaraid.list.erb"
-#   only_if { platform_family?("debian") }
-# end
-
-# template "/etc/apt/sources.list.d/openstack_swift.list" do
-#   source "common/etc/apt/sources.list.d/openstack_swift.list.erb"
-#   only_if { platform_family?("debian") }
-# end
 
 # /etc/cron.d
 service "swift-common-cron" do
