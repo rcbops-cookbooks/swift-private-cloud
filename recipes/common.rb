@@ -23,6 +23,7 @@ include_recipe "swift-lite::ntp"
 include_recipe "swift-private-cloud::logging"
 include_recipe "swift-private-cloud::mail"
 include_recipe "swift-private-cloud::sysctl"
+include_recipe "swift-lite::common"
 
 # /etc/cron.d
 service "swift-storage-cron" do
