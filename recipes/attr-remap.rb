@@ -39,3 +39,17 @@ node.default["memcached"]["services"]["cache"]["network"] = "swift-storage"
 node.default["git"] ||= {}
 node.default["git"]["server"] ||= {}
 node.default["git"]["server"]["base_path"] = node["swift-private-cloud"]["versioning"]["repository_base"]
+
+# point remote syslog to admin machine if not overridden/specified
+#
+# FIXME: this is pretty questionable... we need to fix up the osops-utils
+# stuff to work righter by recipe
+#
+if not node["swift-private-cloud"]["swift_common"]["syslog_ip"]
+    nodelist = get_nodes_by_recipe("swift-private-cloud::admin-server")
+    if nodelist.length == 0
+      raise "Must specify swift-private-cloud/swift_common/syslog_ip"
+    end
+
+    node.default["swift-private-cloud"]["swift_common"]["syslog_ip"] = get_ip_for_net("swift-management", nodelist[0])
+end

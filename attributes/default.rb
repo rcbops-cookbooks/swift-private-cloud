@@ -35,8 +35,8 @@ default["swift-private-cloud"]["common"]["apt_options"] = "-y -qq --force-yes -o
 # swift_common
 default["swift-private-cloud"]["swift_common"]["swift_hash_prefix"] = "secretswifthash"
 default["swift-private-cloud"]["swift_common"]["swift_hash_suffix"] = ""
-default["swift-private-cloud"]["swift_common"]["admin_ip"] = "127.16.0.252"
-default["swift-private-cloud"]["swift_common"]["syslog_ip"] = "172.16.0.252"
+default["swift-private-cloud"]["swift_common"]["admin_ip"] = nil
+default["swift-private-cloud"]["swift_common"]["syslog_ip"] = nil
 
 # proxy
 default["swift-private-cloud"]["proxy"]["pipeline"] = "catch_errors healthcheck proxy-logging cache ratelimit authtoken keystoneauth proxy-logging proxy-server"
