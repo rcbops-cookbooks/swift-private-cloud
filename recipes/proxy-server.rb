@@ -49,11 +49,6 @@ template "/etc/init.d/memcached.swift" do
   source "proxy/etc/init.d/memcached.swift.erb"
 end
 
-# /etc/sysctl.d
-# template "/etc/sysctl.d/30-swift-proxy.conf" do
-#   source "proxy/etc/sysctl.d/30-swift-proxy.conf.erb"
-# end
-
 # /etc/memcached.conf
 template "/etc/memcached.conf" do
   source "proxy/etc/memcached.conf.erb"

@@ -73,10 +73,25 @@ default["swift-private-cloud"]["versioning"]["repository_base"] = "/srv/git"
 default["swift-private-cloud"]["versioning"]["repository_name"] = "swift-cluster-configs"
 
 # keystone
-default["swift-private-cloud"]["keystone"]["auth_uri"] = "http://172.16.0.252:5000/v2.0"
-default["swift-private-cloud"]["keystone"]["keystone_admin_tenant"] = "services"
-default["swift-private-cloud"]["keystone"]["keystone_admin_user"] = "tokenvalidator"
-default["swift-private-cloud"]["keystone"]["keystone_admin_password"] = "noswifthere"
+default["swift-private-cloud"]["keystone"]["region"] = "RegionOne"
+#default["swift-private-cloud"]["keystone"]["swift_admin_url"] = http://ip:port/v1/AUTH_%(tenant_id)s"
+#default["swift-private-cloud"]["keystone"]["swift_internal_url"] = ...
+#default["swift-private-cloud"]["keystone"]["swift_public_url"] = ...
+#default["swift-private-cloud"]["keystone"]["keystone_admin_url"] = http://ip:port/v2.0
+#default["swift-private-cloud"]["keystone"]["keystone_internal_url"] = ...
+#default["swift-private-cloud"]["keystone"]["keystone_public_url"] = ...
+
+default["swift-private-cloud"]["keystone"]["auth_user"] = "swift"
+default["swift-private-cloud"]["keystone"]["auth_tenant"] = "service"
+default["swift-private-cloud"]["keystone"]["auth_password"] = "secrete"
+default["swift-private-cloud"]["keystone"]["admin_user"] = "admin"
+default["swift-private-cloud"]["keystone"]["admin_password"] = "secrete"
+default["swift-private-cloud"]["keystone"]["pki"] = true
+
+# default["swift-private-cloud"]["keystone"]["auth_uri"] = "http://172.16.0.252:5000/v2.0"
+# default["swift-private-cloud"]["keystone"]["keystone_admin_tenant"] = "service"
+# default["swift-private-cloud"]["keystone"]["keystone_admin_user"] = "tokenvalidator"
+# default["swift-private-cloud"]["keystone"]["keystone_admin_password"] = "noswifthere"
 
 # dispersion
 default["swift-private-cloud"]["dispersion"]["dis_tenant"] = "dispersion"

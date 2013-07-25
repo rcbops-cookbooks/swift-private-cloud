@@ -23,21 +23,17 @@ node.default["swift"]["swift_hash_suffix"] = node["swift-private-cloud"]["swift_
 node.default["swift"]["swift_hash_prefix"] = node["swift-private-cloud"]["swift_common"]["swift_hash_prefix"]
 
 # make exnet and public map to the right underlying networks
-node.default["osops_networks"] ||= {}
 node.default["osops_networks"]["swift-storage"] = node["swift-private-cloud"]["network"]["management"]
 node.default["osops_networks"]["swift-replication"] = node["swift-private-cloud"]["network"]["management"]
 node.default["osops_networks"]["swift-management"] = node["swift-private-cloud"]["network"]["management"]
 node.default["osops_networks"]["swift-proxy"] = node["swift-private-cloud"]["network"]["management"]
 
 # set up the right memcache bind
-node.default["memcached"] ||= {}
-node.default["memcached"]["services"] ||= {}
-node.default["memcached"]["services"]["cache"] ||= {}
 node.default["memcached"]["services"]["cache"]["network"] = "swift-storage"
+node.default["swift"]["memcache_role"] = "spc-starter-proxy"
+node.default["swift"]["ntp"]["role"] = "spc-starter-controller"
 
 # set the git repo location where the git cookbook expects it
-node.default["git"] ||= {}
-node.default["git"]["server"] ||= {}
 node.default["git"]["server"]["base_path"] = node["swift-private-cloud"]["versioning"]["repository_base"]
 
 # point remote syslog to admin machine if not overridden/specified
@@ -53,3 +49,13 @@ if not node["swift-private-cloud"]["swift_common"]["syslog_ip"]
 
     node.default["swift-private-cloud"]["swift_common"]["syslog_ip"] = get_ip_for_net("swift-management", nodelist[0])
 end
+
+# keystone setup.  This will only do anything interesting if the keystone
+# recipe is applied.
+
+my_keystone_ip = get_ip_for_net("swift-management")
+node.default["swift-private-cloud"]["keystone"]["keystone_admin_url"] = "http://#{my_keystone_ip}:35357/v2.0"
+node.default["swift-private-cloud"]["keystone"]["keystone_internal_url"] = "http://#{my_keystone_ip}:5000/v2.0"
+node.default["swift-private-cloud"]["keystone"]["keystone_public_url"] = "http://#{my_keystone_ip}:5000/v2.0"
+
+node.default["swift"]["keystone_endpoint"] = node["swift-private-cloud"]["keystone"]["keystone_admin_url"]
