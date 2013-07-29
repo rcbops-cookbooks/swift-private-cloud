@@ -22,6 +22,7 @@ include_recipe "swift-private-cloud::packages"
 include_recipe "swift-lite::ntp"
 include_recipe "swift-private-cloud::logging"
 include_recipe "swift-private-cloud::mail"
+include_recipe "swift-private-cloud::snmp"
 include_recipe "swift-private-cloud::sysctl"
 include_recipe "swift-lite::common"
 
@@ -80,14 +81,14 @@ template "/etc/logrotate.d/swift" do
 end
 
 # /etc/snmp
-directory "/etc/snmp" # install snmp!
-
 template "/etc/snmp/snmp.conf" do
   source "common/etc/snmp/snmp.conf.erb"
+  notifies :restart, "service[#{node['snmp']['platform']['service']}]", :delayed
 end
 
 template "/etc/snmp/snmpd.conf" do
   source "common/etc/snmp/snmpd.conf.erb"
+  notifies :restart, "service[#{node['snmp']['platform']['service']}]", :delayed
 end
 
 # /etc/swift

@@ -113,3 +113,16 @@ elsif platform_family?("debian")
     "replaces" => "postfix"
   }
 end
+
+# snmp
+if platform_family?("rhel")
+  default["snmp"]["platform"] = {
+    "packages" => ["net-snmp", "net-snmp-utils"],
+    "service" => "snmpd"
+  }
+elsif platform_family?("debian")
+  default["snmp"]["platform"] = {
+    "packages" => ["snmp", "snmpd"],
+    "service" => "snmpd"
+  }
+end
