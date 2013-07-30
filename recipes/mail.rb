@@ -38,6 +38,7 @@ execute "configure-alternatives-mta" do
 end
 
 execute "update-exim-config" do
+  action :nothing
   command "update-exim4.conf"
   notifies :restart, "service[#{service_name}]", :delayed
   only_if { platform_family?("debian") }

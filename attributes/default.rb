@@ -63,7 +63,7 @@ default["swift-private-cloud"]["storage"]["sysctl"] =  {
 # mailing
 default["swift-private-cloud"]["mailing"]["email_addr"] = "me@mydomain.com"
 default["swift-private-cloud"]["mailing"]["pager_addr"] = "mepager@mydomain.com"
-default["swift-private-cloud"]["mailing"]["smarthost"] = "172.16.0.252"
+default["swift-private-cloud"]["mailing"]["smarthost"] = nil #"172.16.0.252"
 default["swift-private-cloud"]["mailing"]["relay_net"] = "172.16.0.0/16"
 default["swift-private-cloud"]["mailing"]["outgoing_domain"] = "swift.mydomain.com"
 
