@@ -26,6 +26,12 @@ include_recipe "swift-private-cloud::logging"
 include_recipe "swift-private-cloud::mail"
 include_recipe "git::server"
 
+# dsh
+package "dsh" do
+  action :install
+  only_if { platform_family?("debian") }
+end
+
 # /etc/cron.d
 service "swift-admin-cron" do
   service_name "crond"

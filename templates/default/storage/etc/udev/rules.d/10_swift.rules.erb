@@ -1,1 +1,4 @@
-#placeholder
+# filter removable devices?
+
+SUBSYSTEM=="block", ACTION=="add", OWNER="swift", \
+  RUN+="/usr/local/bin/swift-udev-mount.sh %k"

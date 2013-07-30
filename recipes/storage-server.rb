@@ -26,6 +26,12 @@ include_recipe "swift-private-cloud::object-server"
 resources("template[/etc/rsyncd.conf]").cookbook "swift-private-cloud"
 resources("template[/etc/rsyncd.conf]").source "storage/etc/rsyncd.conf.erb"
 
+%w(xfsprogs parted).each do |pkg|
+  package pkg do
+    only_if { platform_family?("debian") }
+  end
+end
+
 template "/etc/cron.d/storage_drivecheck" do
   source "storage/etc/cron.d/storage_drivecheck.erb"
   notifies :reload, "service[swift-storage-cron]", :delayed
@@ -105,6 +111,30 @@ cookbook_file "/usr/local/bin/uname26" do
   source "storage/usr/local/bin/uname26"
   user "root"
   mode "0500"
+end
+
+cookbook_file "/usr/local/bin/swift-format.sh" do
+  source "storage/usr/local/bin/swift-format.sh"
+  user "root"
+  mode "0755"
+end
+
+cookbook_file "/usr/local/bin/swift-mount.sh" do
+  source "storage/usr/local/bin/swift-mount.sh"
+  user "root"
+  mode "0755"
+end
+
+cookbook_file "/usr/local/bin/swift-partition.sh" do
+  source "storage/usr/local/bin/swift-partition.sh"
+  user "root"
+  mode "0755"
+end
+
+cookbook_file "/usr/local/bin/swift-udev-mount.sh" do
+  source "storage/usr/local/bin/swift-udev-mount.sh"
+  user "root"
+  mode "0755"
 end
 
 template "/usr/local/bin/xfs_corruption_check.sh" do
