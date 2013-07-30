@@ -56,9 +56,10 @@
 # +local_domains, +relay_to_domains, and +relay_from_hosts, respectively. They
 # are all colon-separated lists:
 
+local_interfaces = 127.0.0.1
 domainlist local_domains = @ : localhost : localhost.localdomain
 domainlist relay_to_domains =
-hostlist   relay_from_hosts = 127.0.0.1 : 0.0.0.0/0
+hostlist   relay_from_hosts = 127.0.0.1 : ::::1
 
 # Most straightforward access control requirements can be obtained by
 # appropriate settings of the above options. In more complicated situations,
@@ -632,12 +633,12 @@ begin routers
 # If the DNS lookup fails, no further routers are tried because of the no_more
 # setting, and consequently the address is unrouteable.
 
-dnslookup:
-  driver = dnslookup
-  domains = ! +local_domains
-  transport = remote_smtp
-  ignore_target_hosts = 0.0.0.0 : 127.0.0.0/8
-  no_more
+# dnslookup:
+#   driver = dnslookup
+#   domains = ! +local_domains
+#   transport = remote_smtp
+#   ignore_target_hosts = 0.0.0.0 : 127.0.0.0/8
+#   no_more
 
 # Alternatively, comment out the above router and uncomment this one to
 # route all mail to a smarthost instead of sending it directly to the
@@ -646,12 +647,15 @@ dnslookup:
 # later in this file. You might need to change the port number in the
 # remote_msa transport.
 #
-#smarthost:
-#  driver = manualroute
-#  domains = ! +local_domains
-#  transport = remote_smtp
-#  route_data =
-#  no_more
+smarthost:
+  debug_print = "R: smarthost for $local_part@$domain"
+  driver = manualroute
+  domains = ! +local_domains
+  transport = remote_smtp_smarthost
+  route_list = * <%= @smarthost %> byname
+  host_find_failed = defer
+  same_domain_copy_routing = yes
+  no_more
 
 
 # The remaining routers handle addresses in the local domain(s), that is those
@@ -763,6 +767,24 @@ localuser:
 
 begin transports
 
+# This transport is from the debian update conf conf template
+
+remote_smtp_smarthost:
+  debug_print = "T: remote_smtp_smarthost for $local_part@$domain"
+  driver = smtp
+  hosts_try_auth = <; ${if exists{/etc/exim/passwd.client} \
+        {\
+        ${lookup{$host}nwildlsearch{/etc/exim/passwd.client}{$host_address}}\
+        }\
+        {} \
+      }
+  headers_rewrite = *@+local_domains $1@<%= @outdomain %> frs : *@$primary_hostname $1@<%= @outdomain %> frs
+  return_path = ${if match_domain{$sender_address_domain}{+local_domains}\
+        {\
+        ${sender_address_local_part}@<%= @outdomain %>}{\
+        ${if match_domain{$sender_address_domain}{$primary_hostname}{\
+        ${sender_address_local_part}@<%= @outdomain %>}fail}}}
+  helo_data = $primary_hostname
 
 # This transport is used for delivering messages over SMTP connections.
 
