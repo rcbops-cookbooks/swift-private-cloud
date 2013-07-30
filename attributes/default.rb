@@ -70,7 +70,8 @@ default["swift-private-cloud"]["mailing"]["outgoing_domain"] = "swift.mydomain.c
 # versioning
 default["swift-private-cloud"]["versioning"]["versioning_system"] = "git"
 default["swift-private-cloud"]["versioning"]["repository_base"] = "/srv/git"
-default["swift-private-cloud"]["versioning"]["repository_name"] = "swift-cluster-configs"
+default["swift-private-cloud"]["versioning"]["repository_name"] = "rings"
+#default["swift-private-cloud"]["versioning"]["repository_host"] = "ip/hostname"
 
 # keystone
 default["swift-private-cloud"]["keystone"]["region"] = "RegionOne"

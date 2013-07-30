@@ -26,6 +26,13 @@ include_recipe "swift-private-cloud::logging"
 include_recipe "swift-private-cloud::mail"
 include_recipe "git::server"
 
+
+# fix git service
+runit_service "git-daemon" do
+  sv_templates true
+  options({:base_path => node["git"]["server"]["base_path"]})
+end
+
 # dsh
 package "dsh" do
   action :install
@@ -105,6 +112,24 @@ end
 # /srv/ring/scripts
 directory "srv/ring/scripts" do
   recursive true
+end
+
+# git repo
+git_basedir = node["swift-private-cloud"]["versioning"]["repository_base"]
+ring_repo = node["swift-private-cloud"]["versioning"]["repository_name"]
+
+directory git_basedir do
+  mode "0755"
+  owner "swiftops"
+  group "swiftops"
+end
+
+bash "initialize repo" do
+  user "root"
+  cwd git_basedir
+  umask 022
+  code "git init --bare #{ring_repo}; chown swiftops: #{ring_repo}"
+  only_if "test -e #{git_basedir} && test \! -e #{git_basedir}/#{ring_repo} && id swiftops"
 end
 
 template "/srv/ring/scripts/README" do

@@ -26,7 +26,7 @@ apt_repository "dell" do
   uri "http://linux.dell.com/repo/community/deb/latest"
   distribution "/"
   key "1285491434D8786F"
-  keyserver "pool.sks-keyservers.net"
+  keyserver "hkps.pool.sks-keyservers.net"
   only_if { platform_family?("debian") }
 end
 
@@ -42,7 +42,7 @@ apt_repository "cloudarchive-proposed" do
   distribution "precise-proposed/grizzly"
   components ["main"]
   key "5EDB1B62EC4926EA"
-  keyserver "pool.sks-keyservers.net"
+  keyserver "hkps.pool.sks-keyservers.net"
   only_if { platform_family?("debian") }
 end
 
@@ -51,6 +51,6 @@ apt_repository "cloudarchive-updates" do
   distribution "precise-updates/grizzly"
   components ["main"]
   key "5EDB1B62EC4926EA"
-  keyserver "pool.sks-keyservers.net"
+  keyserver "hkps.pool.sks-keyservers.net"
   only_if { platform_family?("debian") }
 end

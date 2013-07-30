@@ -19,11 +19,14 @@
 
 include_recipe "swift-private-cloud::attr-remap"
 include_recipe "swift-private-cloud::packages"
+include_recipe "swift-private-cloud::common"
 include_recipe "swift-lite::ntp"
 include_recipe "swift-private-cloud::logging"
 include_recipe "swift-private-cloud::mail"
 include_recipe "swift-private-cloud::sysctl"
 include_recipe "swift-lite::common"
+include_recipe "git"
+
 
 # /etc/cron.d
 service "swift-storage-cron" do
@@ -140,14 +143,30 @@ template "/etc/rc.local" do
 end
 
 # /usr/local/bin
-template "/usr/local/bin/retrievering.sh" do
-  source "common/usr/local/bin/retrievering.sh.erb"
-  user "root"
-  mode "0500"
-end
 
-template "/usr/local/bin/ringverify.sh" do
-  source "common/usr/local/bin/ringverify.sh.erb"
-  user "root"
-  mode "0500"
+
+# if the pull-ring sufficies, we'll use that
+#
+
+# template "/usr/local/bin/retrievering.sh" do
+#   source "common/usr/local/bin/retrievering.sh.erb"
+#   user "root"
+#   mode "0700"
+# end
+
+# template "/usr/local/bin/ringverify.sh" do
+#   source "common/usr/local/bin/ringverify.sh.erb"
+#   user "root"
+#   mode "0700"
+# end
+
+template "/usr/local/bin/pull-rings.sh" do
+  source "common/usr/local/bin/pull-rings.sh.erb"
+  user "swift"
+  group "swift"
+  mode "0700"
+  variables( :repo => node["swift-private-cloud"]["versioning"]["repository_name"],
+             :builder_ip => node["swift-private-cloud"]["versioning"]["repository_host"],
+             :service_prefix => platform_family?("debian") ? "" : "openstack-" )
+  only_if "/usr/bin/id swift"
 end

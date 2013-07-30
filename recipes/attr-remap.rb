@@ -18,6 +18,14 @@
 #
 
 
+# pull the management host, for lookups later
+nodelist = get_nodes_by_recipe("swift-private-cloud::admin-server")
+admin_node = nil
+if nodelist.length > 0
+  admin_node = nodelist[0]
+end
+
+
 # swift-lite will set the /etc/swift/swift.conf
 node.default["swift"]["swift_hash_suffix"] = node["swift-private-cloud"]["swift_common"]["swift_hash_suffix"]
 node.default["swift"]["swift_hash_prefix"] = node["swift-private-cloud"]["swift_common"]["swift_hash_prefix"]
@@ -42,12 +50,11 @@ node.default["git"]["server"]["base_path"] = node["swift-private-cloud"]["versio
 # stuff to work righter by recipe
 #
 if not node["swift-private-cloud"]["swift_common"]["syslog_ip"]
-    nodelist = get_nodes_by_recipe("swift-private-cloud::admin-server")
-    if nodelist.length == 0
-      raise "Must specify swift-private-cloud/swift_common/syslog_ip"
-    end
+  if not admin_node
+    raise "Must specify swift-private-cloud/swift_common/syslog_ip"
+  end
 
-    node.default["swift-private-cloud"]["swift_common"]["syslog_ip"] = get_ip_for_net("swift-management", nodelist[0])
+  node.default["swift-private-cloud"]["swift_common"]["syslog_ip"] = get_ip_for_net("swift-management", admin_node)
 end
 
 # keystone setup.  This will only do anything interesting if the keystone
@@ -57,3 +64,12 @@ my_keystone_ip = get_ip_for_net("swift-management")
 node.default["swift-private-cloud"]["keystone"]["keystone_admin_url"] = "http://#{my_keystone_ip}:35357/v2.0"
 node.default["swift-private-cloud"]["keystone"]["keystone_internal_url"] = "http://#{my_keystone_ip}:5000/v2.0"
 node.default["swift-private-cloud"]["keystone"]["keystone_public_url"] = "http://#{my_keystone_ip}:5000/v2.0"
+
+# set up the git host ip - pull the ip from the management box
+if not node["swift-private-cloud"]["versioning"]["repository_host"]
+  if not admin_node
+    raise "Must specify swift-private-cloud/versioning/repository_host"
+  end
+
+  node.default["swift-private-cloud"]["versioning"]["repository_host"] = get_ip_for_net("swift-management", admin_node)
+end
