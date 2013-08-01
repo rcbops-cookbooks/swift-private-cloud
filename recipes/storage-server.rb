@@ -27,9 +27,7 @@ resources("template[/etc/rsyncd.conf]").cookbook "swift-private-cloud"
 resources("template[/etc/rsyncd.conf]").source "storage/etc/rsyncd.conf.erb"
 
 %w(xfsprogs parted).each do |pkg|
-  package pkg do
-    only_if { platform_family?("debian") }
-  end
+  package pkg
 end
 
 template "/etc/cron.d/storage_drivecheck" do
