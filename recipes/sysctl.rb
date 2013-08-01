@@ -23,7 +23,7 @@ directory "/etc/sysctl.d"
 #   only_if { node.run_list.include?("swift-private-cloud::proxy-server") }
 # end
 
-if node.recipe?("swift-lite::proxy-server")
+if node.recipe?("swift-private-cloud::proxy-server")
   options = node["swift-private-cloud"]["proxy"]["sysctl"]
 
   sysctl_multi 'swift-proxy-server' do
