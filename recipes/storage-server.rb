@@ -79,7 +79,9 @@ end
 # /etc/udev/rules.d
 template "/etc/udev/rules.d/10_swift.rules" do
   source "storage/etc/udev/rules.d/10_swift.rules.erb"
-  only_if { platform_family?("debian") }
+  mode "0644"
+  owner "root"
+  group "root"
 end
 
 # /usr/local/bin

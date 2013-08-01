@@ -5,7 +5,7 @@
 # at /srv/node/foo
 #
 
-
+export PATH=/bin:/usr/bin:/sbin:/usr/sbin
 DEVICE=$1
 
 if [ ! -b /dev/${DEVICE} ]; then
