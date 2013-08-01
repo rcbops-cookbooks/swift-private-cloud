@@ -16,6 +16,8 @@
 # limitations under the License.
 
 
+directory "/etc/sysctl.d"
+
 sysctl_multi 'swift-proxy-server' do
   instructions node["swift-private-cloud"]["proxy"]["sysctl"]
   only_if { node.run_list.include?("swift-private-cloud::proxy-server") }
