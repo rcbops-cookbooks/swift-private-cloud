@@ -18,18 +18,18 @@
 
 directory "/etc/sysctl.d"
 
-sysctl_multi 'swift-proxy-server' do
-  instructions node["swift-private-cloud"]["proxy"]["sysctl"]
-  only_if { node.run_list.include?("swift-private-cloud::proxy-server") }
-end
-
-# if node.recipe?("swift-lite::proxy-server")
-#   options = node["swift-private-cloud"]["proxy"]["sysctl"]
-
-#   sysctl_multi 'swift-proxy-server' do
-#     instructions options
-#   end
+# sysctl_multi 'swift-proxy-server' do
+#   instructions node["swift-private-cloud"]["proxy"]["sysctl"]
+#   only_if { node.run_list.include?("swift-private-cloud::proxy-server") }
 # end
+
+if node.recipe?("swift-lite::proxy-server")
+  options = node["swift-private-cloud"]["proxy"]["sysctl"]
+
+  sysctl_multi 'swift-proxy-server' do
+    instructions options
+  end
+end
 
 if node.recipe?("swift-private-cloud::storage-server")
   options = node["swift-private-cloud"]["storage"]["sysctl"]
