@@ -60,10 +60,23 @@ end
 # keystone setup.  This will only do anything interesting if the keystone
 # recipe is applied.
 
-my_keystone_ip = get_ip_for_net("swift-management")
-node.default["swift-private-cloud"]["keystone"]["keystone_admin_url"] = "http://#{my_keystone_ip}:35357/v2.0"
-node.default["swift-private-cloud"]["keystone"]["keystone_internal_url"] = "http://#{my_keystone_ip}:5000/v2.0"
-node.default["swift-private-cloud"]["keystone"]["keystone_public_url"] = "http://#{my_keystone_ip}:5000/v2.0"
+if not node["swift-private-cloud"]["keystone"]["keystone_admin_url"]
+  if not admin_node
+    raise "Must specify keystone endpoints"
+  end
+
+  my_keystone_ip = get_ip_for_net("swift-management", admin_node)
+
+  node.default["swift-private-cloud"]["keystone"]["keystone_admin_url"] = "http://#{my_keystone_ip}:35357/v2.0"
+  node.default["swift-private-cloud"]["keystone"]["keystone_internal_url"] = "http://#{my_keystone_ip}:5000/v2.0"
+  node.default["swift-private-cloud"]["keystone"]["keystone_public_url"] = "http://#{my_keystone_ip}:5000/v2.0"
+end
+
+node.default["swift"]["keystone_endpoint"] = node["swift-private-cloud"]["keystone"]["keystone_public_url"]
+
+node.default["swift"]["service_user"] = node["swift-private-cloud"]["keystone"]["auth_user"]
+node.default["swift"]["service_pass"] = node["swift-private-cloud"]["keystone"]["auth_password"]
+node.default["swift"]["service_tenant_name"] = node["swift-private-cloud"]["keystone"]["auth_tenant"]
 
 # set up the git host ip - pull the ip from the management box
 if not node["swift-private-cloud"]["versioning"]["repository_host"]
