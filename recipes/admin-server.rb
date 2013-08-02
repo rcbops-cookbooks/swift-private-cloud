@@ -19,6 +19,7 @@
 
 include_recipe "swift-private-cloud::attr-remap"
 include_recipe "swift-private-cloud::packages"
+include_recipe "swift-private-cloud::common"
 include_recipe "swift-lite::management-server"
 include_recipe "swift-lite::common"
 include_recipe "swift-lite::ntp-server"
