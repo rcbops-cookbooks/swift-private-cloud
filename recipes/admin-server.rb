@@ -24,6 +24,7 @@ include_recipe "swift-lite::common"
 include_recipe "swift-lite::ntp-server"
 include_recipe "swift-private-cloud::logging"
 include_recipe "swift-private-cloud::mail"
+include_recipe "runit::default"
 include_recipe "git::server"
 
 

@@ -16,6 +16,6 @@ recipe            "swift-private-cloud::admin-server", "Installs the swift admin
   supports os
 end
 
-%w{ swift-lite git mysql-openstack keystone }.each do |dep|
+%w{ swift-lite runit git mysql-openstack keystone }.each do |dep|
   depends dep
 end
