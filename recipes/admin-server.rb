@@ -129,7 +129,7 @@ bash "initialize repo" do
   user "root"
   cwd git_basedir
   umask 022
-  code "git init --bare #{ring_repo}; chown swiftops: #{ring_repo}"
+  code "git init --bare #{ring_repo}; chown -R swiftops: #{ring_repo}"
   only_if "test -e #{git_basedir} && test \! -e #{git_basedir}/#{ring_repo} && id swiftops"
 end
 
