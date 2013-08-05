@@ -5,10 +5,10 @@
 #######################################
 # SWIFT SOURCE
 source s_swift {
-       syslog(flags("no-multi-line"));
-       unix-stream("/dev/log" flags("no-multi-line"));
-       #unix-dgram("/dev/log" flags("no-multi-line"));
-       file("/proc/kmsg" program_override("kernel: "));
+       # syslog(flags("no-multi-line"));
+       # unix-stream("/dev/log" flags("no-multi-line"));
+       # #unix-dgram("/dev/log" flags("no-multi-line"));
+       # file("/proc/kmsg" program_override("kernel: "));
        tcp(ip("0.0.0.0") port(514) max-connections(1000) log_iw_size(400000) log_fetch_limit(100));
 };
 
@@ -16,9 +16,9 @@ source s_swift {
 #######################################
 # Destinations
 #######################################
-# SWIFT LOGGING 
+# SWIFT LOGGING
 #
-# Proxy 
+# Proxy
 destination d_healthchk { file("/var/log/swift/healthchk.log"); };
 destination d_local0 { file("/var/log/swift/proxy.log"); };
 destination d_local0_err { file("/var/log/swift/proxy.error"); };
@@ -31,7 +31,7 @@ destination d_local2_err { file("/var/log/swift/jobs.error"); };
 # Swift Drive Audits
 destination d_local3 { file("/var/log/swift/drive-audit.log"); };
 destination d_local3_err { file("/var/log/swift/drive-audit.error"); };
-# python-slogging for log-processor 
+# python-slogging for log-processor
 destination d_local4 { file("/var/log/swift/swift-log-processor.log"); };
 destination d_local4_err { file("/var/log/swift/swift-log-processor.error"); };
 
@@ -39,7 +39,7 @@ destination d_local4_err { file("/var/log/swift/swift-log-processor.error"); };
 #######################################
 # Filters
 #######################################
-# SWIFT LOGGING FILTERS 
+# SWIFT LOGGING FILTERS
 #
 # Proxy
 filter f_local0 { facility(local0) and level(info,debug) and
@@ -67,7 +67,7 @@ filter f_local2_err { facility(local2) and not level(info,debug); };
 # Swift drive Audits
 filter f_local3 { facility(local3) and level(info,debug); };
 filter f_local3_err { facility(local3) and not level(info,debug); };
-# python-slogging for log-processor 
+# python-slogging for log-processor
 filter f_local4 { facility(local4) and level(info,debug); };
 filter f_local4_err { facility(local4) and not level(info,debug); };
 
@@ -75,11 +75,11 @@ filter f_local4_err { facility(local4) and not level(info,debug); };
 ###############################
 # Log paths
 ###############################
-# SWIFT LOGGING 
+# SWIFT LOGGING
 #
 # local0.info                        -/var/log/swift/proxy.log
 # write to local file and to remove log server
-log {  
+log {
         source(s_swift);
         filter(f_local0);
         destination(d_local0);
@@ -88,14 +88,14 @@ log {
 
 # local0.error                        -/var/log/swift/proxy.error
 # write to local file and to remove log server
-log {  
+log {
         source(s_swift);
         filter(f_local0_err);
         destination(d_local0_err);
 };
 
 # Puts all health check into a local file
-log {  
+log {
         source(s_swift);
         filter(f_healthchk);
         destination(d_healthchk);
@@ -151,18 +151,16 @@ log {
 
 # local4.info                        -/var/log/swift/slogging.log
 # write to local file and to remote log server
-log {  
+log {
         source(s_swift);
         filter(f_local4);
         destination(d_local4);
 };
 
-# local4.error                        -/var/log/swift/slogging.error 
+# local4.error                        -/var/log/swift/slogging.error
 # write to local file and to remote log server
-log {  
+log {
         source(s_swift);
         filter(f_local4_err);
         destination(d_local4_err);
 };
-
-
