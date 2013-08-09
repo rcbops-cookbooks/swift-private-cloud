@@ -25,17 +25,7 @@ include_recipe "swift-lite::common"
 include_recipe "swift-lite::ntp-server"
 include_recipe "swift-private-cloud::logging"
 include_recipe "swift-private-cloud::mail"
-include_recipe "git::server"
 
-
-# fix git service -- rhel uses xinetd
-runit_service "git-daemon" do
-  sv_templates true
-  options({:base_path => node["git"]["server"]["base_path"]})
-  only_if { platform_family?("debian") }
-end
-
-# dsh
 package "dsh" do
   action :install
   only_if { platform_family?("debian") }
