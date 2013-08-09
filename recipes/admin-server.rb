@@ -26,38 +26,10 @@ include_recipe "swift-lite::ntp-server"
 include_recipe "swift-private-cloud::logging"
 include_recipe "swift-private-cloud::mail"
 
-case node["platform_family"]
-when "rhel"
-  include_recipe "git::server"
-when "debian"
-  # git::server is currently borken on debian see: http://tickets.opscode.com/browse/COOK-3433
-  # While waiting for fix, do it manually here:
-  include_recipe "git"
-  package "xinetd"
-
-  directory node["git"]["server"]["base_path"] do
-    owner "root"
-    group "root"
-    mode 00755
-  end
-
-  template "/etc/xinetd.d/git" do
-    backup false
-    source "git-xinetd.d.erb"
-    owner "root"
-    group "root"
-    mode 00644
-  end
-
-  service "xinetd" do
-    action [:enable, :restart]
-  end
-
-  package "dsh" do
-    action :install
-  end
+package "dsh" do
+  action :install
+  only_if { platform_family?("debian") }
 end
-
 
 # /etc/cron.d
 service "swift-admin-cron" do
