@@ -164,13 +164,17 @@ Environment (minimum)
     "override_attributes": {
         "swift-private-cloud": {
             "swift_common": {
-                "admin_ip": "<ip of controller>",
-                "syslog_ip": "<ip of controller>",
-                "swift_hash_prefix": "<some random string>"
+                "swift_hash_prefix": "<some random string>",
+                "swift_hash_suffix": "<some random string>"
             },
             "network": {
                 "managmenet": "<cidr of private management net>",
                 "exnet": "<cidr of lb public net>"
+            },
+            "keystone": {
+                "swift_admin_url": "http://xxxxx:8080/v1/AUTH_%(tenant_id)s",
+                "swift_public_url": "http://xxxxx:8080/v1/AUTH_%(tenant_id)s",
+                "swift_internal_url": "http://xxxxx:8080/v1/AUTH_%(tenant_id)s"
             }
         }
     }
