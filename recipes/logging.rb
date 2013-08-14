@@ -17,18 +17,19 @@
 # limitations under the License.
 #
 
-package "syslog-ng"
-
-service "syslog" do
-  action [:disable, :stop]
-  only_if { platform_family?("rhel") }
+node["syslog-ng"]["platform"]["packages"].each do |pkg|
+  package pkg
 end
 
-service "rsyslog" do
-  action [:disable, :stop]
+node["syslog-ng"]["platform"]["replaces"].each do |svc|
+  service svc do
+    action [:disable, :stop]
+  end
 end
 
-service "syslog-ng" do
+service_name = node["syslog-ng"]["platform"]["service"]
+
+service service_name do
   supports :restart => true, :status => true
   action [:enable, :start]
 end
