@@ -19,6 +19,11 @@
 
 package "syslog-ng"
 
+# Rhel/CentOS require the syslog-ng-libdbi package
+if platform_family?("rhel")
+  package "syslog-ng-libdbi"
+end
+
 service "syslog" do
   action [:disable, :stop]
   only_if { platform_family?("rhel") }
