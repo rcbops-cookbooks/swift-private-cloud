@@ -17,23 +17,19 @@
 # limitations under the License.
 #
 
-package "syslog-ng"
-
-# Rhel/CentOS require the syslog-ng-libdbi package
-if platform_family?("rhel")
-  package "syslog-ng-libdbi"
+node["syslog-ng"]["platform"]["packages"].each do |pkg|
+  package pkg
 end
 
-service "syslog" do
-  action [:disable, :stop]
-  only_if { platform_family?("rhel") }
+node["syslog-ng"]["platform"]["replaces"].each do |svc|
+  service svc do
+    action [:disable, :stop]
+  end
 end
 
-service "rsyslog" do
-  action [:disable, :stop]
-end
+service_name = node["syslog-ng"]["platform"]["service"]
 
-service "syslog-ng" do
+service service_name do
   supports :restart => true, :status => true
   action [:enable, :start]
 end

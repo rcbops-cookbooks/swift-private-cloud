@@ -127,3 +127,18 @@ elsif platform_family?("debian")
     "service" => "snmpd"
   }
 end
+
+# syslog-ng
+if platform_family?("rhel")
+  default["syslog-ng"]["platform"] = {
+    "packages" => ["syslog-ng", "syslog-ng-libdbi"],
+    "service" => "syslog-ng",
+    "replaces" => ["rsyslog", "syslog"]
+  }
+elsif platform_family?("debian")
+  default["syslog-ng"]["platform"] = {
+    "packages" => ["syslog-ng"],
+    "service" => "syslog-ng",
+    "replaces" => ["rsyslog"]
+  }
+end
