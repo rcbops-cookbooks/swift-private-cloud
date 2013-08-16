@@ -26,7 +26,12 @@ default["swift-private-cloud"]["common"]["swift_generic"] = "swift python-swift 
 default["swift-private-cloud"]["common"]["swift_proxy"] = "swift-proxy python-keystone python-keystoneclient memcached python-memcache"
 default["swift-private-cloud"]["common"]["swift_storage"] = "swift-account swift-container swift-object"
 default["swift-private-cloud"]["common"]["swift_others"] = "python-suds"
-default["swift-private-cloud"]["common"]["apt_options"] = "-y -qq --force-yes -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold"
+
+if platform_family?("debian")
+  default["swift-private-cloud"]["common"]["pkg_options"] = "-y -qq --force-yes -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold"
+else
+  default["swift-private-cloud"]["common"]["pkg_options"] = ""
+end
 
 # network
 #default["swift-private-cloud"]["network"]["management"] = "cidr"
@@ -84,9 +89,9 @@ default["swift-private-cloud"]["keystone"]["region"] = "RegionOne"
 
 default["swift-private-cloud"]["keystone"]["auth_user"] = "swift"
 default["swift-private-cloud"]["keystone"]["auth_tenant"] = "service"
-default["swift-private-cloud"]["keystone"]["auth_password"] = "secrete"
+#default["swift-private-cloud"]["keystone"]["auth_password"] = "secrete"
 default["swift-private-cloud"]["keystone"]["admin_user"] = "admin"
-default["swift-private-cloud"]["keystone"]["admin_password"] = "secrete"
+#default["swift-private-cloud"]["keystone"]["admin_password"] = "secrete"
 default["swift-private-cloud"]["keystone"]["pki"] = true
 
 # default["swift-private-cloud"]["keystone"]["auth_uri"] = "http://172.16.0.252:5000/v2.0"
