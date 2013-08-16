@@ -18,7 +18,9 @@
 #
 
 node["syslog-ng"]["platform"]["packages"].each do |pkg|
-  package pkg
+  package pkg do
+    options node["swift-private-cloud"]["common"]["pkg_options"]
+  end
 end
 
 node["syslog-ng"]["platform"]["replaces"].each do |svc|

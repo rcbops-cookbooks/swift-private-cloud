@@ -24,7 +24,9 @@ when "debian"
   # git::server is currently borken on debian see: http://tickets.opscode.com/browse/COOK-3433
   # While waiting for fix, do it manually here:
   include_recipe "git"
-  package "xinetd"
+  package "xinetd" do
+    options node["swift-private-cloud"]["common"]["pkg_options"]
+  end
 
   directory node["git"]["server"]["base_path"] do
     owner "root"
