@@ -19,7 +19,7 @@ fi
 
 LABEL=${LABEL// /_}
 
-mkfs.xfs -f -i size=512 /dev/${DEVICE}
+mkfs.xfs -f -i size=512 -d su=64k,sw=1 /dev/${DEVICE}
 xfs_admin -L "swift:${LABEL}" /dev/${DEVICE}
 
 # kick an event so that we mount
