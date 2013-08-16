@@ -45,10 +45,11 @@ template "/etc/cron.d/swift-recon-cron" do
   notifies :reload, "service[swift-storage-cron]", :delayed
 end
 
-template "/etc/cron.d/swift-slogging" do
-  source "storage/etc/cron.d/swift-slogging.erb"
-  notifies :reload, "service[swift-storage-cron]", :delayed
-end
+# python slogging no longer used
+#template "/etc/cron.d/swift-slogging" do
+#  source "storage/etc/cron.d/swift-slogging.erb"
+#  notifies :reload, "service[swift-storage-cron]", :delayed
+#end
 
 template "/etc/cron.d/xfs-corruption-check" do
   source "storage/etc/cron.d/xfs-corruption-check.erb"
