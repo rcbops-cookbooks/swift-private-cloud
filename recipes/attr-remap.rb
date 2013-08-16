@@ -63,6 +63,8 @@ end
 # keystone setup.  This will only do anything interesting if the keystone
 # recipe is applied.
 
+node.default["keystone"]["pki"]["enabled"] = node["swift-private-cloud"]["keystone"]["pki"]
+
 if not node["swift-private-cloud"]["keystone"]["keystone_admin_url"]
   if not admin_node
     raise "Must specify keystone endpoints"
