@@ -44,7 +44,7 @@ default["swift-private-cloud"]["swift_common"]["admin_ip"] = nil
 default["swift-private-cloud"]["swift_common"]["syslog_ip"] = nil
 
 # proxy
-default["swift-private-cloud"]["proxy"]["pipeline"] = "catch_errors healthcheck proxy-logging cache ratelimit authtoken keystoneauth proxy-logging proxy-server"
+default["swift-private-cloud"]["proxy"]["pipeline"] = "catch_errors proxy-logging healthcheck cache ratelimit authtoken keystoneauth proxy-server"
 default["swift-private-cloud"]["proxy"]["memcache_maxmem"] = 512
 default["swift-private-cloud"]["proxy"]["sim_connections"] = 1024
 default["swift-private-cloud"]["proxy"]["memcache_server_list"] = "127.0.0.1:11211"
