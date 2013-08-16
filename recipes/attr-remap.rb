@@ -36,6 +36,9 @@ node.default["osops_networks"]["swift-replication"] = node["swift-private-cloud"
 node.default["osops_networks"]["swift-management"] = node["swift-private-cloud"]["network"]["management"]
 node.default["osops_networks"]["swift-proxy"] = node["swift-private-cloud"]["network"]["management"]
 
+# pass through the proxy args
+node.default["swift"]["proxy"]["pipeline"] = node["swift-private-cloud"]["proxy"]["pipeline"]
+
 # set up the right memcache bind
 node.default["memcached"]["services"]["cache"]["network"] = "swift-storage"
 node.default["swift"]["memcache_role"] = "spc-starter-proxy"

@@ -28,7 +28,8 @@ workers = 12
 # eventlet_debug = false
 
 [pipeline:main]
-pipeline = catch_errors proxy-logging healthcheck cache ratelimit authtoken keystoneauth proxy-server
+pipeline = <%= @proxy_pipeline %>
+
 
 [app:proxy-server]
 use = egg:swift#proxy
