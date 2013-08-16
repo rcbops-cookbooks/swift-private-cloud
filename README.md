@@ -189,13 +189,16 @@ Environment (minimum)
 License and Author
 ==================
 
-|                     |                                         |
-|:--------------------|:----------------------------------------|
-| **Authors**         | Ron Pedde (<ron.pedde@rackspace.com>)   |
-|                     | Will Kelly (<will.kelly@rackspace.com>) |
-|                     | Chris Laco (<chris.laco@rackspace.com>) |
-|                     |                                         |
-| **Copyright**       | 2012, 2013 Rackspace US, Inc.           |
+|                     |                                                   |
+|:--------------------|:--------------------------------------------------|
+| **Authors**         | Ron Pedde (<ron.pedde@rackspace.com>)             |
+|                     | Will Kelly (<will.kelly@rackspace.com>)           |
+|                     | Chris Laco (<chris.laco@rackspace.com>)           |
+|                     | Andy McCrae (<andrew.mccrae@rackspace.co.uk>)     |
+|                     | Hugh Saunders (<hugh.saunders@rackspace.co.uk>)   |
+|                     | Marcelo Martins (<marcelo.martins@rackspace.com>) |
+|                     |                                                   |
+| **Copyright**       | 2012, 2013 Rackspace US, Inc.                     |
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
