@@ -1,23 +1,68 @@
 [DEFAULT]
 bind_ip = <%= @bind_host %>
 bind_port = <%= @bind_port %>
+# bind_timeout = 30
+# backlog = 4096
+# swift_dir = /etc/swift
 workers = 12
+# user = swift
+# expiring_objects_container_divisor = 86400
+# You can specify default log routing here if you want:
+# log_name = swift
+# log_facility = LOG_LOCAL0
+# log_level = INFO
+# log_headers = False
+# log_address = /dev/log
+# If set, log_udp_host will override log_address
+# log_udp_host =
+# log_udp_port = 514
+# You can enable StatsD logging here:
+# log_statsd_host = localhost
+# log_statsd_port = 8125
+# log_statsd_default_sample_rate = 1.0
+# log_statsd_sample_rate_factor = 1.0
+# log_statsd_metric_prefix =
+# Use a comma separated list of full url (http://foo.bar:1234,https://foo.bar)
+# cors_allow_origin =
+# eventlet_debug = false
 
 [pipeline:main]
 pipeline = catch_errors proxy-logging healthcheck cache ratelimit authtoken keystoneauth proxy-server
 
 [app:proxy-server]
 use = egg:swift#proxy
+# set log_name = proxy-server
 set log_facility = LOG_LOCAL0
+# set log_level = INFO
+# set log_address = /dev/log
+# log_handoffs = True
+# recheck_account_existence = 60
+# recheck_container_existence = 60
+# object_chunk_size = 8192
+# client_chunk_size = 8192
 node_timeout = 60
+client_timeout = 60
 conn_timeout = 3.5
+# How long without an error before a node's error count is reset. This will
+# also be how long before a node is reenabled after suppression is triggered.
+# error_suppression_interval = 60
+# How many errors can accumulate before a node is temporarily ignored.
+# error_suppression_limit = 10
 allow_account_management = false
+# object_post_as_copy = true
 account_autocreate = true
+# max_containers_per_account = 0
+# max_containers_whitelist =
+# deny_host_headers =
+# auto_create_account_prefix = .
+# put_queue_depth = 10
+# rate_limit_after_segment = 10
+# rate_limit_segments_per_sec = 1
+# sorting_method = shuffle
+# timing_expiry = 300
+# allow_static_large_object = true
 
 [filter:authtoken]
-# Folsom
-#paste.filter_factory = keystone.middleware.auth_token:filter_factory
-# Grizzly
 paste.filter_factory = keystoneclient.middleware.auth_token:filter_factory
 # Delaying the auth decision is required to support token-less
 # usage for anonymous referrers ('.r:*') or for tempurl/formpost
@@ -32,26 +77,15 @@ admin_password = <%= @service_pass %>
 #auth_uri = $KEYSTONE_AUTH_PROTO://$KEYSTONE_IP:5000/
 signing_dir = /var/cache/swift
 cache = swift.cache
+token_cache_time = 86100
 
 [filter:keystoneauth]
-# Folsom
-#paste.filter_factory = keystone.middleware.swift_auth:filter_factory
-# Grizzly
 use = egg:swift#keystoneauth
 operator_roles = admin, swiftoperator
 
-[filter:informant]
-use = egg:informant#informant
-# statsd_host = $INFORMANT_IP
-# statsd_port = 8125
-# standard statsd sample rate 0.0 <= 1
-statsd_sample_rate = 0.75
-
-[filter:catch_errors]
-use = egg:swift#catch_errors
-
 [filter:healthcheck]
 use = egg:swift#healthcheck
+# disable_path =
 
 [filter:cache]
 use = egg:swift#memcache
@@ -60,43 +94,100 @@ memcache_servers = <%= @memcache_servers %>
 
 [filter:ratelimit]
 use = egg:swift#ratelimit
-account_ratelimit = 200000.0
-container_ratelimit_0 = 100
-
-[filter:proxy-logging]
-use = egg:swift#proxy_logging
-
-[filter:staticweb]
-use = egg:swift#staticweb
-#cache_timeout = 300
-
-[filter:tempurl]
-use = egg:swift#tempurl
-# Please see the proxy-server.conf
-# manpage for more details
-#incoming_remove_headers =
-#incoming_allow_headers =
-#outgoing_remove_headers =
-#outgoing_allow_headers =
-
-[filter:formpost]
-use = egg:swift#formpost
+# clock_accuracy = 1000
+# max_sleep_time_seconds = 60
+# log_sleep_time_seconds = 0
+# rate_buffer_seconds = 5
+# account_ratelimit = 0
+# account_whitelist = a,b
+# account_blacklist = c,d
+# account_ratelimit = 0
+# container_ratelimit_0 = 100
 
 [filter:domain_remap]
 use = egg:swift#domain_remap
-#storage_domain = example.com
-#path_root = v1
-#reseller_prefixes = AUTH
+# storage_domain = example.com
+# path_root = v1
+# reseller_prefixes = AUTH
+
+[filter:catch_errors]
+use = egg:swift#catch_errors
 
 [filter:cname_lookup]
 use = egg:swift#cname_lookup
-#storage_domain = example.com
-#lookup_depth = 1
+# storage_domain = example.com
+# lookup_depth = 1
 
+# Note: Put staticweb just after your auth filter(s) in the pipeline
+[filter:staticweb]
+use = egg:swift#staticweb
+# cache_timeout = 300
+
+# Note: Put tempurl just before your auth filter(s) in the pipeline
+[filter:tempurl]
+use = egg:swift#tempurl
+# incoming_remove_headers = x-timestamp
+# incoming_allow_headers =
+# outgoing_remove_headers = x-object-meta-*
+# outgoing_allow_headers = x-object-meta-public-*
+
+# Note: Put formpost just before your auth filter(s) in the pipeline
+[filter:formpost]
+use = egg:swift#formpost
+
+# Note: Just needs to be placed before the proxy-server in the pipeline.
 [filter:name_check]
 use = egg:swift#name_check
-# Please see the proxy-server.conf
-# manpage for more details
-#forbidden_chars =
-#maximum_length =
-#forbidden_regexp
+# forbidden_chars = '"`<>
+# maximum_length = 255
+# forbidden_regexp = /\./|/\.\./|/\.$|/\.\.$
+
+[filter:list-endpoints]
+use = egg:swift#list_endpoints
+# list_endpoints_path = /endpoints/
+
+[filter:proxy-logging]
+use = egg:swift#proxy_logging
+# access_log_name = swift
+# access_log_facility = LOG_LOCAL0
+# access_log_level = INFO
+# access_log_address = /dev/log
+# access_log_udp_host =
+# access_log_udp_port = 514
+# You can use log_statsd_* from [DEFAULT] or override them here:
+# access_log_statsd_host = localhost
+# access_log_statsd_port = 8125
+# access_log_statsd_default_sample_rate = 1.0
+# access_log_statsd_sample_rate_factor = 1.0
+# access_log_statsd_metric_prefix =
+# access_log_headers = False
+# log_statsd_valid_http_methods = GET,HEAD,POST,PUT,DELETE,COPY,OPTIONS
+
+# Note: Put before both ratelimit and auth in the pipeline.
+[filter:bulk]
+use = egg:swift#bulk
+# max_containers_per_extraction = 10000
+# max_failed_files = 1000
+# max_deletes_per_request = 1000
+
+# Note: Put after auth in the pipeline.
+[filter:container-quotas]
+use = egg:swift#container_quotas
+
+# Note: Put before both ratelimit and auth in the pipeline.
+[filter:slo]
+use = egg:swift#slo
+# max_manifest_segments = 1000
+# max_manifest_size = 2097152
+# min_segment_size = 1048576
+
+[filter:account-quotas]
+use = egg:swift#account_quotas
+
+[filter:informant]
+use = egg:informant#informant
+# statsd_host = $INFORMANT_IP
+# statsd_port = 8125
+# standard statsd sample rate 0.0 <= 1
+# statsd_sample_rate = 0.75
+
