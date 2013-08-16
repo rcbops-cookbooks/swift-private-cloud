@@ -6,21 +6,26 @@
 #   go ahead and restart memcache.
 #
 
-LOCKFILE=/var/lock/.memcachecheck.lock
-if [ -e $LOCKFILE ]; then
-        exit 1
+
+# This assumes IPv4 binding 
+memcache_ip=$(netstat -ntl -A inet | grep 11211 | awk '{ print $4}' | cut -d ":" -f 1 | tr -d '\n')    
+
+lockfile=/var/lock/.memcachecheck.lock
+if [ -e $lockfile ]; then
+    exit 1
 else
-        touch $LOCKFILE
+    touch $lockfile
 fi
 
-TMPF=`mktemp`
-/usr/local/bin/check_memcache.py -H 127.0.0.1 -f > $TMPF
-grep restart $TMPF -q
+tmpf=`mktemp`
+/usr/local/bin/check_memcache.py -H $memcache_ip -f > $tmpf
+grep restart $tmpf -q
 if [ $? -eq 0 ]; then
-    cat $TMPF
+    cat $tmpf
     echo "Restart attempted, sleeping for one cycle"
 fi
 
-rm -f $TMPF
-rm -f $LOCKFILE
+rm -f $tmpf
+rm -f $lockfile
+
 exit 0
