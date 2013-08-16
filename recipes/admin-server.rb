@@ -28,6 +28,7 @@ include_recipe "swift-private-cloud::mail"
 
 package "dsh" do
   action :install
+  options node["swift-private-cloud"]["common"]["pkg_options"]
   only_if { platform_family?("debian") }
 end
 

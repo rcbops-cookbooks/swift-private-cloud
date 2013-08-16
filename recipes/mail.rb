@@ -18,7 +18,9 @@
 #
 
 node["exim"]["platform"]["packages"].each do |pkg|
-  package pkg
+  package pkg do
+    options node["swift-private-cloud"]["common"]["pkg_options"]
+  end
 end
 
 service node["exim"]["platform"]["replaces"] do
