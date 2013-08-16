@@ -21,6 +21,7 @@ include_recipe "swift-private-cloud::common"
 include_recipe "swift-lite::proxy-server"
 
 resources("template[/etc/swift/proxy-server.conf]").cookbook "swift-private-cloud"
+resources("template[/etc/swift/proxy-server.conf]").mode "0644"
 
 # /etc/cron.d
 service "swift-proxy-cron" do
