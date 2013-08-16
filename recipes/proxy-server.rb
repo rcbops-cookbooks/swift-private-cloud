@@ -33,10 +33,11 @@ template "/etc/cron.d/memcache-restart" do
   notifies :reload, "service[swift-proxy-cron]", :delayed
 end
 
-template "/etc/cron.d/swift-access-log-uploader" do
-  source "proxy/etc/cron.d/swift-access-log-uploader.erb"
-  notifies :reload, "service[swift-proxy-cron]", :delayed
-end
+# python slogging no longer used
+#template "/etc/cron.d/swift-access-log-uploader" do
+#  source "proxy/etc/cron.d/swift-access-log-uploader.erb"
+#  notifies :reload, "service[swift-proxy-cron]", :delayed
+#end
 
 # /etc/default
 template "/etc/default/memcached" do

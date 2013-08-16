@@ -30,9 +30,9 @@ destination d_local2_err { file("/var/log/swift/jobs.error"); };
 # Swift Drive Audits
 destination d_local3 { file("/var/log/swift/drive-audit.log"); };
 destination d_local3_err { file("/var/log/swift/drive-audit.error"); };
-# python-slogging for log-processor
-destination d_local4 { file("/var/log/swift/swift-log-processor.log"); };
-destination d_local4_err { file("/var/log/swift/swift-log-processor.error"); };
+# python-slogging for log-processor (DEPRECATED)
+#destination d_local4 { file("/var/log/swift/swift-log-processor.log"); };
+#destination d_local4_err { file("/var/log/swift/swift-log-processor.error"); };
 
 # Remote Syslog-ng Server
 destination d_remote {
@@ -71,9 +71,9 @@ filter f_local2_err { facility(local2) and not level(info,debug); };
 # Swift drive Audits
 filter f_local3 { facility(local3) and level(info,debug); };
 filter f_local3_err { facility(local3) and not level(info,debug); };
-# python-slogging for log-processor
-filter f_local4 { facility(local4) and level(info,debug); };
-filter f_local4_err { facility(local4) and not level(info,debug); };
+# python-slogging for log-processor (DEPRECATED)
+#filter f_local4 { facility(local4) and level(info,debug); };
+#filter f_local4_err { facility(local4) and not level(info,debug); };
 
 
 ###############################
@@ -163,18 +163,18 @@ log {
 
 # local4.info                        -/var/log/swift/slogging.log
 # write to local file and to remote log server
-log {
-        source(s_sys);
-        filter(f_local4);
-        destination(d_local4);
-        destination(d_remote);
-};
+#log {
+#        source(s_sys);
+#        filter(f_local4);
+#        destination(d_local4);
+#        destination(d_remote);
+#};
 
 # local4.error                        -/var/log/swift/slogging.error
 # write to local file and to remote log server
-log {
-        source(s_sys);
-        filter(f_local4_err);
-        destination(d_local4_err);
-        destination(d_remote);
-};
+#log {
+#        source(s_sys);
+#        filter(f_local4_err);
+#        destination(d_local4_err);
+#        destination(d_remote);
+#};

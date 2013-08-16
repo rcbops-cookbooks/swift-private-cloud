@@ -103,20 +103,22 @@ template "/etc/snmp/snmpd.conf" do
 end
 
 # /etc/swift
-template "/etc/swift/internal-proxy-server.conf" do
-  source "common/etc/swift/internal-proxy-server.conf.erb"
-  owner "swift"
-  group "swift"
-end
 
-template "/etc/swift/log-processor.conf" do
-  source "common/etc/swift/log-processor.conf.erb"
-  owner "swift"
-  group "swift"
-  variables(
-    :processing_account => "swift"
-  )
-end
+# python slogging no longer used
+#template "/etc/swift/internal-proxy-server.conf" do
+#  source "common/etc/swift/internal-proxy-server.conf.erb"
+#  owner "swift"
+#  group "swift"
+#end
+
+#template "/etc/swift/log-processor.conf" do
+#  source "common/etc/swift/log-processor.conf.erb"
+#  owner "swift"
+#  group "swift"
+#  variables(
+#    :processing_account => "swift"
+#  )
+#end
 
 template "/etc/swift/mime.types" do
   source "common/etc/swift/mime.types.erb"
