@@ -20,3 +20,4 @@
 include_recipe "swift-lite::account-server"
 
 resources("template[/etc/swift/account-server.conf]").cookbook "swift-private-cloud"
+resources("template[/etc/swift/account-server.conf]").mode "0644"

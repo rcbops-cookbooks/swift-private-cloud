@@ -82,12 +82,14 @@ template "/etc/swift/dispersion.conf" do
   source "admin/etc/swift/dispersion.conf.erb"
   owner "swift"
   group "swift"
+  mode "0644"
 end
 
 template "/etc/swift/object-expirer.conf" do
   source "admin/etc/swift/object-expirer.conf.erb"
   owner "swift"
   group "swift"
+  mode "0644"
 end
 
 # /etc/syslog-ng
