@@ -174,6 +174,8 @@ Environment (minimum)
                 "exnet": "<cidr of lb public net>"
             },
             "keystone": {
+                "auth_password": "xxx",
+                "admin_password": "xxx",
                 "swift_admin_url": "http://xxxxx:8080/v1/AUTH_%(tenant_id)s",
                 "swift_public_url": "http://xxxxx:8080/v1/AUTH_%(tenant_id)s",
                 "swift_internal_url": "http://xxxxx:8080/v1/AUTH_%(tenant_id)s"

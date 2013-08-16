@@ -72,6 +72,10 @@ if not node["swift-private-cloud"]["keystone"]["keystone_admin_url"]
   node.default["swift-private-cloud"]["keystone"]["keystone_public_url"] = "http://#{my_keystone_ip}:5000/v2.0"
 end
 
+if not node["swift-private-cloud"]["keystone"]["auth_password"]
+  raise "Must supply swift/keystone/auth_password"
+end
+
 node.default["swift"]["keystone_endpoint"] = node["swift-private-cloud"]["keystone"]["keystone_public_url"]
 
 node.default["swift"]["service_user"] = node["swift-private-cloud"]["keystone"]["auth_user"]
