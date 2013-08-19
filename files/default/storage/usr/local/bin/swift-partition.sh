@@ -6,5 +6,5 @@ if [ ! -b /dev/${DEVICE} ]; then
     exit 1
 fi
 
-parted -s /dev/${DEVICE} mklabel msdos
+parted -s /dev/${DEVICE} mklabel gpt
 parted -s /dev/${DEVICE} mkpart primary xfs 1M 100%
