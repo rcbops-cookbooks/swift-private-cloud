@@ -39,10 +39,15 @@ node.default["osops_networks"]["swift-proxy"] = node["swift-private-cloud"]["net
 # pass through the proxy args
 node.default["swift"]["proxy"]["pipeline"] = node["swift-private-cloud"]["proxy"]["pipeline"]
 
-# set up the right memcache bind
+# set up memcache
+node.default["memcached"]["memory"] = node["swift-private-cloud"]["proxy"]["memcache_maxmem"]
+node.default["memcached"]["maxconn"] = node["swift-private-cloud"]["proxy"]["sim_connections"]
+
 node.default["memcached"]["services"]["cache"]["network"] = "swift-storage"
 node.default["swift"]["memcache_role"] = "spc-starter-proxy"
 node.default["swift"]["ntp"]["role"] = "spc-starter-controller"
+
+
 
 # set the git repo location where the git cookbook expects it
 node.default["git"]["server"]["base_path"] = node["swift-private-cloud"]["versioning"]["repository_base"]
