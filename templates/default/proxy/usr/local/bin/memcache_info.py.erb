@@ -51,12 +51,12 @@ def main():
     else:
         stat_type=3
         get_info(mc_conn, stat_type)
-       
-    sys.exit(0) 
+
+    sys.exit(0)
 
 
 def find_bound():
-    mc_bound = os.popen("netstat -ntl4 | grep 11211 | awk '{ print $4}' | tr -d '\n' ").readlines()
+    mc_bound = os.popen("netstat -ntl | grep 11211 | awk '{ print $4}' | tr -d '\n' ").readlines()
     if len(mc_bound) == 1 :
         bind_ip,bind_port = mc_bound[0].split(':')
         server = bind_ip + ":" + bind_port
@@ -81,21 +81,21 @@ def single_connect(server, debug):
     except:
         sys.exit(1)
 
-    return sc 
+    return sc
 
-    
-   
+
+
 
 def get_info (mc_conn, stat_type):
     stats = mc_conn.get_stats()
 
     if stat_type == 1 :
         print "\t Current Open Connections " + stats[0][1]['curr_connections']
-    
+
     if stat_type == 2 :
         for item in stats[0][1]:
             print "\t " + item + ":" + stats[0][1][item]
-    
+
     if stat_type == 3 :
         print "\n\t Accepting Connections " + stats[0][1]['accepting_conns']
         print "\t Current Open Connections " + stats[0][1]['curr_connections']
@@ -105,11 +105,14 @@ def get_info (mc_conn, stat_type):
         print "\t Set Count " + stats[0][1]['cmd_set']
         print "\t Get Hits " + stats[0][1]['get_hits']
         print "\t Get Misses " + stats[0][1]['get_misses']
-        print "\t Cache HitRate %.5f" % ( float(stats[0][1]['get_hits']) / float(stats[0][1]['cmd_get']) )
-        print "\n" 
 
- 
+        hit_rate = "N/A"
+        if int(stats[0][1]['cmd_get']) > 0:
+            hit_rate = "%.5f" % (float(stats[0][1]['get_hits']) / float(stats[0][1]['cmd_get']))
+
+        print "\t Cache HitRate %s" % hit_rate
+        print "\n"
+
+
 if __name__ == '__main__':
     main()
-
-
