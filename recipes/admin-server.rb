@@ -81,6 +81,13 @@ template "/etc/swift/dispersion.conf" do
   source "admin/etc/swift/dispersion.conf.erb"
   owner "swift"
   group "swift"
+  variables(
+    :ks_auth_url => node["swift-private-cloud"]["dispersion"]["auth_url"]
+    :ks_dis_tenant => node["swift-private-cloud"]["dispersion"]["dis_tenant"]
+    :ks_dis_user => node["swift-private-cloud"]["dispersion"]["dis_user"]
+    :ks_dis_key => node["swift-private-cloud"]["dispersion"]["dis_key"]
+    :ks_dis_cov => node["swift-private-cloud"]["dispersion"]["dis_coverage"]
+  )
 end
 
 template "/etc/swift/object-expirer.conf" do
