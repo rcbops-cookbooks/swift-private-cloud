@@ -99,7 +99,7 @@ default["swift-private-cloud"]["dispersion"]["auth_url"] = "http://172.16.0.252:
 default["swift-private-cloud"]["dispersion"]["dis_tenant"] = "dispersion"
 default["swift-private-cloud"]["dispersion"]["dis_user"] = "reporter"
 default["swift-private-cloud"]["dispersion"]["dis_key"] = "j4MJBJrsB19bM"
-default["swift-private-cloud"]["dispersion"]["dis_coverage"] = 1
+default["swift-private-cloud"]["dispersion"]["dis_coverage"] = "1"
 
 # exim
 if platform_family?("rhel")
