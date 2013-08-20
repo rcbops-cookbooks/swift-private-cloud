@@ -70,9 +70,9 @@ do
         ;;
     esac
 
-    echo "drivescout -v -y -w 100  --region=$region --mount-prefix=$mount_prefix -r $ip_addr -p $port -z $zone /etc/swift/$x.builder"
+    drivescout -v -y -w 100  --region=$region --mount-prefix=$mount_prefix -r $ip_addr -p $port -z $zone /etc/swift/$x.builder
 done
 
-printf "\nPlease remember to rebalance all *.builder files"
+printf "\nPlease remember to rebalance all *.builder files\n"
 exit 0
 
