@@ -114,6 +114,18 @@ cookbook_file "/usr/local/bin/uname26" do
   mode "0500"
 end
 
+cookbook_file "/usr/local/bin/setup_drives.sh" do
+  source "storage/usr/local/bin/setup_drives.sh"
+  user "root"
+  mode "0755"
+end
+
+cookbook_file "/usr/local/bin/ringminion_setup.sh" do
+  source "storage/usr/local/bin/ringminion_setup.sh"
+  user "root"
+  mode "0755"
+end
+
 cookbook_file "/usr/local/bin/swift-format.sh" do
   source "storage/usr/local/bin/swift-format.sh"
   user "root"
