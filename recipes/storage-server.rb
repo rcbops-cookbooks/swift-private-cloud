@@ -45,12 +45,6 @@ template "/etc/cron.d/swift-recon-cron" do
   notifies :reload, "service[swift-storage-cron]", :delayed
 end
 
-# python slogging no longer used
-#template "/etc/cron.d/swift-slogging" do
-#  source "storage/etc/cron.d/swift-slogging.erb"
-#  notifies :reload, "service[swift-storage-cron]", :delayed
-#end
-
 template "/etc/cron.d/xfs-corruption-check" do
   source "storage/etc/cron.d/xfs-corruption-check.erb"
   notifies :reload, "service[swift-storage-cron]", :delayed
@@ -94,12 +88,6 @@ template "/usr/local/bin/drive_mount_check.py" do
     :email_addr => node["swift-private-cloud"]["mailing"]["email_addr"],
     :outdomain => node["swift-private-cloud"]["mailing"]["outgoing_domain"]
   )
-end
-
-template "/usr/local/bin/set_irq_affinity.sh" do
-  source "storage/usr/local/bin/set_irq_affinity.sh.erb"
-  user "root"
-  mode "0500"
 end
 
 template "/usr/local/bin/swift-drive-audit-nextgen" do

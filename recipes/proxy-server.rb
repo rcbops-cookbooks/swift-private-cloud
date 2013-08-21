@@ -33,12 +33,6 @@ template "/etc/cron.d/memcache-restart" do
   notifies :reload, "service[swift-proxy-cron]", :delayed
 end
 
-# python slogging no longer used
-#template "/etc/cron.d/swift-access-log-uploader" do
-#  source "proxy/etc/cron.d/swift-access-log-uploader.erb"
-#  notifies :reload, "service[swift-proxy-cron]", :delayed
-#end
-
 # /etc/default
 template "/etc/default/memcached" do
   source "proxy/etc/default/memcached.erb"
@@ -78,12 +72,6 @@ end
 
 template "/usr/local/bin/memcache_info.py" do
   source "proxy/usr/local/bin/memcache_info.py.erb"
-  user "root"
-  mode "0500"
-end
-
-template "/usr/local/bin/set_irq_affinity.sh" do
-  source "proxy/usr/local/bin/set_irq_affinity.sh.erb"
   user "root"
   mode "0500"
 end
