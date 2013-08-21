@@ -37,11 +37,6 @@ template "/etc/default/memcached" do
   only_if { platform_family?("debian") }
 end
 
-# /etc/init.d
-template "/etc/init.d/memcached.swift" do
-  source "proxy/etc/init.d/memcached.swift.erb"
-end
-
 # /etc/memcached.conf
 template "/etc/memcached.conf" do
   source "proxy/etc/memcached.conf.erb"
