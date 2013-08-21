@@ -3,12 +3,12 @@
 log_facility = LOG_LOCAL3
 log_level = INFO
 # log_address = /dev/log
-minutes = 5
+minutes = <%= @minutes %>
 # error_limit = 1
 #
 # Location of the log file with globbing
 # pattern to check against device errors.
-# log_file_pattern = /var/log/kern*
+log_file_pattern = <%= @log_file_pattern %>
 #
 # Regular expression patterns to be used to locate
 # device blocks with errors in the log file. Currently
@@ -16,7 +16,10 @@ minutes = 5
 #   \berror\b.*\b(sd[a-z]{1,2}\d?)\b
 #   \b(sd[a-z]{1,2}\d?)\b.*\berror\b
 # One can overwrite the default ones by providing
-# new expressions using the format below: 
+# new expressions using the format below:
 # Format: regex_pattern_X = regex_expression
 # Example:
 #   regex_pattern_1 = \berror\b.*\b(dm-[0-9]{1,2}\d?)\b
+<% @regex_patterns.each_index do |idx| -%>
+<%= "regex_pattern_#{idx} = #{@regex_patterns[idx]}" %>
+<% end -%>
