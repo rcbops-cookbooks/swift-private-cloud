@@ -181,3 +181,24 @@ template "/usr/local/bin/pull-rings.sh" do
              :service_prefix => platform_family?("debian") ? "" : "openstack-" )
   only_if "/usr/bin/id swift"
 end
+
+# Adding some helpful/needed packages
+centos_pkgs = ["patch", "dstat", "iptraf", "iptraf-ng", "htop",
+               "strace", "iotop", "bsd-mailx", "screen", "bonnie++"]
+ubuntu_pkgs = ["python-software-properties", "patch", "debconf", "bonnie++", "dstat",
+               "ethtool", "python-configobj", "curl", "iptraf", "htop", "nmon",
+               "strace", "iotop", "debsums", "python-pip", "bsd-mailx", "screen"]
+case node[:platform]
+when "centos"
+  centos_pkgs.each do |pkg| 
+    package pkg do
+      action :install
+    end
+  end
+when "ubuntu"
+  ubuntu_pkgs.each do |pkg| 
+    package pkg do
+      action :install
+    end
+  end
+end
