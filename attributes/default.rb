@@ -43,6 +43,15 @@ default["swift-private-cloud"]["swift_common"]["swift_hash_suffix"] = nil
 default["swift-private-cloud"]["swift_common"]["admin_ip"] = nil
 default["swift-private-cloud"]["swift_common"]["syslog_ip"] = nil
 
+
+# drive_audit
+regex_patterns = ["\\berror\\b.*\\b(sd[a-z]{1,2}\\d?)\\b",
+                  "\\b(sd[a-z]{1,2}\d?)\\b.*\\berror\\b"]
+
+default["swift-private-cloud"]["drive_audit"]["minutes"] = 5
+default["swift-private-cloud"]["drive_audit"]["log_file_pattern"] = "/var/log/kern*"
+default["swift-private-cloud"]["drive_audit"]["regex_patterns"] = regex_patterns
+
 # proxy
 default["swift-private-cloud"]["proxy"]["pipeline"] = "catch_errors proxy-logging healthcheck cache ratelimit authtoken keystoneauth proxy-server"
 default["swift-private-cloud"]["proxy"]["memcache_maxmem"] = 512

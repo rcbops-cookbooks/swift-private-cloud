@@ -26,6 +26,15 @@ include_recipe "swift-private-cloud::object-server"
 resources("template[/etc/rsyncd.conf]").cookbook "swift-private-cloud"
 resources("template[/etc/rsyncd.conf]").source "storage/etc/rsyncd.conf.erb"
 
+# /etc/swift/drive-audit.conf
+resources("template[/etc/swift/drive-audit.conf]").cookbook "swift-private-cloud"
+resources("template[/etc/swift/drive-audit.conf]").variables(
+  "minutes" => node["swift-private-cloud"]["drive_audit"]["minutes"],
+  "log_file_pattern" => node["swift-private-cloud"]["drive_audit"]["log_file_pattern"],
+  "regex_patterns" => node["swift-private-cloud"]["drive_audit"]["regex_patterns"]
+)
+
+
 %w(xfsprogs parted).each do |pkg|
   package pkg
 end
