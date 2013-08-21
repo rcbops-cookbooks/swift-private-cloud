@@ -89,9 +89,9 @@ default["swift-private-cloud"]["keystone"]["region"] = "RegionOne"
 
 default["swift-private-cloud"]["keystone"]["auth_user"] = "swift"
 default["swift-private-cloud"]["keystone"]["auth_tenant"] = "service"
-#default["swift-private-cloud"]["keystone"]["auth_password"] = "secrete"
+default["swift-private-cloud"]["keystone"]["auth_password"] = "secrete"
 default["swift-private-cloud"]["keystone"]["admin_user"] = "admin"
-#default["swift-private-cloud"]["keystone"]["admin_password"] = "secrete"
+default["swift-private-cloud"]["keystone"]["admin_password"] = "secrete"
 default["swift-private-cloud"]["keystone"]["pki"] = false
 
 # default["swift-private-cloud"]["keystone"]["auth_uri"] = "http://172.16.0.252:5000/v2.0"
