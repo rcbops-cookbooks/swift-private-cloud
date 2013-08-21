@@ -34,11 +34,6 @@ template "/etc/cron.d/memcache-restart" do
   notifies :reload, "service[swift-proxy-cron]", :delayed
 end
 
-template "/etc/cron.d/swift-access-log-uploader" do
-  source "proxy/etc/cron.d/swift-access-log-uploader.erb"
-  notifies :reload, "service[swift-proxy-cron]", :delayed
-end
-
 # /etc/default
 template "/etc/default/memcached" do
   source "proxy/etc/default/memcached.erb"
@@ -82,8 +77,8 @@ template "/usr/local/bin/memcache_info.py" do
   mode "0500"
 end
 
-template "/usr/local/bin/set_irq_affinity.sh" do
-  source "proxy/usr/local/bin/set_irq_affinity.sh.erb"
+cookbook_file "/usr/local/bin/ringminion_setup.sh" do
+  source "storage/usr/local/bin/ringminion_setup.sh"
   user "root"
-  mode "0500"
+  mode "0755"
 end

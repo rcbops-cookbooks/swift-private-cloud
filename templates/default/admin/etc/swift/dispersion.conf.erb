@@ -1,9 +1,9 @@
 [dispersion]
-auth_url = $KEYSTONE_AUTH_PROTO://$KEYSTONE_IP:5000/v2.0/
-auth_user = $DIS_TENANT:$DIS_USER
-auth_key = $DIS_KEY
+auth_url = <%= @ks_auth_url %>
+auth_user = <%= @ks_dis_tenant %>:<%= @ks_dis_user %>
+auth_key = <%= @ks_dis_key %>
 auth_version = 2.0
-dispersion_coverage = $DIS_COVERAGE
+dispersion_coverage = <%= @ks_dis_cov %>
 # swift_dir = /etc/swift
 # retries = 5
 # concurrency = 25

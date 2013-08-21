@@ -106,23 +106,6 @@ template "/etc/snmp/snmpd.conf" do
 end
 
 # /etc/swift
-template "/etc/swift/internal-proxy-server.conf" do
-  source "common/etc/swift/internal-proxy-server.conf.erb"
-  owner "swift"
-  group "swift"
-  mode "0644"
-end
-
-template "/etc/swift/log-processor.conf" do
-  source "common/etc/swift/log-processor.conf.erb"
-  owner "swift"
-  group "swift"
-  mode "0644"
-  variables(
-    :processing_account => "swift"
-  )
-end
-
 template "/etc/swift/mime.types" do
   source "common/etc/swift/mime.types.erb"
   owner "swift"
@@ -153,12 +136,7 @@ resources("template[/etc/ntp.conf]") do
   source "common/etc/ntp.conf"
 end
 
-template "/etc/rc.local" do
-  source "common/etc/rc.local.erb"
-end
-
 # /usr/local/bin
-
 
 # if the pull-ring sufficies, we'll use that
 #
@@ -184,4 +162,25 @@ template "/usr/local/bin/pull-rings.sh" do
              :builder_ip => node["swift-private-cloud"]["versioning"]["repository_host"],
              :service_prefix => platform_family?("debian") ? "" : "openstack-" )
   only_if "/usr/bin/id swift"
+end
+
+# Adding some helpful/needed packages
+centos_pkgs = ["patch", "dstat", "iptraf", "iptraf-ng", "htop",
+               "strace", "iotop", "bsd-mailx", "screen", "bonnie++"]
+ubuntu_pkgs = ["python-software-properties", "patch", "debconf", "bonnie++", "dstat",
+               "ethtool", "python-configobj", "curl", "iptraf", "htop", "nmon",
+               "strace", "iotop", "debsums", "python-pip", "bsd-mailx", "screen"]
+case node[:platform]
+when "centos"
+  centos_pkgs.each do |pkg| 
+    package pkg do
+      action :install
+    end
+  end
+when "ubuntu"
+  ubuntu_pkgs.each do |pkg| 
+    package pkg do
+      action :install
+    end
+  end
 end

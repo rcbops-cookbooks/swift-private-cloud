@@ -83,6 +83,13 @@ template "/etc/swift/dispersion.conf" do
   owner "swift"
   group "swift"
   mode "0644"
+  variables(
+    :ks_auth_url => node["swift-private-cloud"]["dispersion"]["auth_url"],
+    :ks_dis_tenant => node["swift-private-cloud"]["dispersion"]["dis_tenant"],
+    :ks_dis_user => node["swift-private-cloud"]["dispersion"]["dis_user"],
+    :ks_dis_key => node["swift-private-cloud"]["dispersion"]["dis_key"],
+    :ks_dis_cov => node["swift-private-cloud"]["dispersion"]["dis_coverage"]
+  )
 end
 
 template "/etc/swift/object-expirer.conf" do
@@ -169,9 +176,9 @@ template "/usr/local/bin/swift_recon_wrapper.sh" do
   mode "0500"
 end
 
-contrib_files = ["drivescout_wrapper.sh", "setup_drives.sh",
-                 "setup_local_swiftops.sh", "setup_remote_swiftops.exp",
-                 "udev_drive_rules.sh"]
+contrib_files = ["drivescout_wrapper.sh", "setup_local_swiftops.sh",
+                 "setup_remote_swiftops.exp", "udev_drive_rules.sh",
+                 "ringmaster_setup.sh"] 
 
 contrib_files.each do |file|
   cookbook_file "/usr/local/bin/#{file}" do

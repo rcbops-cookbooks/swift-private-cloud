@@ -54,11 +54,6 @@ template "/etc/cron.d/swift-recon-cron" do
   notifies :reload, "service[swift-storage-cron]", :delayed
 end
 
-template "/etc/cron.d/swift-slogging" do
-  source "storage/etc/cron.d/swift-slogging.erb"
-  notifies :reload, "service[swift-storage-cron]", :delayed
-end
-
 template "/etc/cron.d/xfs-corruption-check" do
   source "storage/etc/cron.d/xfs-corruption-check.erb"
   notifies :reload, "service[swift-storage-cron]", :delayed
@@ -104,12 +99,6 @@ template "/usr/local/bin/drive_mount_check.py" do
   )
 end
 
-template "/usr/local/bin/set_irq_affinity.sh" do
-  source "storage/usr/local/bin/set_irq_affinity.sh.erb"
-  user "root"
-  mode "0500"
-end
-
 template "/usr/local/bin/swift-drive-audit-nextgen" do
   source "storage/usr/local/bin/swift-drive-audit-nextgen.erb"
   user "root"
@@ -120,6 +109,18 @@ cookbook_file "/usr/local/bin/uname26" do
   source "storage/usr/local/bin/uname26"
   user "root"
   mode "0500"
+end
+
+cookbook_file "/usr/local/bin/setup_drives.sh" do
+  source "storage/usr/local/bin/setup_drives.sh"
+  user "root"
+  mode "0755"
+end
+
+cookbook_file "/usr/local/bin/ringminion_setup.sh" do
+  source "storage/usr/local/bin/ringminion_setup.sh"
+  user "root"
+  mode "0755"
 end
 
 cookbook_file "/usr/local/bin/swift-format.sh" do
