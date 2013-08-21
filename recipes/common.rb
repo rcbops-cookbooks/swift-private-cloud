@@ -31,21 +31,10 @@ include_recipe "git"
 resources("directory[/etc/swift]").mode "0755"
 resources("template[/etc/swift/swift.conf]").mode "0644"
 
-# /etc/cron.d
-service "swift-storage-cron" do
-  service_name "crond"
-  action :nothing
-end
 
-# /etc/cron.d
-service "swift-common-cron" do
-  service_name "crond"
-  action :nothing
-end
-
+# btorch WHAT DOES THIS DO?
 template "/etc/cron.d/swift_ring_check" do
   source "common/etc/cron.d/swift_ring_check.erb"
-  notifies :reload, "service[swift-common-cron]", :delayed
 end
 
 # /etc/default

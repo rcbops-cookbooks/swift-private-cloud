@@ -32,20 +32,24 @@ package "dsh" do
   only_if { platform_family?("debian") }
 end
 
-# /etc/cron.d
-service "swift-admin-cron" do
-  service_name "crond"
-  action :nothing
+cron_d "os_drivecheck" do
+  user "swiftops"
+  command "bash /usr/local/bin/drive_check"
 end
 
-template "/etc/cron.d/os_drivechece" do
-  source "admin/etc/cron.d/os_drivecheck.erb"
-  notifies :reload, "service[swift-admin-cron]", :delayed
+cron_d "swift_recon" do
+  minute "50"
+  hour "23"
+  user "root"
+
+  command "/usr/local/bin/swift_recon_wrapper.sh"
 end
 
-template "/etc/cron.d/swift_reports" do
-  source "admin/etc/cron.d/swift_reports.erb"
-  notifies :reload, "service[swift-admin-cron]", :delayed
+cron_d "swift_dispersion" do
+  minute "50"
+  hour "23"
+  user "root"
+  command "/usr/local/bin/swift_dispersion_report.sh"
 end
 
 # /etc/default
