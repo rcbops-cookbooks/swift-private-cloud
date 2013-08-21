@@ -21,3 +21,4 @@ include_recipe "swift-private-cloud::common"
 include_recipe "swift-lite::container-server"
 
 resources("template[/etc/swift/container-server.conf]").cookbook "swift-private-cloud"
+resources("template[/etc/swift/container-server.conf]").mode "0644"

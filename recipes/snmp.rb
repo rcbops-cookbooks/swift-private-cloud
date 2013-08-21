@@ -18,7 +18,10 @@
 #
 
 node["snmp"]["platform"]["packages"].each do |pkg|
-  package pkg
+  package pkg do
+    options node["swift-private-cloud"]["common"]["pkg_options"]
+    action :install
+  end
 end
 
 service node["snmp"]["platform"]["service"] do

@@ -28,6 +28,7 @@ include_recipe "swift-private-cloud::mail"
 
 package "dsh" do
   action :install
+  options node["swift-private-cloud"]["common"]["pkg_options"]
   only_if { platform_family?("debian") }
 end
 
@@ -81,6 +82,7 @@ template "/etc/swift/dispersion.conf" do
   source "admin/etc/swift/dispersion.conf.erb"
   owner "swift"
   group "swift"
+  mode "0644"
   variables(
     :ks_auth_url => node["swift-private-cloud"]["dispersion"]["auth_url"],
     :ks_dis_tenant => node["swift-private-cloud"]["dispersion"]["dis_tenant"],
@@ -94,6 +96,7 @@ template "/etc/swift/object-expirer.conf" do
   source "admin/etc/swift/object-expirer.conf.erb"
   owner "swift"
   group "swift"
+  mode "0644"
 end
 
 # /etc/syslog-ng

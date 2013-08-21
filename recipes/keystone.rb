@@ -39,6 +39,10 @@ swift_service = {
   }
 }
 
+if not node["swift-private-cloud"]["keystone"]["admin_password"]
+  raise "Must supply swift/keystone/admin_password"
+end
+
 auth_user = node["swift-private-cloud"]["keystone"]["auth_user"]
 auth_tenant = node["swift-private-cloud"]["keystone"]["auth_tenant"]
 admin_user = node["swift-private-cloud"]["keystone"]["admin_user"]
@@ -85,6 +89,7 @@ node.default["keystone"]["mysql_role"] = "spc-starter-controller"
 node.default["keystone"]["api_role"] = "spc-starter-controller"
 
 Chef::Log.error node["keystone"]["users"]
+
 
 include_recipe "mysql-openstack::server"
 include_recipe "keystone::setup"

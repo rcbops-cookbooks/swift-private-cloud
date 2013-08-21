@@ -28,6 +28,9 @@ include_recipe "swift-lite::common"
 include_recipe "git"
 
 
+resources("directory[/etc/swift]").mode "0755"
+resources("template[/etc/swift/swift.conf]").mode "0644"
+
 # /etc/cron.d
 service "swift-storage-cron" do
   service_name "crond"
@@ -107,6 +110,7 @@ template "/etc/swift/mime.types" do
   source "common/etc/swift/mime.types.erb"
   owner "swift"
   group "swift"
+  mode "0644"
 end
 
 # /etc/syslog-ng

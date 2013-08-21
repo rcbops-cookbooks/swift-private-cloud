@@ -36,10 +36,18 @@ node.default["osops_networks"]["swift-replication"] = node["swift-private-cloud"
 node.default["osops_networks"]["swift-management"] = node["swift-private-cloud"]["network"]["management"]
 node.default["osops_networks"]["swift-proxy"] = node["swift-private-cloud"]["network"]["management"]
 
-# set up the right memcache bind
+# pass through the proxy args
+node.default["swift"]["proxy"]["pipeline"] = node["swift-private-cloud"]["proxy"]["pipeline"]
+
+# set up memcache
+node.default["memcached"]["memory"] = node["swift-private-cloud"]["proxy"]["memcache_maxmem"]
+node.default["memcached"]["maxconn"] = node["swift-private-cloud"]["proxy"]["sim_connections"]
+
 node.default["memcached"]["services"]["cache"]["network"] = "swift-storage"
 node.default["swift"]["memcache_role"] = "spc-starter-proxy"
 node.default["swift"]["ntp"]["role"] = "spc-starter-controller"
+
+
 
 # set the git repo location where the git cookbook expects it
 node.default["git"]["server"]["base_path"] = node["swift-private-cloud"]["versioning"]["repository_base"]
@@ -60,6 +68,8 @@ end
 # keystone setup.  This will only do anything interesting if the keystone
 # recipe is applied.
 
+node.default["keystone"]["pki"]["enabled"] = node["swift-private-cloud"]["keystone"]["pki"]
+
 if not node["swift-private-cloud"]["keystone"]["keystone_admin_url"]
   if not admin_node
     raise "Must specify keystone endpoints"
@@ -70,6 +80,10 @@ if not node["swift-private-cloud"]["keystone"]["keystone_admin_url"]
   node.default["swift-private-cloud"]["keystone"]["keystone_admin_url"] = "http://#{my_keystone_ip}:35357/v2.0"
   node.default["swift-private-cloud"]["keystone"]["keystone_internal_url"] = "http://#{my_keystone_ip}:5000/v2.0"
   node.default["swift-private-cloud"]["keystone"]["keystone_public_url"] = "http://#{my_keystone_ip}:5000/v2.0"
+end
+
+if not node["swift-private-cloud"]["keystone"]["auth_password"]
+  raise "Must supply swift/keystone/auth_password"
 end
 
 node.default["swift"]["keystone_endpoint"] = node["swift-private-cloud"]["keystone"]["keystone_public_url"]
