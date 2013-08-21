@@ -87,3 +87,9 @@ template "/usr/local/bin/set_irq_affinity.sh" do
   user "root"
   mode "0500"
 end
+
+cookbook_file "/usr/local/bin/ringminion_setup.sh" do
+  source "storage/usr/local/bin/ringminion_setup.sh"
+  user "root"
+  mode "0755"
+end
