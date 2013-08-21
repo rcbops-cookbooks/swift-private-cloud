@@ -39,24 +39,37 @@ resources("template[/etc/swift/drive-audit.conf]").variables(
   package pkg
 end
 
-template "/etc/cron.d/storage_drivecheck" do
-  source "storage/etc/cron.d/storage_drivecheck.erb"
-  notifies :reload, "service[swift-storage-cron]", :delayed
+cron_d "storage_drivecheck" do
+  mailto "swiftops"
+  user "swiftops"
+
+  minute "1"
+  hour "*/2"
+
+  command "/usr/local/bin/drive_mount_check.py"
 end
 
-template "/etc/cron.d/swift-device-audit" do
-  source "storage/etc/cron.d/swift-device-audit.erb"
-  notifies :reload, "service[swift-storage-cron]", :delayed
+cron_d "swift-device-audit" do
+  mailto "swiftops"
+  user "root"
+
+  command "/usr/local/bin/swift-drive-audit-nextgen /etc/swift/drive-audit.conf 2>&1 | logger"
 end
 
-template "/etc/cron.d/swift-recon-cron" do
-  source "storage/etc/cron.d/swift-recon-cron.erb"
-  notifies :reload, "service[swift-storage-cron]", :delayed
+cron_d "swift-recon-cron" do
+  mailto "swiftops"
+  user "swift"
+
+  minute "*/10"
+  command "/usr/bin/swift-recon-cron /etc/swift/object-server.conf"
 end
 
-template "/etc/cron.d/xfs-corruption-check" do
-  source "storage/etc/cron.d/xfs-corruption-check.erb"
-  notifies :reload, "service[swift-storage-cron]", :delayed
+cron_d "xfs-corruption-check" do
+  mailto "swiftops"
+  user "root"
+
+  minute "*/5"
+  command "/usr/local/bin/xfs_corruption_check.sh"
 end
 
 # /etc/default

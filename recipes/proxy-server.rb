@@ -23,15 +23,12 @@ include_recipe "swift-lite::proxy-server"
 resources("template[/etc/swift/proxy-server.conf]").cookbook "swift-private-cloud"
 resources("template[/etc/swift/proxy-server.conf]").mode "0644"
 
-# /etc/cron.d
-service "swift-proxy-cron" do
-  service_name "crond"
-  action :nothing
-end
+cron_d "memcache-restart" do
+  mailto "swiftops"
+  user "root"
 
-template "/etc/cron.d/memcache-restart" do
-  source "proxy/etc/cron.d/memcache-restart.erb"
-  notifies :reload, "service[swift-proxy-cron]", :delayed
+  minute "*/2"
+  command "/usr/local/bin/check_memcache_wrapper.sh"
 end
 
 # /etc/default
