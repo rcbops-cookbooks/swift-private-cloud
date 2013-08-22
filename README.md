@@ -103,9 +103,9 @@ Attributes
      * keystone_port - management port
      * ... this all seems broken to me
    * dispersion
-     * dis_tenant - tenant for dispersion reports
-     * dis_user - user for dispersion reports
-     * dis_key - password/key for dispersion user
+     * dis_tenant - tenant for dispersion reports (defaults to "dispersion", not automatically created)
+     * dis_user - user for dispersion reports (defaults to "reporter", not automatically created)
+     * dis_key - password/key for dispersion user (no default)
      * dis_coverage - 1
 
 
