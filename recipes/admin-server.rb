@@ -59,14 +59,26 @@ template "/etc/default/git-daemon" do
 end
 
 # /etc/exim4
+
+relay_hosts = "127.0.0.1/32"
+node['swift-private-cloud']['network'].each do |network, cidr|
+  relay_hosts = "#{relay_hosts};#{cidr}"
+end
+
 template "/etc/exim4/update-exim4.conf.conf" do
   source "admin/etc/exim4/update-exim4.conf.conf.relay.erb"
+  variables(
+    :relay_hosts => relay_hosts
+  )
   notifies :run, "execute[update-exim-config]", :delayed
   only_if { platform_family?("debian") }
 end
 
 template "/etc/exim/exim.conf" do
   source "admin/etc/exim4/exim.conf.erb"
+  variables(
+    :relay_hosts => relay_hosts
+  )
   notifies :restart, "service[#{node['exim']['platform']['service']}]", :delayed
   only_if { platform_family?("rhel") }
 end
