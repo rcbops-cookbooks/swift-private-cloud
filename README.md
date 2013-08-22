@@ -15,7 +15,8 @@ issue, along with any relevant log/command/error output.  If logfiles
 are extremely long, please place the relevant portion into the issue
 description, and link to a gist containing the entire logfile
 
-Please see the [contribution guidelines](CONTRIBUTING.md) for more information about contributing to this cookbook.
+Please see the [contribution guidelines](CONTRIBUTING.md) for more
+information about contributing to this cookbook.
 
 Description
 ===========
@@ -65,16 +66,17 @@ Attributes
 
  * swift-private-cloud
    * common
-     * ssh_user - unix admin user.  default: "swiftops"
+     * ssh_user - unix admin user.
+	              default: "swiftops"
      * ssh_key - ???
-     * swift_generic - space separated list of packges to install on all boxes
+     * swift_generic - space separated list of packages to install on all boxes
      * swift_proxy - space separated list of packages to install on proxies
      * swift_storage - space separated list of packages to install on storage
      * swift_others - other random packages to install on all boxes
      * apt_options - default apt options when installing packages
    * network
-     * management - cidr of management ip range [REQUIRED]
-     * exnet - cidr of exnet ip range [REQUIRED]
+     * management - cidr of management (swift network) ip range [REQUIRED]
+     * exnet - cidr of exnet (public LB vip network) ip range [REQUIRED]
    * swift_common
      * admin_ip - ip of the admin box (with git ring repo and suchlike)
      * syslog_ip - ip of upstream syslog server (boxes will stream logs here)
@@ -103,10 +105,13 @@ Attributes
      * keystone_port - management port
      * ... this all seems broken to me
    * dispersion
-     * dis_tenant - tenant for dispersion reports (defaults to "dispersion", not automatically created)
-     * dis_user - user for dispersion reports (defaults to "reporter", not automatically created)
+     * dis_tenant - tenant for dispersion reports
+	                default: "dispersion" (not created automatically)
+     * dis_user - user for dispersion reports
+	              default: "reporter" (not created automatically)
      * dis_key - password/key for dispersion user (no default)
-     * dis_coverage - 1
+     * dis_coverage - the percentage of partition coverage used in dispersion reporting
+	                  default: 1
 
 
 Deps
