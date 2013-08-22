@@ -88,6 +88,7 @@ end
 
 node.default["swift"]["keystone_endpoint"] = node["swift-private-cloud"]["keystone"]["keystone_public_url"]
 
+
 node.default["swift"]["service_user"] = node["swift-private-cloud"]["keystone"]["auth_user"]
 node.default["swift"]["service_pass"] = node["swift-private-cloud"]["keystone"]["auth_password"]
 node.default["swift"]["service_tenant_name"] = node["swift-private-cloud"]["keystone"]["auth_tenant"]
