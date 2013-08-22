@@ -179,6 +179,9 @@ Environment (minimum)
                 "swift_admin_url": "http://xxxxx:8080/v1/AUTH_%(tenant_id)s",
                 "swift_public_url": "http://xxxxx:8080/v1/AUTH_%(tenant_id)s",
                 "swift_internal_url": "http://xxxxx:8080/v1/AUTH_%(tenant_id)s"
+            },
+            "dispersion": {
+                "dis_key": "not_automatically_created"
             }
         }
     }
