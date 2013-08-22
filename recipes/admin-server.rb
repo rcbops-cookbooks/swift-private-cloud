@@ -62,7 +62,11 @@ end
 
 relay_hosts = "127.0.0.1/32"
 node['swift-private-cloud']['network'].each do |network, cidr|
-  relay_hosts = "#{relay_hosts};#{cidr}"
+  if platform_family?("debian")
+    relay_hosts = "#{relay_hosts};#{cidr}"
+  elsif platform_family?("rhel")
+    relay_hosts = "#{relay_hosts} : #{cidr}"
+  end
 end
 
 template "/etc/exim4/update-exim4.conf.conf" do
