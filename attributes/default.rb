@@ -98,9 +98,9 @@ default["swift-private-cloud"]["keystone"]["region"] = "RegionOne"
 
 default["swift-private-cloud"]["keystone"]["auth_user"] = "swift"
 default["swift-private-cloud"]["keystone"]["auth_tenant"] = "service"
-default["swift-private-cloud"]["keystone"]["auth_password"] = "secrete"
+#default["swift-private-cloud"]["keystone"]["auth_password"] = "secrete"
 default["swift-private-cloud"]["keystone"]["admin_user"] = "admin"
-default["swift-private-cloud"]["keystone"]["admin_password"] = "secrete"
+#default["swift-private-cloud"]["keystone"]["admin_password"] = "secrete"
 default["swift-private-cloud"]["keystone"]["pki"] = false
 
 # default["swift-private-cloud"]["keystone"]["auth_uri"] = "http://172.16.0.252:5000/v2.0"
@@ -109,10 +109,9 @@ default["swift-private-cloud"]["keystone"]["pki"] = false
 # default["swift-private-cloud"]["keystone"]["keystone_admin_password"] = "noswifthere"
 
 # dispersion
-default["swift-private-cloud"]["dispersion"]["auth_url"] = "http://172.16.0.252:5000/v2.0"
 default["swift-private-cloud"]["dispersion"]["dis_tenant"] = "dispersion"
 default["swift-private-cloud"]["dispersion"]["dis_user"] = "reporter"
-default["swift-private-cloud"]["dispersion"]["dis_key"] = "j4MJBJrsB19bM"
+#default["swift-private-cloud"]["dispersion"]["dis_key"] = "j4MJBJrsB19bM"
 default["swift-private-cloud"]["dispersion"]["dis_coverage"] = "1"
 
 # exim

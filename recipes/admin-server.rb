@@ -93,6 +93,9 @@ template "/etc/nginx/sites-available/default" do
   source "admin/etc/nginx/sites-available/default.erb"
 end
 
+if not node["swift-private-cloud"]["dispersion"]["dis_key"]
+  raise "Must set swift-private-cloud/dispersion/dis_key"
+end
 
 # /etc/swift
 template "/etc/swift/dispersion.conf" do
@@ -101,7 +104,7 @@ template "/etc/swift/dispersion.conf" do
   group "swift"
   mode "0644"
   variables(
-    :ks_auth_url => node["swift-private-cloud"]["dispersion"]["auth_url"],
+    :ks_auth_url => node["swift-private-cloud"]["keystone"]["keystone_public_url"],
     :ks_dis_tenant => node["swift-private-cloud"]["dispersion"]["dis_tenant"],
     :ks_dis_user => node["swift-private-cloud"]["dispersion"]["dis_user"],
     :ks_dis_key => node["swift-private-cloud"]["dispersion"]["dis_key"],
