@@ -60,14 +60,11 @@ end
 
 # /etc/exim4
 
-relay_hosts = "127.0.0.1/32"
-node['swift-private-cloud']['network'].each do |network, cidr|
-  if platform_family?("debian")
-    relay_hosts = "#{relay_hosts};#{cidr}"
-  elsif platform_family?("rhel")
-    relay_hosts = "#{relay_hosts} : #{cidr}"
-  end
+if not node["swift-private-cloud"]["mailing"]["relay_nets"]
+  relay_nets = node["swift-private-cloud"]["network"].values.uniq << "127.0.0.0/8"
 end
+
+relay_hosts = relay_nets.join(platform_family?("debian") ? ";" :  " : ")
 
 template "/etc/exim4/update-exim4.conf.conf" do
   source "admin/etc/exim4/update-exim4.conf.conf.relay.erb"
@@ -198,7 +195,7 @@ end
 
 contrib_files = ["drivescout_wrapper.sh", "setup_local_swiftops.sh",
                  "setup_remote_swiftops.exp", "udev_drive_rules.sh",
-                 "ringmaster_setup.sh"] 
+                 "ringmaster_setup.sh"]
 
 contrib_files.each do |file|
   cookbook_file "/usr/local/bin/#{file}" do
