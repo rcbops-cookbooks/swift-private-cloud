@@ -43,6 +43,12 @@ default["swift-private-cloud"]["swift_common"]["swift_hash_suffix"] = nil
 default["swift-private-cloud"]["swift_common"]["admin_ip"] = nil
 default["swift-private-cloud"]["swift_common"]["syslog_ip"] = nil
 
+# common statsd config
+default["swift-private-cloud"]["swift_common"]["log_statsd_host"] = nil
+default["swift-private-cloud"]["swift_common"]["log_statsd_port"] = 8125
+default["swift-private-cloud"]["swift_common"]["log_statsd_default_sample_rate"] = 1.0
+default["swift-private-cloud"]["swift_common"]["log_statsd_sample_rate_factor"] = 1.0
+default["swift-private-cloud"]["swift_common"]["log_statsd_metric_prefix"] = nil
 
 # drive_audit
 regex_patterns = ["\\berror\\b.*\\b(sd[a-z]{1,2}\\d?)\\b",

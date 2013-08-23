@@ -23,9 +23,17 @@ workers = 12
 # log_statsd_default_sample_rate = 1.0
 # log_statsd_sample_rate_factor = 1.0
 # log_statsd_metric_prefix =
+<% if @log_statsd_host -%>
+log_statsd_host = <%= @log_statsd_host %>
+log_statsd_port = <%= @log_statsd_port %>
+log_statsd_default_sample_rate = <%= @log_statsd_default_sample_rate %>
+log_statsd_sample_rate_factor = <%= @log_statsd_sample_rate_factor %>
+log_status_metric_prefix = <%= @log_status_metric_prefix %>
+<% end -%>
 # Use a comma separated list of full url (http://foo.bar:1234,https://foo.bar)
 # cors_allow_origin =
 # eventlet_debug = false
+
 
 [pipeline:main]
 pipeline = <%= @proxy_pipeline %>
