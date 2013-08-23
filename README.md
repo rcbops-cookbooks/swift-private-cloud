@@ -80,6 +80,11 @@ Attributes
      * syslog_ip - ip of upstream syslog server (boxes will stream logs here)
      * swift_hash_prefix - swift hash prefix (preferred over suffix)
      * swift_hash_suffix - hash suffix (compatibility only)
+     * log_statsd_host (statsd host to report metrics to, defaults to nil)
+     * log_statsd_port (defaults to 8125)
+     * log_statsd_default_sample_rate (defaults to 1.0)
+     * log_statsd_sample_rate_factor (defaults to 1.0)
+     * log_statsd_metric_prefix (defaults to nil)
    * proxy
      * pipeline - proxy-server.conf pipline
      * memcache_maxmem - memcache per proxy, this is maxmem (default 512M)
