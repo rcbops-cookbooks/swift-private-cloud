@@ -20,7 +20,9 @@
 include_recipe "swift-private-cloud::common"
 include_recipe "swift-lite::container-server"
 
-resources("template[/etc/swift/container-server.conf]") do
+common = node["swift-private-cloud"]["swift_common"]
+
+resources("template[/etc/swift/container-server.conf]").instance_exec do
   cookbook "swift-private-cloud"
   mode "0644"
   variables variables.merge("log_statsd_host" => common["log_statsd_host"],

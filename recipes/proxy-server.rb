@@ -22,7 +22,7 @@ include_recipe "swift-lite::proxy-server"
 
 common = node["swift-private-cloud"]["swift_common"]
 
-resources("template[/etc/swift/proxy-server.conf]") do
+resources("template[/etc/swift/proxy-server.conf]").instance_exec do
   cookbook "swift-private-cloud"
   mode "0644"
   variables variables.merge("log_statsd_host" => common["log_statsd_host"],
