@@ -24,6 +24,13 @@ devices = /srv/node
 # log_statsd_default_sample_rate = 1.0
 # log_statsd_sample_rate_factor = 1.0
 # log_statsd_metric_prefix =
+<% if @log_statsd_host -%>
+log_statsd_host = <%= @log_statsd_host %>
+log_statsd_port = <%= @log_statsd_port %>
+log_statsd_default_sample_rate = <%= @log_statsd_default_sample_rate %>
+log_statsd_sample_rate_factor = <%= @log_statsd_sample_rate_factor %>
+log_status_metric_prefix = <%= @log_status_metric_prefix %>
+<% end -%>
 db_preallocation = off
 # eventlet_debug = false
 # fallocate_reserve = 0
