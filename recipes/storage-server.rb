@@ -86,6 +86,9 @@ end
 # /etc/logrotate.d
 template "/etc/logrotate.d/rsync" do
   source "storage/etc/logrotate.d/rsync.erb"
+  variables(:postrotate_command => platform_family?("debian") ?
+            "/usr/sbin/invoke-rc.d rsync reload > /dev/null" :
+            "/sbin/service rsync reload > /dev/null")
 end
 
 # /usr/local/bin

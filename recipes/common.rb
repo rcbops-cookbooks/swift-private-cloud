@@ -88,6 +88,9 @@ end
 # /etc/logrotate.d
 template "/etc/logrotate.d/swift" do
   source "common/etc/logrotate.d/swift.erb"
+  variables(:postrotate_command => platform_family?("debian") ?
+            "/usr/sbin/invoke-rc.d syslog-ng reload >/dev/null" :
+            "/sbin/service syslog-ng reload >/dev/null")
 end
 
 # /etc/snmp
