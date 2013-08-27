@@ -67,7 +67,7 @@ Attributes
  * swift-private-cloud
    * common
      * ssh_user - unix admin user.
-	              default: "swiftops"
+                      default: "swiftops"
      * ssh_key - ???
      * swift_generic - space separated list of packages to install on all boxes
      * swift_proxy - space separated list of packages to install on proxies
@@ -110,13 +110,11 @@ Attributes
      * keystone_port - management port
      * ... this all seems broken to me
    * dispersion
-     * dis_tenant - tenant for dispersion reports
-	                default: "dispersion" (not created automatically)
-     * dis_user - user for dispersion reports
-	              default: "reporter" (not created automatically)
+     * dis_tenant - tenant for dispersion reports (created automatically)
+     * dis_user - user for dispersion reports (created automatically)
      * dis_key - password/key for dispersion user (no default)
      * dis_coverage - the percentage of partition coverage used in dispersion reporting
-	                  default: 1
+                          default: 1
 
 
 Deps
