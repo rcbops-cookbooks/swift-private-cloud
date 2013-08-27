@@ -81,6 +81,9 @@ end
 # /etc/logrotate.d
 template "/etc/logrotate.d/swift" do
   source "common/etc/logrotate.d/swift.erb"
+  variables(:postrotate_command => platform_family?("debian") ?
+            "/usr/sbin/invoke-rc.d syslog-ng reload >/dev/null" :
+            "/sbin/service syslog-ng reload >/dev/null")
 end
 
 # /etc/snmp
@@ -161,13 +164,13 @@ ubuntu_pkgs = ["python-software-properties", "patch", "debconf", "bonnie++", "ds
                "strace", "iotop", "debsums", "python-pip", "bsd-mailx", "screen"]
 case node[:platform]
 when "centos"
-  centos_pkgs.each do |pkg| 
+  centos_pkgs.each do |pkg|
     package pkg do
       action :install
     end
   end
 when "ubuntu"
-  ubuntu_pkgs.each do |pkg| 
+  ubuntu_pkgs.each do |pkg|
     package pkg do
       action :install
     end
