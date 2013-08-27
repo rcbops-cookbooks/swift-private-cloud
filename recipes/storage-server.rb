@@ -88,19 +88,6 @@ template "/etc/logrotate.d/rsync" do
   source "storage/etc/logrotate.d/rsync.erb"
 end
 
-# /etc/sysctl.d
-# template "/etc/sysctl.d/31-swift-storage.conf" do
-#   source "storage/etc/sysctl.d/31-swift-storage.conf.erb"
-# end
-
-# /etc/udev/rules.d
-template "/etc/udev/rules.d/10_swift.rules" do
-  source "storage/etc/udev/rules.d/10_swift.rules.erb"
-  mode "0644"
-  owner "root"
-  group "root"
-end
-
 # /usr/local/bin
 template "/usr/local/bin/drive_mount_check.py" do
   source "storage/usr/local/bin/drive_mount_check.py.erb"
@@ -142,20 +129,8 @@ cookbook_file "/usr/local/bin/swift-format.sh" do
   mode "0755"
 end
 
-cookbook_file "/usr/local/bin/swift-mount.sh" do
-  source "storage/usr/local/bin/swift-mount.sh"
-  user "root"
-  mode "0755"
-end
-
 cookbook_file "/usr/local/bin/swift-partition.sh" do
   source "storage/usr/local/bin/swift-partition.sh"
-  user "root"
-  mode "0755"
-end
-
-cookbook_file "/usr/local/bin/swift-udev-mount.sh" do
-  source "storage/usr/local/bin/swift-udev-mount.sh"
   user "root"
   mode "0755"
 end

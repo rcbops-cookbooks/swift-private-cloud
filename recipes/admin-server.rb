@@ -125,12 +125,6 @@ template "/etc/syslog-ng/conf.d/swift-ng.conf" do
   notifies :reload, "service[syslog-ng]", :delayed
 end
 
-# /etc/udev/rules.d
-template "/etc/udev/rules.d/10_swift.rules" do
-  source "storage/etc/udev/rules.d/10_swift.rules.erb"
-  only_if { platform_family?("debian") }
-end
-
 # /srv/ring/scripts
 directory "srv/ring/scripts" do
   recursive true
