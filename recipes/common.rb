@@ -169,17 +169,15 @@ centos_pkgs = ["patch", "dstat", "iptraf", "iptraf-ng", "htop",
 ubuntu_pkgs = ["python-software-properties", "patch", "debconf", "bonnie++", "dstat",
                "ethtool", "python-configobj", "curl", "iptraf", "htop", "nmon",
                "strace", "iotop", "debsums", "python-pip", "bsd-mailx", "screen"]
-case node[:platform]
-when "centos"
-  centos_pkgs.each do |pkg|
-    package pkg do
-      action :install
-    end
-  end
-when "ubuntu"
-  ubuntu_pkgs.each do |pkg|
-    package pkg do
-      action :install
-    end
+
+packages = value_for_platform(
+  "centos" => { "default" => centos_pkgs },
+  "ubuntu" => { "default" => ubuntu_pkgs },
+  "default" => []
+)
+
+packages.each do |pkg|
+  package pkg do
+    action :install
   end
 end
