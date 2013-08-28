@@ -11,7 +11,7 @@ Berksfile.lock
 # Bundler
 bin/*
 .bundle/*
-
+.chef
 .kitchen/
 .kitchen.local.yml
 .chef/checksums

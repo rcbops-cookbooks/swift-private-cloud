@@ -17,7 +17,7 @@ Vagrant.configure("2") do |config|
 
     server.vm.provision :chef_client do |chef|
       chef.chef_server_url = "https://#{$ips[:chef_server]}"
-      chef.validation_key_path = "./.chef/chef-validator.pem"
+      chef.validation_key_path = "./.chef-vagrant/chef-validator.pem"
       chef.environment = "swift"
 
       chef.run_list = [
@@ -59,7 +59,7 @@ Vagrant.configure("2") do |config|
 
       server.vm.provision :chef_client do |chef|
         chef.chef_server_url = "https://#{$ips[:chef_server]}"
-        chef.validation_key_path = "./.chef/chef-validator.pem"
+        chef.validation_key_path = "./.chef-vagrant/chef-validator.pem"
         chef.environment = "swift"
 
         chef.run_list = [
@@ -102,7 +102,7 @@ Vagrant.configure("2") do |config|
 
       server.vm.provision :chef_client do |chef|
         chef.chef_server_url = "https://#{$ips[:chef_server]}"
-        chef.validation_key_path = "./.chef/chef-validator.pem"
+        chef.validation_key_path = "./.chef-vagrant/chef-validator.pem"
         chef.environment = "swift"
 
         chef.run_list = [

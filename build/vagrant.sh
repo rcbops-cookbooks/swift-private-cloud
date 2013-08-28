@@ -40,13 +40,13 @@ echo
 echo "-----------------------------------------------------------------------------"
 echo "Copying Credentials to Share"
 echo "-----------------------------------------------------------------------------"
-vagrant ssh chef_server -c "sudo cp -v /etc/chef-server/chef-validator.pem /vagrant/.chef" || exit 1
+vagrant ssh chef_server -c "sudo cp -v /etc/chef-server/chef-validator.pem /vagrant/.chef-vagrant" || exit 1
 echo
 
 echo "-----------------------------------------------------------------------------"
 echo "Uploading Environments"
 echo "-----------------------------------------------------------------------------"
-vagrant ssh chef_server -c "sudo knife environment from file /vagrant/environments/* -c /vagrant/.chef/knife.rb" || exit 1
+vagrant ssh chef_server -c "sudo knife environment from file /vagrant/environments/* -c /vagrant/.chef-vagrant/knife.rb" || exit 1
 echo
 
 echo "-----------------------------------------------------------------------------"
@@ -59,11 +59,11 @@ echo
 echo "-----------------------------------------------------------------------------"
 echo "Uploading Cookbooks"
 echo "-----------------------------------------------------------------------------"
-vagrant ssh chef_server -c "sudo knife cookbook upload --all -c /vagrant/.chef/knife.rb" || exit 1
+vagrant ssh chef_server -c "sudo knife cookbook upload --all -c /vagrant/.chef-vagrant/knife.rb" || exit 1
 echo
 
 echo "-----------------------------------------------------------------------------"
 echo "Uploading Roles"
 echo "-----------------------------------------------------------------------------"
-vagrant ssh chef_server -c "sudo knife role from file /vagrant/roles/* -c /vagrant/.chef/knife.rb" || exit 1
+vagrant ssh chef_server -c "sudo knife role from file /vagrant/roles/* -c /vagrant/.chef-vagrant/knife.rb" || exit 1
 echo
