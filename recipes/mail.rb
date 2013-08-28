@@ -23,8 +23,14 @@ node["exim"]["platform"]["packages"].each do |pkg|
   end
 end
 
-service node["exim"]["platform"]["replaces"] do
-  action [:disable, :stop]
+node["exim"]["platform"]["removes"].each do |svc|
+  service svc do
+    action [:disable, :stop]
+  end
+
+  package svc do
+    action :remove
+  end
 end
 
 service_name = node["exim"]["platform"]["service"]
