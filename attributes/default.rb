@@ -45,12 +45,38 @@ default["swift-private-cloud"]["swift_common"]["swift_hash_suffix"] = nil
 default["swift-private-cloud"]["swift_common"]["admin_ip"] = nil
 default["swift-private-cloud"]["swift_common"]["syslog_ip"] = nil
 
-# common statsd config
+# common statsd config -- these will be merged into configs unless overridden in the specific
+# object/container/etc tunings
 default["swift-private-cloud"]["swift_common"]["log_statsd_host"] = nil
 default["swift-private-cloud"]["swift_common"]["log_statsd_port"] = 8125
 default["swift-private-cloud"]["swift_common"]["log_statsd_default_sample_rate"] = 1.0
 default["swift-private-cloud"]["swift_common"]["log_statsd_sample_rate_factor"] = 1.0
 default["swift-private-cloud"]["swift_common"]["log_statsd_metric_prefix"] = nil
+
+# object server tuning
+
+# Note that any object-server config can be represented here, but these are the
+# knobs most frequently frobbed.
+default["swift-private-cloud"]["object"]["config"]["DEFAULT"]["workers"] = 8
+default["swift-private-cloud"]["object"]["config"]["DEFAULT"]["backlog"] = 4096
+default["swift-private-cloud"]["object"]["config"]["DEFAULT"]["disable_fallocate"] = false
+default["swift-private-cloud"]["object"]["config"]["DEFAULT"]["fallocate_reserve"] = 0
+
+default["swift-private-cloud"]["object"]["config"]["app:object-server"]["node_timeout"] = 3
+default["swift-private-cloud"]["object"]["config"]["app:object-server"]["conn_timeout"] = 0.5
+
+default["swift-private-cloud"]["object"]["config"]["object-replicator"]["run_pause"] = 30
+default["swift-private-cloud"]["object"]["config"]["object-replicator"]["concurrency"] = 6
+default["swift-private-cloud"]["object"]["config"]["object-replicator"]["rsync_timeout"] = 900
+default["swift-private-cloud"]["object"]["config"]["object-replicator"]["rsync_io_timeout"] = 30
+default["swift-private-cloud"]["object"]["config"]["object-replicator"]["http_timeout"] = 60
+default["swift-private-cloud"]["object"]["config"]["object-replicator"]["lockup_timeout"] = 1800
+
+default["swift-private-cloud"]["object"]["config"]["object-updater"]["concurrency"] = 3
+default["swift-private-cloud"]["object"]["config"]["object-updater"]["node_timeout"] = 60
+default["swift-private-cloud"]["object"]["config"]["object-updater"]["conn_timeout"] = 5
+default["swift-private-cloud"]["object"]["config"]["object-updater"]["slowdown"] = 0.01
+
 
 # drive_audit
 regex_patterns = [
