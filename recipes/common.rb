@@ -31,6 +31,13 @@ include_recipe "git"
 resources("directory[/etc/swift]").mode "0755"
 resources("template[/etc/swift/swift.conf]").mode "0644"
 
+# make sure we have a swift lock directory - should this be in swift-lite?
+directory "/var/lock/swift" do
+  owner "swift"
+  group "swift"
+  mode "0750"
+  action :create
+end
 
 # btorch WHAT DOES THIS DO?
 template "/etc/cron.d/swift_ring_check" do
