@@ -57,12 +57,12 @@ end
 
 # /etc/exim4
 if not node["swift-private-cloud"]["mailing"]["smarthost"]
-    nodelist = get_nodes_by_recipe("swift-private-cloud::admin-server")
-    if nodelist.length == 0
-      raise "Must specify swift-private-cloud/mailing/smarthost"
-    end
+  nodelist = get_nodes_by_recipe("swift-private-cloud::admin-server")
+  if nodelist.length == 0
+    raise "Must specify swift-private-cloud/mailing/smarthost"
+  end
 
-    node.default["swift-private-cloud"]["mailing"]["smarthost"] = get_ip_for_net("swift-management", nodelist[0])
+  node.default["swift-private-cloud"]["mailing"]["smarthost"] = get_ip_for_net("swift-management", nodelist[0])
 end
 
 template "/etc/exim4/update-exim4.conf.conf" do
@@ -88,9 +88,10 @@ end
 # /etc/logrotate.d
 template "/etc/logrotate.d/swift" do
   source "common/etc/logrotate.d/swift.erb"
-  variables(:postrotate_command => platform_family?("debian") ?
-            "/usr/sbin/invoke-rc.d syslog-ng reload >/dev/null" :
-            "/sbin/service syslog-ng reload >/dev/null")
+  variables(
+    :postrotate_command => platform_family?("debian") ?
+      "/usr/sbin/invoke-rc.d syslog-ng reload >/dev/null" :
+      "/sbin/service syslog-ng reload >/dev/null")
 end
 
 # /etc/snmp
@@ -157,18 +158,22 @@ template "/usr/local/bin/pull-rings.sh" do
   user "swift"
   group "swift"
   mode "0700"
-  variables( :repo => node["swift-private-cloud"]["versioning"]["repository_name"],
-             :builder_ip => node["swift-private-cloud"]["versioning"]["repository_host"],
-             :service_prefix => platform_family?("debian") ? "" : "openstack-" )
+  variables(
+    :repo => node["swift-private-cloud"]["versioning"]["repository_name"],
+    :builder_ip => node["swift-private-cloud"]["versioning"]["repository_host"],
+    :service_prefix => platform_family?("debian") ? "" : "openstack-")
   only_if "/usr/bin/id swift"
 end
 
 # Adding some helpful/needed packages
-centos_pkgs = ["patch", "dstat", "iptraf", "iptraf-ng", "htop",
-               "strace", "iotop", "bsd-mailx", "screen", "bonnie++"]
-ubuntu_pkgs = ["python-software-properties", "patch", "debconf", "bonnie++", "dstat",
-               "ethtool", "python-configobj", "curl", "iptraf", "htop", "nmon",
-               "strace", "iotop", "debsums", "python-pip", "bsd-mailx", "screen"]
+centos_pkgs = [
+  "patch", "dstat", "iptraf", "iptraf-ng", "htop",
+  "strace", "iotop", "bsd-mailx", "screen", "bonnie++"]
+
+ubuntu_pkgs = [
+  "python-software-properties", "patch", "debconf", "bonnie++", "dstat",
+  "ethtool", "python-configobj", "curl", "iptraf", "htop", "nmon",
+  "strace", "iotop", "debsums", "python-pip", "bsd-mailx", "screen"]
 
 packages = value_for_platform(
   "centos" => { "default" => centos_pkgs },

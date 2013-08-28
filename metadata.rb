@@ -8,7 +8,7 @@ recipe            "swift-private-cloud::common", "Installs the swift servers com
 recipe            "swift-private-cloud::account-server", "Installs the swift account server"
 recipe            "swift-private-cloud::object-server", "Installs the swift object server"
 recipe            "swift-private-cloud::container-server", "Installs the swift container server"
-recipe            "swift-private-cloud::storage-server", "Installs the swift account, object, container servers, ntp, and sysctl"
+recipe            "swift-private-cloud::storage-server", "Installs the swift account, object, container servers"
 recipe            "swift-private-cloud::proxy-server", "Installs the swift proxy server, ntp, and sysctl"
 recipe            "swift-private-cloud::admin-server", "Installs the swift admin server bits"
 
@@ -16,6 +16,6 @@ recipe            "swift-private-cloud::admin-server", "Installs the swift admin
   supports os
 end
 
-%w{ swift-lite runit git mysql-openstack keystone cron }.each do |dep|
+%w{ swift-lite osops-utils runit git mysql-openstack keystone cron }.each do |dep|
   depends dep
 end

@@ -36,7 +36,7 @@ end
 
 execute "configure-alternatives-mta" do
   command "alternatives --set mta /usr/sbin/sendmail.exim"
-  only_if { platform_family?{"rhel"} }
+  only_if { platform_family?("rhel") }
 end
 
 execute "update-exim-config" do
