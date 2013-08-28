@@ -53,8 +53,8 @@ Vagrant.configure("2") do |config|
       ]
     end
 
-    server.vm.provision :shell, :inline => "cp -v /etc/chef-server/chef-validator.pem /vagrant/.chef"
-    server.vm.provision :shell, :inline => "knife role from file /vagrant/roles/* -c /vagrant/.chef/knife.rb"
+    server.vm.provision :shell, :inline => "cp -v /etc/chef-server/chef-validator.pem /vagrant/.chef-vagrant"
+    server.vm.provision :shell, :inline => "knife role from file /vagrant/roles/* -c /vagrant/.chef-vagrant/knife.rb"
   end
 
   # Create a forwarded port mapping which allows access to a specific port
