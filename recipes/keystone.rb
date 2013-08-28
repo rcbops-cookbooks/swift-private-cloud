@@ -83,7 +83,7 @@ node.default["keystone"]["users"] = {
     "password" => "",
     "default_tenant" => auth_tenant,
     "roles" => {
-      "Member" => [ "admin" ]
+      "Member" => ["admin"]
     }
   }
 }

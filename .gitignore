@@ -9,11 +9,11 @@ Berksfile.lock
 /cookbooks
 
 # Bundler
-Gemfile.lock
 bin/*
 .bundle/*
 
 .kitchen/
 .kitchen.local.yml
-.chef
+.chef/checksums
 .ruby-version
+*.pem

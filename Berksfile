@@ -7,3 +7,9 @@ cookbook 'sysctl', git: 'git://github.com/rcbops-cookbooks/sysctl', branch: 'gri
 cookbook 'memcached-openstack', git: 'git://github.com/rcbops-cookbooks/memcached-openstack', branch: 'grizzly'
 cookbook 'keystone', git: 'git://github.com/rpedde-rcbops/keystone', branch: 'role_whackery'
 cookbook 'mysql-openstack', git: 'git://github.com/rcbops-cookbooks/mysql-openstack', branch: 'grizzly'
+
+group :chef_server do
+  cookbook 'chef-server'
+  cookbook 'chef-client'
+  cookbook 'iptables'
+end

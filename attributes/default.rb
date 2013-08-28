@@ -23,12 +23,14 @@ free_memory = node["memory"]["free"].to_i
 default["swift-private-cloud"]["common"]["ssh_user"] = "swiftops"
 default["swift-private-cloud"]["common"]["ssh_key"] = "/tmp/id_rsa_swiftops.priv"
 default["swift-private-cloud"]["common"]["swift_generic"] = "swift python-swift python-swiftclient"
-default["swift-private-cloud"]["common"]["swift_proxy"] = "swift-proxy python-keystone python-keystoneclient memcached python-memcache"
+default["swift-private-cloud"]["common"]["swift_proxy"] =
+  "swift-proxy python-keystone python-keystoneclient memcached python-memcache"
 default["swift-private-cloud"]["common"]["swift_storage"] = "swift-account swift-container swift-object"
 default["swift-private-cloud"]["common"]["swift_others"] = "python-suds"
 
 if platform_family?("debian")
-  default["swift-private-cloud"]["common"]["pkg_options"] = "-y -qq --force-yes -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold"
+  default["swift-private-cloud"]["common"]["pkg_options"] =
+    "-y -qq --force-yes -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold"
 else
   default["swift-private-cloud"]["common"]["pkg_options"] = ""
 end
@@ -51,20 +53,22 @@ default["swift-private-cloud"]["swift_common"]["log_statsd_sample_rate_factor"] 
 default["swift-private-cloud"]["swift_common"]["log_statsd_metric_prefix"] = nil
 
 # drive_audit
-regex_patterns = ["\\berror\\b.*\\b(sd[a-z]{1,2}\\d?)\\b",
-                  "\\b(sd[a-z]{1,2}\d?)\\b.*\\berror\\b"]
+regex_patterns = [
+  "\\berror\\b.*\\b(sd[a-z]{1,2}\\d?)\\b",
+  "\\b(sd[a-z]{1,2}\d?)\\b.*\\berror\\b"]
 
 default["swift-private-cloud"]["drive_audit"]["minutes"] = 5
 default["swift-private-cloud"]["drive_audit"]["log_file_pattern"] = "/var/log/kern*"
 default["swift-private-cloud"]["drive_audit"]["regex_patterns"] = regex_patterns
 
 # proxy
-default["swift-private-cloud"]["proxy"]["pipeline"] = "catch_errors proxy-logging healthcheck cache ratelimit authtoken keystoneauth proxy-server"
+default["swift-private-cloud"]["proxy"]["pipeline"] =
+  "catch_errors proxy-logging healthcheck cache ratelimit authtoken keystoneauth proxy-server"
 default["swift-private-cloud"]["proxy"]["memcache_maxmem"] = 512
 default["swift-private-cloud"]["proxy"]["sim_connections"] = 1024
 default["swift-private-cloud"]["proxy"]["memcache_server_list"] = "127.0.0.1:11211"
 default["swift-private-cloud"]["proxy"]["authtoken_factory"] = "keystoneclient.middleware.auth_token:filter_factory"
-default["swift-private-cloud"]["proxy"]["sysctl"] =  {
+default["swift-private-cloud"]["proxy"]["sysctl"] = {
   "net.ipv4.tcp_tw_recycle" => "1",
   "net.ipv4.tcp_tw_reuse" => "1",
   "net.ipv4.ip_local_port_range" => "1024 61000",
@@ -72,7 +76,7 @@ default["swift-private-cloud"]["proxy"]["sysctl"] =  {
 }
 
 # storage
-default["swift-private-cloud"]["storage"]["sysctl"] =  {
+default["swift-private-cloud"]["storage"]["sysctl"] = {
   "net.ipv4.tcp_tw_recycle" => "1",
   "net.ipv4.tcp_tw_reuse" => "1",
   "net.ipv4.ip_local_port_range" => "1024 61000",

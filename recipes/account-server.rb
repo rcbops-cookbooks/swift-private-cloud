@@ -24,9 +24,10 @@ common = node["swift-private-cloud"]["swift_common"]
 resources("template[/etc/swift/account-server.conf]").instance_exec do
   cookbook "swift-private-cloud"
   mode "0644"
-  variables variables.merge("log_statsd_host" => common["log_statsd_host"],
-                            "log_statsd_port" => common["log_statsd_port"],
-                            "log_statsd_default_sample_rate" => common["log_statsd_default_sample_rate"],
-                            "log_statsd_sample_rate_factor" => common["log_statsd_sample_rate_factor"],
-                            "log_status_metric_prefix" => common["log_statsd_metric_prefix"])
+  variables variables.merge(
+    "log_statsd_host" => common["log_statsd_host"],
+    "log_statsd_port" => common["log_statsd_port"],
+    "log_statsd_default_sample_rate" => common["log_statsd_default_sample_rate"],
+    "log_statsd_sample_rate_factor" => common["log_statsd_sample_rate_factor"],
+    "log_status_metric_prefix" => common["log_statsd_metric_prefix"])
 end
