@@ -129,13 +129,13 @@ if platform_family?("rhel")
   default["exim"]["platform"] = {
     "packages" => ["exim"],
     "service" => "exim",
-    "replaces" => "postfix"
+    "removes" => ["postfix"]
   }
 elsif platform_family?("debian")
   default["exim"]["platform"] = {
     "packages" => ["exim4"],
     "service" => "exim4",
-    "replaces" => "postfix"
+    "removes" => ["postfix"]
   }
 end
 
