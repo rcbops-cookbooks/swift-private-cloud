@@ -81,7 +81,7 @@ default["swift-private-cloud"]["object"]["config"]["object-updater"]["slowdown"]
 default["swift-private-cloud"]["proxy"]["config"]["DEFAULT"]["backlog"] = 4096
 default["swift-private-cloud"]["proxy"]["config"]["DEFAULT"]["workers"] = 12
 
-default["swift-private-cloud"]["proxy"]["config"]["pipline:main"]["pipeline"] = "catch_errors proxy-logging healthcheck cache ratelimit authtoken keystoneauth proxy-server"
+default["swift-private-cloud"]["proxy"]["config"]["pipeline:main"]["pipeline"] = "catch_errors proxy-logging healthcheck cache ratelimit authtoken keystoneauth proxy-server"
 
 default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["node_timeout"] = 60
 default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["client_timeout"] = 60
