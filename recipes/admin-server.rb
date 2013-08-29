@@ -125,11 +125,6 @@ template "/etc/syslog-ng/conf.d/swift-ng.conf" do
   notifies :reload, "service[syslog-ng]", :delayed
 end
 
-# /srv/ring/scripts
-directory "srv/ring/scripts" do
-  recursive true
-end
-
 # git repo
 git_basedir = node["swift-private-cloud"]["versioning"]["repository_base"]
 ring_repo = node["swift-private-cloud"]["versioning"]["repository_name"]
@@ -146,35 +141,6 @@ bash "initialize repo" do
   umask 022
   code "git init --bare #{ring_repo}; chown -R swiftops: #{ring_repo}"
   only_if "test -e #{git_basedir} && test \! -e #{git_basedir}/#{ring_repo} && id swiftops"
-end
-
-template "/srv/ring/scripts/README" do
-  source "admin/srv/ring/scripts/README"
-end
-
-template "/srv/ring/scripts/rebalance_ring.sh" do
-  source "admin/srv/ring/scripts/rebalance_ring.sh.erb"
-  mode "0500"
-end
-
-template "/srv/ring/scripts/retrievering.sh" do
-  source "admin/srv/ring/scripts/retrievering.sh.erb"
-  mode "0500"
-end
-
-template "/srv/ring/scripts/ring_add.sh" do
-  source "admin/srv/ring/scripts/ring_add.sh.erb"
-  mode "0500"
-end
-
-template "/srv/ring/scripts/updatemd5.sh" do
-  source "admin/srv/ring/scripts/updatemd5.sh.erb"
-  mode "0500"
-end
-
-template "/srv/ring/scripts/vm_ring_add.sh" do
-  source "admin/srv/ring/scripts/vm_ring_add.sh.erb"
-  mode "0500"
 end
 
 # /usr/local/bin

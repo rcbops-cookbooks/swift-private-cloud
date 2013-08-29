@@ -39,15 +39,11 @@ directory "/var/lock/swift" do
   action :create
 end
 
-# btorch WHAT DOES THIS DO?
+# checks ring to make sure it's current
+# and updates it with the latest from the 
+# ring master otherwise
 template "/etc/cron.d/swift_ring_check" do
   source "common/etc/cron.d/swift_ring_check.erb"
-end
-
-# /etc/default
-template "/etc/default/irqbalance" do
-  source "common/etc/default/irqbalance.erb"
-  only_if { platform_family?("debian") }
 end
 
 template "/etc/default/megaclisas-statusd" do
