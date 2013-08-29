@@ -11,6 +11,8 @@ recipe            "swift-private-cloud::container-server", "Installs the swift c
 recipe            "swift-private-cloud::storage-server", "Installs the swift account, object, container servers"
 recipe            "swift-private-cloud::proxy-server", "Installs the swift proxy server, ntp, and sysctl"
 recipe            "swift-private-cloud::admin-server", "Installs the swift admin server bits"
+recipe            "swift-private-cloud::freeze", "Freeze/Hold packages, etc after deployment"
+recipe            "swift-private-cloud::unfreeze", "Unfreeze/unhold packages, etc before an upgrade"
 
 %w{ centos ubuntu }.each do |os|
   supports os
