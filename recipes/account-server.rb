@@ -73,6 +73,7 @@ end
 
 resources("template[/etc/swift/account-server.conf]").instance_exec do
   cookbook "swift-private-cloud"
+  source "inifile.conf.erb"
   mode "0644"
   variables("config_options" => default_options.merge(overrides) { |k, x, y| x.merge(y) })
 end
