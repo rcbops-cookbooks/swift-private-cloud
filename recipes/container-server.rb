@@ -22,13 +22,58 @@ include_recipe "swift-lite::container-server"
 
 common = node["swift-private-cloud"]["swift_common"]
 
+default_options = {
+  "DEFAULT" => {
+    "bind_ip" => "0.0.0.0",
+    "bind_port" => "6001",
+    "workers" => "6",
+    "user" => "swift",
+    "swift_dir" => "/etc/swift",
+    "devices" => "/srv/node",
+    "db_preallocation" => "off"
+  },
+  "pipeline:main" => {
+    "pipeline" => "healthcheck recon container-server"
+  },
+  "app:container-server" => {
+    "use" => "egg:swift#container",
+    "log_facility" => "LOG_LOCAL1"
+  },
+  "filter:healthcheck" => {
+    "use" => "egg:swift#healthcheck"
+  },
+  "filter:recon" => {
+    "use" => "egg:swift#recon",
+    "log_facility" => "LOG_LOCAL2",
+    "recon_cache_path" => "/var/cache/swift",
+    "recon_lock_path" => "/var/lock/swift"
+  },
+  "container-replicator" => {
+    "log_facility" => "LOG_LOCAL2",
+    "concurrency" => 6
+  },
+  "container-updater" => {
+    "log_facility" => "LOG_LOCAL2",
+    "concurrency" => "4",
+    "node_timeout" => "15",
+    "conn_timeout" => "5"
+  },
+  "container-auditor" => {
+    "log_facility" => "LOG_LOCAL2",
+    "interval" => 1800
+  },
+  "container-sync" => {
+  }
+}
+
+overrides = { "DEFAULT" => node["swift-private-cloud"]["swift_common"].select { |k, _| k.start_with?("log_statsd_") }}
+
+if node["swift-private-cloud"]["container"] and node["swift-private-cloud"]["container"]["config"]
+  overrides = overrides.merge(node["swift-private-cloud"]["container"]["config"]) { |k, x, y| x.merge(y) }
+end
+
 resources("template[/etc/swift/container-server.conf]").instance_exec do
   cookbook "swift-private-cloud"
   mode "0644"
-  variables variables.merge(
-    "log_statsd_host" => common["log_statsd_host"],
-    "log_statsd_port" => common["log_statsd_port"],
-    "log_statsd_default_sample_rate" => common["log_statsd_default_sample_rate"],
-    "log_statsd_sample_rate_factor" => common["log_statsd_sample_rate_factor"],
-    "log_status_metric_prefix" => common["log_statsd_metric_prefix"])
+  variables("config_options" => default_options.merge(overrides) { |k, x, y| x.merge(y) })
 end
