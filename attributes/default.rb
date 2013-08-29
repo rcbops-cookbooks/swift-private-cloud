@@ -77,6 +77,19 @@ default["swift-private-cloud"]["object"]["config"]["object-updater"]["node_timeo
 default["swift-private-cloud"]["object"]["config"]["object-updater"]["conn_timeout"] = 5
 default["swift-private-cloud"]["object"]["config"]["object-updater"]["slowdown"] = 0.01
 
+# Note that any proxy-server config can be represented here, but these are the
+# knobs most frequently frobbed.
+default["swift-private-cloud"]["proxy"]["config"]["DEFAULT"]["backlog"] = 4096
+default["swift-private-cloud"]["proxy"]["config"]["DEFAULT"]["workers"] = 12
+
+default["swift-private-cloud"]["proxy"]["config"]["pipline:main"]["pipeline"] = "catch_errors proxy-logging healthcheck cache ratelimit authtoken keystoneauth proxy-server"
+
+default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["node_timeout"] = 60
+default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["client_timeout"] = 60
+default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["conn_timeout"] = 3.5
+default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["error_suppression_interval"] = 60
+default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["error_suppression_limit"] = 10
+default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["object_post_as_copy"] = true
 
 # drive_audit
 regex_patterns = [
@@ -88,8 +101,6 @@ default["swift-private-cloud"]["drive_audit"]["log_file_pattern"] = "/var/log/ke
 default["swift-private-cloud"]["drive_audit"]["regex_patterns"] = regex_patterns
 
 # proxy
-default["swift-private-cloud"]["proxy"]["pipeline"] =
-  "catch_errors proxy-logging healthcheck cache ratelimit authtoken keystoneauth proxy-server"
 default["swift-private-cloud"]["proxy"]["memcache_maxmem"] = 512
 default["swift-private-cloud"]["proxy"]["sim_connections"] = 1024
 default["swift-private-cloud"]["proxy"]["memcache_server_list"] = "127.0.0.1:11211"
