@@ -75,13 +75,9 @@ default_options = {
 
 overrides = { "DEFAULT" => node["swift-private-cloud"]["swift_common"].select { |k, _| k.start_with?("log_statsd_") }}
 
-Chef::Log.error(overrides)
-
 if node["swift-private-cloud"]["object"] and node["swift-private-cloud"]["object"]["config"]
   overrides = overrides.merge(node["swift-private-cloud"]["object"]["config"]) { |k, x, y| x.merge(y) }
 end
-
-Chef::Log.error(overrides)
 
 resources("template[/etc/swift/object-server.conf]").instance_exec do
   cookbook "swift-private-cloud"
