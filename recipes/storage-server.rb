@@ -23,8 +23,18 @@ include_recipe "swift-private-cloud::container-server"
 include_recipe "swift-private-cloud::object-server"
 
 # /etc/rsync.conf
-resources("template[/etc/rsyncd.conf]").cookbook "swift-private-cloud"
-resources("template[/etc/rsyncd.conf]").source "storage/etc/rsyncd.conf.erb"
+resources("template[/etc/rsyncd.conf]").instance_exec do
+  cookbook "swift-private-cloud"
+  source "storage/etc/rsyncd.conf.erb"
+  variables(
+    :account_connections =>
+      node["swift-private-cloud"]["rsync"]["config"]["account"]["max connections"],
+    :container_connections =>
+      node["swift-private-cloud"]["rsync"]["config"]["container"]["max connections"],
+    :object_connections =>
+      node["swift-private-cloud"]["rsync"]["config"]["object"]["max connections"]
+  )
+end
 
 # /etc/swift/drive-audit.conf
 resources("template[/etc/swift/drive-audit.conf]").cookbook "swift-private-cloud"
