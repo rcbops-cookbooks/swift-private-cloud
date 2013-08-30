@@ -35,6 +35,22 @@ else
   default["swift-private-cloud"]["common"]["pkg_options"] = ""
 end
 
+if platform?("centos")
+  default["swift-private-clound"]["common"]["pkg_holds"] = [
+    "openstack-swift", "python-swiftclient", "openstack-swift-account",
+    "openstack-swift-container", "openstack-swift-object",
+    "openstack-swift-proxy", "python-keystoneclient", "python-memcached",
+    "python-keystone", "rsync", "memcached"]
+elsif platform?("ubuntu")
+  default["swift-private-clound"]["common"]["pkg_holds"] = [
+    "swift", "python-swiftclient", "swift-account",
+    "swift-container", "swift-object",
+    "swift-proxy", "python-keystoneclient", "python-memcached",
+    "python-keystone", "rsync", "memcached"]
+else
+  default["swift-private-clound"]["common"]["pkg_holds"] = []
+end
+
 # network
 #default["swift-private-cloud"]["network"]["management"] = "cidr"
 #default["swift-private-cloud"]["network"]["exnet"] = "cidr"
@@ -77,12 +93,11 @@ default["swift-private-cloud"]["object"]["config"]["object-updater"]["node_timeo
 default["swift-private-cloud"]["object"]["config"]["object-updater"]["conn_timeout"] = 5
 default["swift-private-cloud"]["object"]["config"]["object-updater"]["slowdown"] = 0.01
 
-# Note that any proxy-server config can be represented here, but these are the
-# knobs most frequently frobbed.
+# Proxy tuning -- note that any proxy-server config can be represented here
 default["swift-private-cloud"]["proxy"]["config"]["DEFAULT"]["backlog"] = 4096
 default["swift-private-cloud"]["proxy"]["config"]["DEFAULT"]["workers"] = 12
 
-default["swift-private-cloud"]["proxy"]["config"]["pipline:main"]["pipeline"] = "catch_errors proxy-logging healthcheck cache ratelimit authtoken keystoneauth proxy-server"
+default["swift-private-cloud"]["proxy"]["config"]["pipeline:main"]["pipeline"] = "catch_errors proxy-logging healthcheck cache ratelimit authtoken keystoneauth proxy-server"
 
 default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["node_timeout"] = 60
 default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["client_timeout"] = 60
@@ -90,6 +105,62 @@ default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["conn_time
 default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["error_suppression_interval"] = 60
 default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["error_suppression_limit"] = 10
 default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["object_post_as_copy"] = true
+
+# container tuning -- note that any container-server config can be represented here
+default["swift-private-cloud"]["container"]["config"]["DEFAULT"]["backlog"] = "4096"
+default["swift-private-cloud"]["container"]["config"]["DEFAULT"]["workers"] = "6"
+default["swift-private-cloud"]["container"]["config"]["DEFAULT"]["disable_fallocate"] = "false"
+default["swift-private-cloud"]["container"]["config"]["DEFAULT"]["db_preallocation"] = "off"
+default["swift-private-cloud"]["container"]["config"]["DEFAULT"]["fallocate_reserve"] = 0
+
+default["swift-private-cloud"]["container"]["config"]["app:container-server"]["node_timeout"] = 3
+default["swift-private-cloud"]["container"]["config"]["app:container-server"]["conn_timeout"] = 0.5
+default["swift-private-cloud"]["container"]["config"]["app:container-server"]["allow_versions"] = "false"
+
+default["swift-private-cloud"]["container"]["config"]["container-replicator"]["per_diff"] = 1000
+default["swift-private-cloud"]["container"]["config"]["container-replicator"]["max_diffs"] = 100
+default["swift-private-cloud"]["container"]["config"]["container-replicator"]["concurrency"] = 6
+default["swift-private-cloud"]["container"]["config"]["container-replicator"]["interval"] = 30
+default["swift-private-cloud"]["container"]["config"]["container-replicator"]["node_timeout"] = 15
+default["swift-private-cloud"]["container"]["config"]["container-replicator"]["conn_timeout"] = 0.5
+default["swift-private-cloud"]["container"]["config"]["container-replicator"]["reclaim_age"] = 604800
+
+default["swift-private-cloud"]["container"]["config"]["container-updater"]["interval"] = 300
+default["swift-private-cloud"]["container"]["config"]["container-updater"]["concurrency"] = 4
+default["swift-private-cloud"]["container"]["config"]["container-updater"]["node_timeout"] = 15
+default["swift-private-cloud"]["container"]["config"]["container-updater"]["conn_timeout"] = 5
+default["swift-private-cloud"]["container"]["config"]["container-updater"]["account_suppression_time"] = 60
+
+default["swift-private-cloud"]["container"]["config"]["container-auditor"]["interval"] = 1800
+default["swift-private-cloud"]["container"]["config"]["container-auditor"]["containers_per_second"] = 200
+
+
+# account tuning -- note that any account-server config can be represented here
+default["swift-private-cloud"]["account"]["config"]["DEFAULT"]["backlog"] = 4096
+default["swift-private-cloud"]["account"]["config"]["DEFAULT"]["workers"] = 6
+default["swift-private-cloud"]["account"]["config"]["DEFAULT"]["disable_fallocate"] = false
+default["swift-private-cloud"]["account"]["config"]["DEFAULT"]["db_preallocation"] = "off"
+default["swift-private-cloud"]["account"]["config"]["DEFAULT"]["fallocate_reserve"] = 0
+
+default["swift-private-cloud"]["account"]["config"]["account-replicator"]["per_diff"] = 10000
+default["swift-private-cloud"]["account"]["config"]["account-replicator"]["max_diffs"] = 100
+default["swift-private-cloud"]["account"]["config"]["account-replicator"]["concurrency"] = 4
+default["swift-private-cloud"]["account"]["config"]["account-replicator"]["interval"] = 30
+default["swift-private-cloud"]["account"]["config"]["account-replicator"]["error_suppression_interval"] = 60
+default["swift-private-cloud"]["account"]["config"]["account-replicator"]["error_suppression_limit"] = 10
+default["swift-private-cloud"]["account"]["config"]["account-replicator"]["node_timeout"] = 10
+default["swift-private-cloud"]["account"]["config"]["account-replicator"]["conn_timeout"] = 0.5
+default["swift-private-cloud"]["account"]["config"]["account-replicator"]["reclaim_age"] = 604800
+default["swift-private-cloud"]["account"]["config"]["account-replicator"]["run_pause"] = 30
+
+default["swift-private-cloud"]["account"]["config"]["account-auditor"]["interval"] = 1800
+default["swift-private-cloud"]["account"]["config"]["account-auditor"]["accounts_per_second"] = 100
+
+default["swift-private-cloud"]["account"]["config"]["account-reaper"]["concurrency"] = 2
+default["swift-private-cloud"]["account"]["config"]["account-reaper"]["interval"] = 3600
+default["swift-private-cloud"]["account"]["config"]["account-reaper"]["node_timeout"] = 10
+default["swift-private-cloud"]["account"]["config"]["account-reaper"]["conn_timeout"] = 0.5
+default["swift-private-cloud"]["account"]["config"]["account-reaper"]["delay_reaping"] = 604800
 
 # drive_audit
 regex_patterns = [

@@ -1,9 +1,0 @@
-# This file is managed by chef.  Do not edit.
-
-<% @config_options.keys.each do |section| -%>
-[<%= section %>]
-<% @config_options[section].each do |key, value| -%>
-<%= key %> = <%= value %>
-<% end %>
-
-<% end %>
