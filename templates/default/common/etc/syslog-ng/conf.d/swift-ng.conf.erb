@@ -84,7 +84,7 @@ filter f_local3_err { facility(local3) and not level(info,debug); };
 # local0.info                        -/var/log/swift/proxy.log
 # write to local file and to remove log server
 log {
-        source(s_sys);
+        source(<%= @source %>);
         filter(f_local0);
         destination(d_local0);
         destination(d_remote);
@@ -94,7 +94,7 @@ log {
 # local0.error                        -/var/log/swift/proxy.error
 # write to local file and to remove log server
 log {
-        source(s_sys);
+        source(<%= @source %>);
         filter(f_local0_err);
         destination(d_local0_err);
         destination(d_remote);
@@ -102,7 +102,7 @@ log {
 
 # Puts all health check into a local file
 log {
-        source(s_sys);
+        source(<%= @source %>);
         filter(f_healthchk);
         destination(d_healthchk);
 };
@@ -110,7 +110,7 @@ log {
 # local1.info                        -/var/log/swift/storage.log
 # write to local file and to remote log server
 log {
-        source(s_sys);
+        source(<%= @source %>);
         filter(f_local1);
         destination(d_local1);
         destination(d_remote);
@@ -119,7 +119,7 @@ log {
 # local1.error                        -/var/log/swift/storage.error
 # write to local file and to remote log server
 log {
-        source(s_sys);
+        source(<%= @source %>);
         filter(f_local1_err);
         destination(d_local1_err);
         destination(d_remote);
@@ -128,7 +128,7 @@ log {
 # local2.info                        -/var/log/swift/jobs.log
 # write to local file and to remote log server
 log {
-        source(s_sys);
+        source(<%= @source %>);
         filter(f_local2);
         destination(d_local2);
         destination(d_remote);
@@ -137,7 +137,7 @@ log {
 # local2.error                        -/var/log/swift/jobs.error
 # write to local file and to remote log server
 log {
-        source(s_sys);
+        source(<%= @source %>);
         filter(f_local2_err);
         destination(d_local2_err);
         destination(d_remote);
@@ -146,7 +146,7 @@ log {
 # local3.info                        -/var/log/swift/drive-audit.log
 # write to local file and to remote log server
 log {
-        source(s_sys);
+        source(<%= @source %>);
         filter(f_local3);
         destination(d_local3);
         destination(d_remote);
@@ -155,7 +155,7 @@ log {
 # local3.error                        -/var/log/swift/drive-audit.error
 # write to local file and to remote log server
 log {
-        source(s_sys);
+        source(<%= @source %>);
         filter(f_local3_err);
         destination(d_local3_err);
         destination(d_remote);
@@ -164,7 +164,7 @@ log {
 # local4.info                        -/var/log/swift/slogging.log
 # write to local file and to remote log server
 #log {
-#        source(s_sys);
+#        source(<%= @source %>);
 #        filter(f_local4);
 #        destination(d_local4);
 #        destination(d_remote);
@@ -173,7 +173,7 @@ log {
 # local4.error                        -/var/log/swift/slogging.error
 # write to local file and to remote log server
 #log {
-#        source(s_sys);
+#        source(<%= @source %>);
 #        filter(f_local4_err);
 #        destination(d_local4_err);
 #        destination(d_remote);
