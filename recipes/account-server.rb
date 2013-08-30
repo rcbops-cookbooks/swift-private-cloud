@@ -21,6 +21,9 @@ include_recipe "swift-lite::account-server"
 
 common = node["swift-private-cloud"]["swift_common"]
 
+
+# For more configurable options and information please check either account-server.conf manpage
+# or account-server.conf-sample provided within the distributed package 
 default_options = {
   "DEFAULT" => {
     "bind_ip" => "0.0.0.0",
@@ -58,7 +61,7 @@ default_options = {
   },
   "account-reaper" => {
     "log_facility" => "LOG_LOCAL2",
-    "concurrency" => 5,
+    "concurrency" => 2,
     "delay_reaping" => 604800
   }
 }

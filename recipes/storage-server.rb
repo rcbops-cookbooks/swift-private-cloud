@@ -89,7 +89,7 @@ template "/etc/logrotate.d/rsync" do
   variables(
     :postrotate_command => platform_family?("debian") ?
       "/usr/sbin/invoke-rc.d rsync reload > /dev/null" :
-      "/sbin/service rsync reload > /dev/null")
+      "/sbin/service rsyncd restart > /dev/null")
 end
 
 # /usr/local/bin
