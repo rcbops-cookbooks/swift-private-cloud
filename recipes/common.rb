@@ -113,7 +113,8 @@ end
 template "/etc/syslog-ng/conf.d/swift-ng.conf" do
   source "common/etc/syslog-ng/conf.d/swift-ng.conf.erb"
   variables(
-    :remote_syslog_ip => node["swift-private-cloud"]["swift_common"]["syslog_ip"]
+    :remote_syslog_ip => node["swift-private-cloud"]["swift_common"]["syslog_ip"],
+    :source => platform_family?("debian") ? "s_src" : "s_sys"
   )
   notifies :reload, "service[syslog-ng]", :delayed
 end
