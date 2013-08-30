@@ -32,7 +32,7 @@ else
         touch $lockfile
 fi
 
-awk '$0>=from&&$0<=to' from="$endtime" to="$starttime" $KERNLOG | cut -d "]" -f 2 | grep "Corruption detected" | uniq > $tmpf
+awk '$0>=from&&$0<=to' from="$endtime" to="$starttime" $logfile | cut -d "]" -f 2 | grep "Corruption detected" | uniq > $tmpf
 
 test -s $tmpf
 if [ $? -eq 0 ]; then
