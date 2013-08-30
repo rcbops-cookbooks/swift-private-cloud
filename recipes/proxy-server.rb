@@ -44,6 +44,8 @@ end
 keystone_uri = URI(keystone_auth_uri)
 
 
+# For more configurable options and information please check either proxy-server.conf manpage
+# or proxy-server.conf-sample provided within the distributed package 
 default_options = {
   "DEFAULT" => {
     "bind_ip" => "0.0.0.0",
@@ -52,7 +54,7 @@ default_options = {
     "workers" => 12
   },
   "pipeline:main" => {
-    "pipeline" => "catch_errors proxy-logging healthcheck cache ratelimit authtoken keystoneauth proxy-server"
+    "pipeline" => "catch_errors proxy-logging healthcheck cache ratelimit authtoken keystoneauth proxy-logging proxy-server"
   },
   "app:proxy-server" => {
     "use" => "egg:swift#proxy",
@@ -129,9 +131,6 @@ default_options = {
   },
   "filter:account-quotas" => {
     "use" => "egg:swift#account_quotas"
-  },
-  "filter:informant" => {
-    "use" => "egg:informant#informant"
   }
 }
 
