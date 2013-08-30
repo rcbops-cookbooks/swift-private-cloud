@@ -93,19 +93,6 @@ default["swift-private-cloud"]["object"]["config"]["object-updater"]["node_timeo
 default["swift-private-cloud"]["object"]["config"]["object-updater"]["conn_timeout"] = 5
 default["swift-private-cloud"]["object"]["config"]["object-updater"]["slowdown"] = 0.01
 
-# Proxy tuning -- note that any proxy-server config can be represented here
-default["swift-private-cloud"]["proxy"]["config"]["DEFAULT"]["backlog"] = 4096
-default["swift-private-cloud"]["proxy"]["config"]["DEFAULT"]["workers"] = 12
-
-default["swift-private-cloud"]["proxy"]["config"]["pipeline:main"]["pipeline"] = "catch_errors proxy-logging healthcheck cache ratelimit authtoken keystoneauth proxy-server"
-
-default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["node_timeout"] = 60
-default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["client_timeout"] = 60
-default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["conn_timeout"] = 3.5
-default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["error_suppression_interval"] = 60
-default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["error_suppression_limit"] = 10
-default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["object_post_as_copy"] = true
-
 # container tuning -- note that any container-server config can be represented here
 default["swift-private-cloud"]["container"]["config"]["DEFAULT"]["backlog"] = "4096"
 default["swift-private-cloud"]["container"]["config"]["DEFAULT"]["workers"] = "6"
@@ -134,7 +121,6 @@ default["swift-private-cloud"]["container"]["config"]["container-updater"]["acco
 default["swift-private-cloud"]["container"]["config"]["container-auditor"]["interval"] = 1800
 default["swift-private-cloud"]["container"]["config"]["container-auditor"]["containers_per_second"] = 200
 
-
 # account tuning -- note that any account-server config can be represented here
 default["swift-private-cloud"]["account"]["config"]["DEFAULT"]["backlog"] = 4096
 default["swift-private-cloud"]["account"]["config"]["DEFAULT"]["workers"] = 6
@@ -161,6 +147,19 @@ default["swift-private-cloud"]["account"]["config"]["account-reaper"]["interval"
 default["swift-private-cloud"]["account"]["config"]["account-reaper"]["node_timeout"] = 10
 default["swift-private-cloud"]["account"]["config"]["account-reaper"]["conn_timeout"] = 0.5
 default["swift-private-cloud"]["account"]["config"]["account-reaper"]["delay_reaping"] = 604800
+
+# Proxy tuning -- note that any proxy-server config can be represented here
+default["swift-private-cloud"]["proxy"]["config"]["DEFAULT"]["backlog"] = 4096
+default["swift-private-cloud"]["proxy"]["config"]["DEFAULT"]["workers"] = 12
+
+default["swift-private-cloud"]["proxy"]["config"]["pipeline:main"]["pipeline"] = "catch_errors proxy-logging healthcheck cache ratelimit authtoken keystoneauth proxy-logging proxy-server"
+
+default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["node_timeout"] = 60
+default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["client_timeout"] = 60
+default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["conn_timeout"] = 3.5
+default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["error_suppression_interval"] = 60
+default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["error_suppression_limit"] = 10
+default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["object_post_as_copy"] = true
 
 # drive_audit
 regex_patterns = [

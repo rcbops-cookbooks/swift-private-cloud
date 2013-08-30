@@ -22,6 +22,9 @@ include_recipe "swift-lite::object-server"
 
 common = node["swift-private-cloud"]["swift_common"]
 
+
+# For more configurable options and information please check either object-server.conf manpage
+# or object-server.conf-sample provided within the distributed package 
 default_options = {
   "DEFAULT" => {
     "bind_ip" => "0.0.0.0",
