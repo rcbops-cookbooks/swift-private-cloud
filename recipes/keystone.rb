@@ -56,12 +56,14 @@ dis_password = node["swift-private-cloud"]["dispersion"]["dis_key"]
 
 node.default["keystone"]["published_services"] = [swift_service]
 
-node.default["keystone"]["tenants"] = ["admin", auth_tenant, dis_tenant].uniq
+node.default["keystone"]["tenants"] = ["admin", auth_tenant, dis_tenant, "swiftops"].uniq
 node.default["keystone"]["users"] = {
   dis_user => {
     "password" => dis_password,
     "default_tenant" => dis_tenant,
-    "roles" => {}
+    "roles" => {
+      "admin" => ["reporter"]
+    }
   },
   auth_user => {
     "password" => auth_password,
@@ -85,7 +87,14 @@ node.default["keystone"]["users"] = {
     "roles" => {
       "Member" => ["admin"]
     }
-  }
+  },
+  "swiftops" => {
+    "password" => "swiftopsme",
+    "default_tenant" => "swiftops",
+    "roles" => {
+       "admin" => ["swiftops"]
+    }
+  }  
 }
 
 node.default["osops_networks"]["nova"] = node["swift-private-cloud"]["network"]["management"]
