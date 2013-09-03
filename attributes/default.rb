@@ -161,6 +161,11 @@ default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["error_sup
 default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["error_suppression_limit"] = 10
 default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["object_post_as_copy"] = true
 
+# rsync tuning
+default["swift-private-cloud"]["rsync"]["config"]["account"]["max connections"] = 8
+default["swift-private-cloud"]["rsync"]["config"]["container"]["max connections"] = 12
+default["swift-private-cloud"]["rsync"]["config"]["object"]["max connections"] = 18
+
 # drive_audit
 regex_patterns = [
   "\\berror\\b.*\\b(sd[a-z]{1,2}\\d?)\\b",
