@@ -120,8 +120,13 @@ template "/etc/swift/object-expirer.conf" do
 end
 
 # /etc/syslog-ng
-template "/etc/syslog-ng/conf.d/swift-ng.conf" do
-  source "admin/etc/syslog-ng/conf.d/swift-ng.conf.erb"
+# Leaving the old one for now (marcelo)
+##template "/etc/syslog-ng/conf.d/swift-ng.conf" do
+##  source "admin/etc/syslog-ng/conf.d/swift-ng.conf.erb"
+##  notifies :reload, "service[syslog-ng]", :delayed
+##end
+template "/etc/syslog-ng/syslog-ng.conf" do
+  source "admin/etc/syslog-ng/syslog-ng.conf.erb"
   notifies :reload, "service[syslog-ng]", :delayed
 end
 
