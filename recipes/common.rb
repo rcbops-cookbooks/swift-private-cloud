@@ -110,11 +110,19 @@ template "/etc/swift/mime.types" do
 end
 
 # /etc/syslog-ng
-template "/etc/syslog-ng/conf.d/swift-ng.conf" do
-  source "common/etc/syslog-ng/conf.d/swift-ng.conf.erb"
+# Leving old one for now (marcelo)
+##template "/etc/syslog-ng/conf.d/swift-ng.conf" do
+##  source "common/etc/syslog-ng/conf.d/swift-ng.conf.erb"
+##  variables(
+##    :remote_syslog_ip => node["swift-private-cloud"]["swift_common"]["syslog_ip"],
+##    :source => platform_family?("debian") ? "s_src" : "s_sys"
+##  )
+##  notifies :reload, "service[syslog-ng]", :delayed
+##end
+template "/etc/syslog-ng/syslog-ng.conf" do
+  source "common/etc/syslog-ng/syslog-ng.conf.erb"
   variables(
-    :remote_syslog_ip => node["swift-private-cloud"]["swift_common"]["syslog_ip"],
-    :source => platform_family?("debian") ? "s_src" : "s_sys"
+    :remote_syslog_ip => node["swift-private-cloud"]["swift_common"]["syslog_ip"]
   )
   notifies :reload, "service[syslog-ng]", :delayed
 end
