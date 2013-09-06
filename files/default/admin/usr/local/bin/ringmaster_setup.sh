@@ -1,10 +1,10 @@
 #!/bin/bash
 
 
-# Info: 
+# Info:
 #       Installs and setup the swift-ring-master from source. This script
 #       will setup the Ring Master server that normally runs on the admin box only.
-#       
+#
 #       NOTE: services are not started up at boot time unless you enable it
 #
 
@@ -12,7 +12,7 @@
 git_repo="https://github.com/pandemicsyn/swift-ring-master.git"
 
 id=$(whoami)
-if [[ "$id" != "root" ]]; then 
+if [[ "$id" != "root" ]]; then
     printf "\n Error: Must run as root or sudo privilege \n"
     exit 1
 fi
@@ -26,11 +26,16 @@ cd swift-ring-master
 printf "\n - Installing Ring Master \n"
 python setup.py -q install
 cp /usr/local/src/swift-ring-master/etc/swift/ring-master.conf-sample /etc/swift/ring-master.conf
-cp /usr/local/src/swift-ring-master/etc/init.d/swift-ring-master-init /etc/init.d/
-cp /usr/local/src/swift-ring-master/etc/init.d/swift-ring-master-wsgi-init /etc/init.d/
+
+sed -e s#/usr/bin/sw#/usr/local/bin/sw# /usr/local/src/swift-ring-master/etc/init.d/swift-ring-master-init > /etc/init.d/swift-ring-master-init
+sed -e s#/usr/bin/sw#/usr/local/bin/sw# /usr/local/src/swift-ring-master/etc/init.d/swift-ring-master-wsgi-init > /etc/init.d/swift-ring-master-wsgi-init
+
+chmod +x /etc/init.d/swift-ring-master-init
+chmod +x /etc/init.d/swift-ring-master-wsgi-init
+
 chown -R swift.swift /etc/swift
 
-if [[ ! -e /var/log/ring-master ]]; then 
+if [[ ! -e /var/log/ring-master ]]; then
     mkdir /var/log/ring-master
 fi
 chown swift.swift /var/log/ring-master
@@ -38,5 +43,4 @@ chown swift.swift /var/log/ring-master
 printf "\n - Starting up Ring Master services \n"
 /etc/init.d/swift-ring-master-init start && /etc/init.d/swift-ring-master-wsgi-init start
 
-exit 0 
-
+exit 0
