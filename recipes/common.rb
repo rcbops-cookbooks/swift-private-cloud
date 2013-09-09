@@ -40,8 +40,17 @@ directory "/var/lock/swift" do
 end
 
 # checks ring to make sure it's current
-# and updates it with the latest from the 
+# and updates it with the latest from the
 # ring master otherwise
+cron_d "swift_ring_check" do
+  mailto "swiftops"
+
+  minute "5"
+  user "swift"
+
+  command "/usr/bin/swift-ring-minion-server start -f -o"
+end
+
 template "/etc/cron.d/swift_ring_check" do
   source "common/etc/cron.d/swift_ring_check.erb"
 end
