@@ -164,7 +164,7 @@ end
 contrib_files = [
   "drivescout_wrapper.sh", "setup_local_swiftops.sh",
   "setup_remote_swiftops.exp", "udev_drive_rules.sh",
-  "ringmaster_setup.sh"]
+  "ringmaster_setup.sh", "drivescout_setup.sh"]
 
 contrib_files.each do |file|
   cookbook_file "/usr/local/bin/#{file}" do
