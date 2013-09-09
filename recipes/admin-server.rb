@@ -33,11 +33,15 @@ package "dsh" do
 end
 
 cron_d "os_drivecheck" do
+  mailto "swiftops"
+
   user "swiftops"
   command "bash /usr/local/bin/drive_check"
 end
 
 cron_d "swift_recon_reports" do
+  mailto "swiftops"
+
   minute "50"
   hour "23"
   user "root"
@@ -46,6 +50,8 @@ cron_d "swift_recon_reports" do
 end
 
 cron_d "swift_dispersion_reports" do
+  mailto "swiftops"
+
   minute "50"
   hour "23"
   user "root"
