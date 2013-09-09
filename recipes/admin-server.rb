@@ -37,7 +37,7 @@ cron_d "os_drivecheck" do
   command "bash /usr/local/bin/drive_check"
 end
 
-cron_d "swift_recon" do
+cron_d "swift_recon_reports" do
   minute "50"
   hour "23"
   user "root"
@@ -45,7 +45,7 @@ cron_d "swift_recon" do
   command "/usr/local/bin/swift_recon_wrapper.sh"
 end
 
-cron_d "swift_dispersion" do
+cron_d "swift_dispersion_reports" do
   minute "50"
   hour "23"
   user "root"
