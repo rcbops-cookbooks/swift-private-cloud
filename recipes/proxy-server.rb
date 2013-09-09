@@ -80,7 +80,8 @@ default_options = {
   },
   "filter:keystoneauth" => {
     "use" => "egg:swift#keystoneauth",
-    "operator_roles" => "admin, swiftoperator"
+    "operator_roles" => "admin, swiftoperator",
+    "reseller_admin_role" => "reseller_admin"
   },
   "filter:healthcheck" => {
     "use" => "egg:swift#healthcheck"
