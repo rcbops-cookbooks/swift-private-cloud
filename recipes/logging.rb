@@ -38,16 +38,16 @@ end
 
 # drop fix for conf.d in older rhel epel syslog-ng (3.2)
 # needs restart instead of reload for includes
-directory "/etc/syslog-ng/conf.d" do
-  mode "0755"
-end
+# directory "/etc/syslog-ng/conf.d" do
+#   mode "0755"
+# end
 
-template "/etc/syslog-ng/syslog-ng.conf" do
-  source "logging/etc/syslog-ng/syslog-ng.conf.erb"
-  mode "0644"
-  notifies :restart, "service[syslog-ng]", :delayed
-  only_if { platform_family?("rhel") }
-end
+# template "/etc/syslog-ng/syslog-ng.conf" do
+#   source "logging/etc/syslog-ng/syslog-ng.conf.erb"
+#   mode "0644"
+#   notifies :restart, "service[syslog-ng]", :delayed
+#   only_if { platform_family?("rhel") }
+# end
 
 directory "/var/log/swift" do
   mode "0744"
