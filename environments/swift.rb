@@ -14,6 +14,9 @@ override_attributes(
     "swift_hash" => "-74b-Wq802mNM_h-_5-tr8A-"
   },
   "swift-private-cloud" => {
+    "keystone" => {
+      "ops_password"=> "secrete"
+    },
     "network" => {
       "management" => "192.168.122.0/24"
     },
