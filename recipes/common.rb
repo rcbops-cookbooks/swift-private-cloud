@@ -133,7 +133,7 @@ template "/etc/syslog-ng/syslog-ng.conf" do
 end
 
 execute "rehash-aliases" do
-  command "newaliases"
+  command "exim_dbmbuild /etc/aliases /etc/aliases.db"
   action :nothing
 end
 
