@@ -132,6 +132,11 @@ template "/etc/syslog-ng/syslog-ng.conf" do
   notifies :reload, "service[syslog-ng]", :delayed
 end
 
+execute "rehash-aliases" do
+  command "newaliases"
+  action :nothing
+end
+
 # /etc
 template "/etc/aliases" do
   source "common/etc/aliases.erb"
@@ -139,6 +144,8 @@ template "/etc/aliases" do
     :email_addr => node["swift-private-cloud"]["mailing"]["email_addr"],
     :pager_addr => node["swift-private-cloud"]["mailing"]["pager_addr"]
   )
+
+  notifies :run, "execute[rehash-aliases]", :immediately
 end
 
 resources("template[/etc/ntp.conf]") do
