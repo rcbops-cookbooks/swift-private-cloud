@@ -51,10 +51,6 @@ cron_d "swift_ring_check" do
   command "/usr/bin/swift-ring-minion-server start -f -o"
 end
 
-template "/etc/cron.d/swift_ring_check" do
-  source "common/etc/cron.d/swift_ring_check.erb"
-end
-
 template "/etc/default/megaclisas-statusd" do
   source "common/etc/default/megaclisas-statusd.erb"
   only_if { platform_family?("debian") }
