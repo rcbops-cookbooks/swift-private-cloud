@@ -48,7 +48,7 @@ cron_d "swift_ring_check" do
   minute "5"
   user "swift"
 
-  command "/usr/bin/swift-ring-minion-server start -f -o"
+  command "/usr/local/bin/swift-ring-minion-server start -f -o"
 end
 
 template "/etc/default/megaclisas-statusd" do
