@@ -49,7 +49,7 @@ resources("template[/etc/swift/drive-audit.conf]").variables(
   package pkg
 end
 
-cron_d "storage_drivecheck" do
+cron_d "storage-drivecheck" do
   mailto "swiftops"
   user "swiftops"
 
@@ -80,6 +80,15 @@ cron_d "xfs-corruption-check" do
 
   minute "*/5"
   command "/usr/local/bin/xfs_corruption_check.sh"
+end
+
+cron_d "swift-ring-check" do
+  mailto "swiftops"
+  user "swift"
+
+  hour "*/1"
+  minute "5"
+  command "/usr/bin/swift-ring-minion-server start -f -o"
 end
 
 # /etc/default
