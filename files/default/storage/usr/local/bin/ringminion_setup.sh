@@ -53,7 +53,7 @@ git clone $git_repo
 
 cd swift-ring-master
 printf "\n - Installing Ring Master \n"
-python setup.py -q install
+python setup.py -q install --prefix=/usr
 
 printf "\n - Setting up Ring Minion files \n"
 

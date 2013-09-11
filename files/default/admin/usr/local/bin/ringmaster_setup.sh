@@ -24,11 +24,11 @@ git clone $git_repo
 
 cd swift-ring-master
 printf "\n - Installing Ring Master \n"
-python setup.py -q install
-cp /usr/local/src/swift-ring-master/etc/swift/ring-master.conf-sample /etc/swift/ring-master.conf
+python setup.py -q install --prefix=/usr
 
-sed -e s#/usr/bin/sw#/usr/local/bin/sw# /usr/local/src/swift-ring-master/etc/init.d/swift-ring-master-init > /etc/init.d/swift-ring-master-init
-sed -e s#/usr/bin/sw#/usr/local/bin/sw# /usr/local/src/swift-ring-master/etc/init.d/swift-ring-master-wsgi-init > /etc/init.d/swift-ring-master-wsgi-init
+cp /usr/local/src/swift-ring-master/etc/swift/ring-master.conf-sample /etc/swift/ring-master.conf
+cp /usr/local/src/swift-ring-master/etc/init.d/swift-ring-master-init /etc/init.d/
+cp /usr/local/src/swift-ring-master/etc/init.d/swift-ring-master-wsgi-init /etc/init.d/
 
 chmod +x /etc/init.d/swift-ring-master-init
 chmod +x /etc/init.d/swift-ring-master-wsgi-init
