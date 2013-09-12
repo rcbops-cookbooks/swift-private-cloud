@@ -31,13 +31,6 @@ package "dsh" do
   only_if { platform_family?("debian") }
 end
 
-cron_d "os_drivecheck" do
-  mailto "swiftops"
-
-  user "swiftops"
-  command "bash /usr/local/bin/drive_check"
-end
-
 cron_d "swift_recon_reports" do
   mailto "swiftops"
 
@@ -125,11 +118,6 @@ template "/etc/swift/object-expirer.conf" do
 end
 
 # /etc/syslog-ng
-# Leaving the old one for now (marcelo)
-##template "/etc/syslog-ng/conf.d/swift-ng.conf" do
-##  source "admin/etc/syslog-ng/conf.d/swift-ng.conf.erb"
-##  notifies :reload, "service[syslog-ng]", :delayed
-##end
 template "/etc/syslog-ng/syslog-ng.conf" do
   source "admin/etc/syslog-ng/syslog-ng.conf.erb"
   notifies :reload, "service[syslog-ng]", :delayed
