@@ -52,12 +52,5 @@ override_attributes(
       "swift_hash_prefix" => "staticprefix", # this should be changed to something else
       "swift_hash_suffix" => "" # this should be defined as blank
     }
-  },
-
-  # this block is only necessary if you are using the cookbooks to install keystone (rather than using an existing keystone)
-  "osops_networks" => {
-    "nova" => "192.168.122.0/24",
-    "management" => "192.168.122.0/24",
-    "public" => "192.168.122.0/24"
   }
 )
