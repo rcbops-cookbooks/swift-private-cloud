@@ -12,6 +12,7 @@ cookbook "sysctl", git: "git://github.com/rcbops-cookbooks/sysctl", branch: "v4.
 cookbook "memcached-openstack", git: "git://github.com/rcbops-cookbooks/memcached-openstack", branch: "v4.1.2"
 cookbook "keystone", git: "git://github.com/rcbops-cookbooks/keystone", branch: "v4.1.2"
 cookbook "keepalived", git: "git://github.com/rcbops-cookbooks/keepalived", branch: "v4.1.2"
+cookbook "memcached", "1.4.0"
 
 group :chef_server do
   cookbook "chef-server"
