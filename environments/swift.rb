@@ -31,9 +31,9 @@ override_attributes(
       "swift_public_url"=> "" # should be set to the endpoint you desire
 
       # if using an existing keystone, define the following=>
-      # "keystone_admin_url"=> "http://ip=>port/v2.0"
-      # "keystone_internal_url"=> "http://ip=>port/v2.0"
-      # "keystone_public_url"=> "http://ip=>port/v2.0"
+      # "keystone_admin_url"=> "http://ip:port/v2.0"
+      # "keystone_internal_url"=> "http://ip:port/v2.0"
+      # "keystone_public_url"=> "http://ip:port/v2.0"
     },
 
     "dispersion"=> {
