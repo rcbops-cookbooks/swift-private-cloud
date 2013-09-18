@@ -238,6 +238,7 @@ default["swift-private-cloud"]["dispersion"]["dis_tenant"] = "dispersion"
 default["swift-private-cloud"]["dispersion"]["dis_user"] = "reporter"
 #default["swift-private-cloud"]["dispersion"]["dis_key"] = "<pw>"
 default["swift-private-cloud"]["dispersion"]["dis_coverage"] = "1"
+default["swift-private-cloud"]["dispersion"]["dis_concurrency"] = "5"
 
 # exim
 if platform_family?("rhel")
