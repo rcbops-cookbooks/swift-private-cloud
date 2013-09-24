@@ -45,15 +45,6 @@ template "/etc/default/megaclisas-statusd" do
 end
 
 # /etc/exim4
-if not node["swift-private-cloud"]["mailing"]["smarthost"]
-  nodelist = get_nodes_by_recipe("swift-private-cloud::admin-server")
-  if nodelist.length == 0
-    raise "Must specify swift-private-cloud/mailing/smarthost"
-  end
-
-  node.default["swift-private-cloud"]["mailing"]["smarthost"] = get_ip_for_net("swift-management", nodelist[0])
-end
-
 template "/etc/exim4/update-exim4.conf.conf" do
   source "common/etc/exim4/update-exim4.conf.conf.erb"
   variables(

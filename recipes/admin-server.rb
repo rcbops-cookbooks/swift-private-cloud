@@ -21,7 +21,7 @@ include_recipe "swift-private-cloud::attr-remap"
 include_recipe "swift-private-cloud::packages"
 include_recipe "swift-lite::management-server"
 include_recipe "swift-lite::common"
-include_recipe "swift-lite::ntp-server"
+include_recipe "swift-lite::ntp"
 include_recipe "swift-private-cloud::logging"
 include_recipe "swift-private-cloud::mail"
 
@@ -67,7 +67,8 @@ relay_hosts = relay_nets.join(platform_family?("debian") ? ";" :  " : ")
 template "/etc/exim4/update-exim4.conf.conf" do
   source "admin/etc/exim4/update-exim4.conf.conf.relay.erb"
   variables(
-    :relay_hosts => relay_hosts
+    :relay_hosts => relay_hosts,
+    :smarthost => node["swift-private-cloud"]["mailing"]["smarthost"]
   )
   notifies :run, "execute[update-exim-config]", :delayed
   only_if { platform_family?("debian") }
@@ -76,7 +77,8 @@ end
 template "/etc/exim/exim.conf" do
   source "admin/etc/exim4/exim.conf.erb"
   variables(
-    :relay_hosts => relay_hosts
+    :relay_hosts => relay_hosts,
+    :smarthost => node["swift-private-cloud"]["mailing"]["smarthost"]
   )
   notifies :restart, "service[#{node['exim']['platform']['service']}]", :delayed
   only_if { platform_family?("rhel") }
