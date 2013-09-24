@@ -197,11 +197,11 @@ default["swift-private-cloud"]["storage"]["sysctl"] = {
 }
 
 # mailing
-default["swift-private-cloud"]["mailing"]["email_addr"] = "me@mydomain.com"
-default["swift-private-cloud"]["mailing"]["pager_addr"] = "mepager@mydomain.com"
+default["swift-private-cloud"]["mailing"]["email_addr"] = "me@example.com"
+default["swift-private-cloud"]["mailing"]["pager_addr"] = "mepager@example.com"
 default["swift-private-cloud"]["mailing"]["smarthost"] = nil
 default["swift-private-cloud"]["mailing"]["relay_nets"] = nil  # array of cidr for relays
-default["swift-private-cloud"]["mailing"]["outgoing_domain"] = "swift.mydomain.com"
+default["swift-private-cloud"]["mailing"]["outgoing_domain"] = "swift.example.com"
 
 # versioning
 default["swift-private-cloud"]["versioning"]["versioning_system"] = "git"
