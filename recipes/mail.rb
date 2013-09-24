@@ -17,6 +17,21 @@
 # limitations under the License.
 #
 
+if not node["swift-private-cloud"]["mailing"]["smarthost"]
+  nodelist = get_nodes_by_recipe("swift-private-cloud::admin-server")
+  if nodelist.length == 0
+    raise "Must specify swift-private-cloud/mailing/smarthost"
+  end
+
+  network = "swift-management"
+  my_ip = get_ip_for_net(network, node)
+  smarthost_ip = get_ip_for_net(network, nodelist[0])
+
+  if smarthost_ip != my_ip
+    node.default["swift-private-cloud"]["mailing"]["smarthost"] = smarthost_ip
+  end
+end
+
 node["exim"]["platform"]["packages"].each do |pkg|
   package pkg do
     options node["swift-private-cloud"]["common"]["pkg_options"]

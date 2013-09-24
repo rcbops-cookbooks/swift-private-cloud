@@ -647,13 +647,24 @@ dnslookup:
 # later in this file. You might need to change the port number in the
 # remote_msa transport.
 #
+<% if @smarthost %>
+smarthost:
+  debug_print = "R: smarthost for $local_part@$domain"
+  driver = manualroute
+  domains = ! +local_domains
+  transport = remote_smtp_smarthost
+  route_list = * <%= @smarthost %> byname
+  host_find_failed = defer
+  same_domain_copy_routing = yes
+  no_more
+<% else %>
 #smarthost:
 #  driver = manualroute
 #  domains = ! +local_domains
 #  transport = remote_smtp
 #  route_data =
 #  no_more
-
+<% end %>
 
 # The remaining routers handle addresses in the local domain(s), that is those
 # domains that are defined by "domainlist local_domains" above.
