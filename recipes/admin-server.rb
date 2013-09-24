@@ -108,7 +108,7 @@ template "/etc/swift/dispersion.conf" do
     :ks_dis_tenant => node["swift-private-cloud"]["dispersion"]["dis_tenant"],
     :ks_dis_user => node["swift-private-cloud"]["dispersion"]["dis_user"],
     :ks_dis_key => node["swift-private-cloud"]["dispersion"]["dis_key"],
-    :ks_dis_cov => node["swift-private-cloud"]["dispersion"]["dis_coverage"]
+    :ks_dis_cov => node["swift-private-cloud"]["dispersion"]["dis_coverage"],
     :dis_concurrency => node["swift-private-cloud"]["dispersion"]["dis_concurrency"]
   )
 end
