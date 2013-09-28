@@ -6,7 +6,7 @@
     "swift-lite": {
       "locked_version": "4.1.2",
       "git": "git://github.com/rcbops-cookbooks/swift-lite",
-      "ref": "a8aaea553e2e9ae0b98954d85d8310c255f24edb"
+      "ref": "797fecfc00a7ef3aa5d55d486856f26967e9d529"
     },
     "mysql-openstack": {
       "locked_version": "1.0.14",
