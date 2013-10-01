@@ -13,6 +13,7 @@ cookbook "memcached-openstack", git: "git://github.com/rcbops-cookbooks/memcache
 cookbook "keystone", git: "git://github.com/rcbops-cookbooks/keystone", branch: "master"
 cookbook "keepalived", git: "git://github.com/rcbops-cookbooks/keepalived", branch: "master"
 cookbook "memcached", "1.4.0"
+cookbook "ntp", git: "git://github.com/opscode-cookbooks/ntp", branch: "master"
 
 group :chef_server do
   cookbook "chef-server"
