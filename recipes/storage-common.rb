@@ -97,8 +97,8 @@ end
 # /usr/local/bin
 template "/usr/local/bin/drive_mount_check.py" do
   source "storage/usr/local/bin/drive_mount_check.py.erb"
-  user node["swift"]["dsh"]["admin_user"]["name"]
-  mode "0500"
+  user "root"
+  mode "0755"
   variables(
     :email_addr => node["swift-private-cloud"]["mailing"]["email_addr"],
     :outdomain => node["swift-private-cloud"]["mailing"]["outgoing_domain"]
