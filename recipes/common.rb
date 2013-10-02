@@ -45,10 +45,21 @@ template "/etc/default/megaclisas-statusd" do
 end
 
 # /etc/exim4
+if not node["swift-private-cloud"]["mailing"]["relay_nets"]
+  relay_nets = ["127.0.0.1", "::::1"]
+else
+  relay_nets = node["swift-private-cloud"]["network"]
+end
+
+relay_hosts = relay_nets.join(platform_family?("debian") ? ";" :  " : ")
+
 template "/etc/exim4/update-exim4.conf.conf" do
   source "common/etc/exim4/update-exim4.conf.conf.erb"
   variables(
-    :outdomain => node["swift-private-cloud"]["mailing"]["outgoing_domain"],
+    :config_type => "satellite",
+    :local_interfaces => "127.0.0.1",
+    :hide_mailname => "true",
+    :outgoing_domain => node["swift-private-cloud"]["mailing"]["outgoing_domain"],
     :smarthost => node["swift-private-cloud"]["mailing"]["smarthost"]
   )
   notifies :run, "execute[update-exim-config]", :delayed
@@ -58,7 +69,9 @@ end
 template "/etc/exim/exim.conf" do
   source "common/etc/exim4/exim.conf.erb"
   variables(
-    :outdomain => node["swift-private-cloud"]["mailing"]["outgoing_domain"],
+    :local_interfaces => "127.0.0.1",
+    :outgoing_domain => node["swift-private-cloud"]["mailing"]["outgoing_domain"],
+    :relay_hosts => relay_hosts,
     :smarthost => node["swift-private-cloud"]["mailing"]["smarthost"]
   )
   notifies :restart, "service[#{node['exim']['platform']['service']}]", :delayed

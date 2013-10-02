@@ -61,16 +61,18 @@ template "/etc/default/git-daemon" do
 end
 
 # /etc/exim4
-
 if not node["swift-private-cloud"]["mailing"]["relay_nets"]
   relay_nets = node["swift-private-cloud"]["network"].values.uniq << "127.0.0.0/8"
+else
+  relay_nets = node["swift-private-cloud"]["network"]
 end
 
 relay_hosts = relay_nets.join(platform_family?("debian") ? ";" :  " : ")
 
 template "/etc/exim4/update-exim4.conf.conf" do
-  source "admin/etc/exim4/update-exim4.conf.conf.relay.erb"
+  source "common/etc/exim4/update-exim4.conf.conf.erb"
   variables(
+    :config_type => "internet",
     :relay_hosts => relay_hosts,
     :smarthost => node["swift-private-cloud"]["mailing"]["smarthost"]
   )
@@ -79,8 +81,9 @@ template "/etc/exim4/update-exim4.conf.conf" do
 end
 
 template "/etc/exim/exim.conf" do
-  source "admin/etc/exim4/exim.conf.erb"
+  source "common/etc/exim4/exim.conf.erb"
   variables(
+    :local_interfaces => "0.0.0.0",
     :relay_hosts => relay_hosts,
     :smarthost => node["swift-private-cloud"]["mailing"]["smarthost"]
   )
