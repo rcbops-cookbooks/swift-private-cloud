@@ -48,7 +48,7 @@ end
 
 cron_d "storage-drivecheck" do
   mailto "swiftops"
-  user "swiftops"
+  user "swift"
 
   minute "1"
   hour "*/2"
