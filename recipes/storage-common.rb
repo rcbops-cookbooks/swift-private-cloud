@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: swift-private-cloud
-# Recipe:: storage-server
+# Recipe:: storage-common
 #
 # Copyright 2012, Rackspace US, Inc.
 #
@@ -17,10 +17,7 @@
 # limitations under the License.
 #
 
-include_recipe "swift-private-cloud::common"
-include_recipe "swift-private-cloud::account-server"
-include_recipe "swift-private-cloud::container-server"
-include_recipe "swift-private-cloud::object-server"
+include_recipe "swift-lite::storage-common"
 
 # /etc/rsync.conf
 resources("template[/etc/rsyncd.conf]").instance_exec do
@@ -51,7 +48,7 @@ end
 
 cron_d "storage-drivecheck" do
   mailto "swiftops"
-  user "swiftops"
+  user "swift"
 
   minute "1"
   hour "*/2"
@@ -82,21 +79,7 @@ cron_d "xfs-corruption-check" do
   command "/usr/local/bin/xfs_corruption_check.sh"
 end
 
-cron_d "swift-ring-check" do
-  mailto "swiftops"
-  user "swift"
-
-  hour "*/1"
-  minute "5"
-  command "/usr/bin/swift-ring-minion-server start -f -o"
-end
-
 # /etc/default
-template "/etc/default/memcached" do
-  source "storage/etc/default/memcached.erb"
-  only_if { platform_family?("debian") }
-end
-
 template "/etc/default/rsync" do
   source "storage/etc/default/rsync.erb"
   only_if { platform_family?("debian") }
@@ -114,8 +97,8 @@ end
 # /usr/local/bin
 template "/usr/local/bin/drive_mount_check.py" do
   source "storage/usr/local/bin/drive_mount_check.py.erb"
-  user node["swift"]["dsh"]["admin_user"]["name"]
-  mode "0500"
+  user "root"
+  mode "0755"
   variables(
     :email_addr => node["swift-private-cloud"]["mailing"]["email_addr"],
     :outdomain => node["swift-private-cloud"]["mailing"]["outgoing_domain"]
@@ -136,12 +119,6 @@ end
 
 cookbook_file "/usr/local/bin/setup_drives.sh" do
   source "storage/usr/local/bin/setup_drives.sh"
-  user "root"
-  mode "0755"
-end
-
-cookbook_file "/usr/local/bin/ringminion_setup.sh" do
-  source "storage/usr/local/bin/ringminion_setup.sh"
   user "root"
   mode "0755"
 end

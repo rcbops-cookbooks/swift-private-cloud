@@ -17,6 +17,10 @@
 # limitations under the License.
 #
 
+include_recipe "swift-private-cloud::base"
+include_recipe "swift-private-cloud::ring-common"
+include_recipe "swift-private-cloud::storage-common"
+
 include_recipe "swift-lite::account-server"
 
 common = node["swift-private-cloud"]["swift_common"]
