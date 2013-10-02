@@ -17,11 +17,15 @@
 # limitations under the License.
 #
 
-include_recipe "swift-private-cloud::attr-remap"
-include_recipe "swift-private-cloud::common"
+include_recipe "swift-private-cloud::base"
+include_recipe "swift-private-cloud::ring-common"
+
 include_recipe "swift-lite::proxy-server"
 
 common = node["swift-private-cloud"]["swift_common"]
+
+# fix memcache defaults (for debian)
+
 
 # find memcache servers and keystone endpoint
 memcache_endpoints = get_realserver_endpoints(node["swift"]["memcache_role"], "memcached", "cache")
