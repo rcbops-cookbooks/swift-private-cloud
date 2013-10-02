@@ -18,7 +18,7 @@
 #
 
 if not node["swift-private-cloud"]["mailing"]["smarthost"]
-  nodelist = get_nodes_by_recipe("swift-private-cloud::admin-server")
+  nodelist = get_nodes_by_tag(node["swift"]["tags"]["management-server"])
   if nodelist.length == 0
     raise "Must specify swift-private-cloud/mailing/smarthost"
   end
