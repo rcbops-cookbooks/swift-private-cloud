@@ -19,7 +19,7 @@
 
 
 # pull the management host, for lookups later
-nodelist = get_nodes_by_recipe("swift-private-cloud::admin-server")
+nodelist = get_nodes_by_tag(node["swift"]["tags"]["management-server"])
 admin_node = nil
 if nodelist.length > 0
   admin_node = nodelist[0]

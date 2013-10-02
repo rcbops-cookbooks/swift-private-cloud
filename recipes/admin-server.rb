@@ -17,6 +17,10 @@
 # limitations under the License.
 #
 
+# Not sure how evil this is. We need a tag to attr map but the tag
+# in ::management-server happens too late
+tag node["swift"]["tags"]["management-server"]
+
 include_recipe "swift-private-cloud::attr-remap"
 include_recipe "swift-private-cloud::packages"
 include_recipe "swift-lite::management-server"
