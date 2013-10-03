@@ -19,8 +19,9 @@
 
 include_recipe "swift-private-cloud::base"
 include_recipe "swift-private-cloud::ring-common"
-
 include_recipe "swift-lite::proxy-server"
+include_recipe "swift-private-cloud::keystoneclient-patch"
+include_recipe "swift-private-cloud::swift-ratelimit-patch"
 
 common = node["swift-private-cloud"]["swift_common"]
 
