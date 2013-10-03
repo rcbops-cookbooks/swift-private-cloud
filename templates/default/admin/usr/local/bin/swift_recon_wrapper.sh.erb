@@ -23,13 +23,16 @@ weekold=7
 email_subj="Swift Recon Weekly Report"
 email_from="swift_reporter@swift.zeroaccess.org"
 email_to="swiftops"
-
-if [[ -e /usr/bin/bsd-mailx ]]; then 
-    mail_client="/usr/bin/bsd-mailx"
-    mail_opts=( -a "From: ${email_from}" )
-elif [[ -e /usr/bin/heirloom-mailx ]]; then 
-    mail_client="/usr/bin/heirloom-mailx"
-    mail_opts=( -r "${email_from}" )
+if [[ -x /bin/mailx ]]; then mail_client=/bin/mailx; fi
+if [[ -x /usr/bin/mailx ]]; then mail_client=/usr/bin/mailx; fi
+if [[ -n "${mail_client}" ]]; then
+    if ${mail_client} -V -B &>/dev/null; then
+	# heirloom has -V and -B
+	mail_opts=( -r "${email_from}")
+    else
+	# bsd-mailx and gnu mailutils do not have -V and -B
+	mail_opts=( -a "From: ${email_from}" )
+    fi
 else
     mail_client="None"
 fi
