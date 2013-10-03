@@ -177,7 +177,7 @@ end
 # Adding some helpful/needed packages
 centos_pkgs = [
   "patch", "dstat", "iptraf", "iptraf-ng", "htop",
-  "strace", "iotop", "bsd-mailx", "screen", "bonnie++"]
+  "strace", "iotop", "mailx", "screen", "bonnie++"]
 
 ubuntu_pkgs = [
   "python-software-properties", "patch", "debconf", "bonnie++", "dstat",
