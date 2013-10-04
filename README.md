@@ -98,7 +98,7 @@ Attributes
      * sysctl - key/value sysctl pairs, like { "net.ipv4.tcp_tw_recycle" => "1" }
    * mailing
      * email_addr - address to send notifications from
-     * pager_addr - ???
+     * pager_addr - used by scripts / crons as a more severe notification email address.
      * smarthost - ip of smarthost
      * outgoing_domain - domain suffix
    * versioning
