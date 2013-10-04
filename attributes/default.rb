@@ -255,19 +255,6 @@ elsif platform_family?("debian")
   }
 end
 
-# snmp
-if platform_family?("rhel")
-  default["snmp"]["platform"] = {
-    "packages" => ["net-snmp", "net-snmp-utils"],
-    "service" => "snmpd"
-  }
-elsif platform_family?("debian")
-  default["snmp"]["platform"] = {
-    "packages" => ["snmp", "snmpd"],
-    "service" => "snmpd"
-  }
-end
-
 # syslog-ng
 if platform_family?("rhel")
   default["syslog-ng"]["platform"] = {
