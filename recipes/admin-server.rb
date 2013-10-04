@@ -117,13 +117,6 @@ template "/etc/swift/dispersion.conf" do
   )
 end
 
-template "/etc/swift/object-expirer.conf" do
-  source "admin/etc/swift/object-expirer.conf.erb"
-  owner "swift"
-  group "swift"
-  mode "0644"
-end
-
 # /etc/syslog-ng
 template "/etc/syslog-ng/syslog-ng.conf" do
   source "admin/etc/syslog-ng/syslog-ng.conf.erb"
