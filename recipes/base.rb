@@ -176,12 +176,12 @@ end
 
 # Adding some helpful/needed packages
 centos_pkgs = [
-  "patch", "dstat", "iptraf", "iptraf-ng", "htop",
+  "patch", "dstat", "iptraf", "iptraf-ng", "htop", "sysstat",
   "strace", "iotop", "mailx", "screen", "bonnie++"]
 
 ubuntu_pkgs = [
   "python-software-properties", "patch", "debconf", "bonnie++", "dstat",
-  "ethtool", "python-configobj", "curl", "iptraf", "htop", "nmon",
+  "ethtool", "python-configobj", "curl", "iptraf", "htop", "nmon", "sysstat",
   "strace", "iotop", "debsums", "python-pip", "bsd-mailx", "screen"]
 
 packages = value_for_platform(
@@ -194,4 +194,18 @@ packages.each do |pkg|
   package pkg do
     action :install
   end
+end
+
+template "/etc/default/sysstat" do
+  source "common/etc/default/sysstat.erb"
+  user "root"
+  group "root"
+  mode "0644"
+  only_if { node.platform_family?("debian") }
+  notifies :restart, "service[sysstat]", :delayed
+end
+
+service "sysstat" do
+  supports :restart => true
+  action [:enable, :start]
 end
