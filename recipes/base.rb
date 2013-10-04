@@ -52,6 +52,7 @@ else
 end
 
 relay_hosts = relay_nets.join(platform_family?("debian") ? ";" :  " : ")
+smarthost = node["swift-private-cloud"]["mailing"]["smarthost"]
 
 template "/etc/exim4/update-exim4.conf.conf" do
   source "common/etc/exim4/update-exim4.conf.conf.erb"
@@ -60,7 +61,7 @@ template "/etc/exim4/update-exim4.conf.conf" do
     :local_interfaces => "127.0.0.1",
     :hide_mailname => "true",
     :outgoing_domain => node["swift-private-cloud"]["mailing"]["outgoing_domain"],
-    :smarthost => node["swift-private-cloud"]["mailing"]["smarthost"]
+    :smarthost => smarthost
   )
   notifies :run, "execute[update-exim-config]", :delayed
   only_if { platform_family?("debian") }
@@ -72,7 +73,7 @@ template "/etc/exim/exim.conf" do
     :local_interfaces => "127.0.0.1",
     :outgoing_domain => node["swift-private-cloud"]["mailing"]["outgoing_domain"],
     :relay_hosts => relay_hosts,
-    :smarthost => node["swift-private-cloud"]["mailing"]["smarthost"]
+    :smarthost => smarthost
   )
   notifies :restart, "service[#{node['exim']['platform']['service']}]", :delayed
   only_if { platform_family?("rhel") }
