@@ -70,15 +70,6 @@ cron_d "memcache-restart" do
   command "/usr/local/bin/check_memcache_wrapper.sh"
 end
 
-cron_d "swift-ring-check" do
-  mailto "swiftops"
-  user "swift"
-
-  hour "*/1"
-  minute "5"
-  command "/usr/bin/swift-ring-minion-server start -f -o"
-end
-
 # /etc/default
 template "/etc/default/memcached" do
   source "proxy/etc/default/memcached.erb"
@@ -115,10 +106,4 @@ template "/usr/local/bin/memcache_info.py" do
   source "proxy/usr/local/bin/memcache_info.py.erb"
   user "root"
   mode "0500"
-end
-
-cookbook_file "/usr/local/bin/ringminion_setup.sh" do
-  source "storage/usr/local/bin/ringminion_setup.sh"
-  user "root"
-  mode "0755"
 end
