@@ -77,7 +77,15 @@ template "/etc/default/memcached" do
 end
 
 # /etc/memcached.conf
-template "/etc/memcached.conf" do
+# kill double restarts from the memcached book that conditionally defines the resource
+begin
+  t = resources(:template => "/etc/memcached.conf")
+rescue Chef::Exceptions::ResourceNotFound
+  t = template("/etc/memcached.conf")
+end
+
+t.instance_exec do
+  cookbook "swift-private-cloud"
   source "proxy/etc/memcached.conf.erb"
   owner "root"
   group "root"
