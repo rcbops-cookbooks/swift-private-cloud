@@ -66,7 +66,8 @@ end
 relay_hosts = relay_nets.join(platform_family?("debian") ? ";" :  " : ")
 smarthost = node["swift-private-cloud"]["mailing"]["smarthost"]
 
-template "/etc/exim4/update-exim4.conf.conf" do
+# override base
+resources(:template => "/etc/exim4/update-exim4.conf.conf").instance_exec do
   source "common/etc/exim4/update-exim4.conf.conf.erb"
   variables(
     :config_type => (smarthost.nil?) ? "internet" : "satellite",
@@ -77,7 +78,8 @@ template "/etc/exim4/update-exim4.conf.conf" do
   only_if { platform_family?("debian") }
 end
 
-template "/etc/exim/exim.conf" do
+# override base
+resources(:template => "/etc/exim/exim.conf").instance_exec do
   source "common/etc/exim4/exim.conf.erb"
   variables(
     :local_interfaces => (smarthost.nil?) ? "0.0.0.0" : "127.0.0.1",
@@ -118,7 +120,8 @@ template "/etc/swift/dispersion.conf" do
 end
 
 # /etc/syslog-ng
-template "/etc/syslog-ng/syslog-ng.conf" do
+# override base
+resources(:template => "/etc/syslog-ng/syslog-ng.conf").instance_exec do
   source "admin/etc/syslog-ng/syslog-ng.conf.erb"
   notifies :reload, "service[syslog-ng]", :delayed
 end
@@ -127,7 +130,8 @@ end
 git_basedir = node["swift-private-cloud"]["versioning"]["repository_base"]
 ring_repo = node["swift-private-cloud"]["versioning"]["repository_name"]
 
-directory git_basedir do
+directory "git-repository-base" do
+  path git_basedir
   mode "0755"
   owner "swiftops"
   group "swiftops"
