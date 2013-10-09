@@ -32,7 +32,7 @@ end
 service_name = node["syslog-ng"]["platform"]["service"]
 
 service service_name do
-  supports :restart => true, :status => true
+  supports :restart => true, :status => true, :reload => true
   action [:enable, :start]
 end
 
