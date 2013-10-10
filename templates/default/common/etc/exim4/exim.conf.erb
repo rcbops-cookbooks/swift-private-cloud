@@ -410,7 +410,7 @@ acl_check_rcpt:
   # Deny unless the sender address can be routed. For proper verification of the
   # address, read the documentation on callouts and add the /callout modifier.
 
-  require verify        = sender
+#  require verify        = sender
 
   # Accept if the message comes from one of the hosts for which we are an
   # outgoing relay. It is assumed that such hosts are most likely to be MUAs,
