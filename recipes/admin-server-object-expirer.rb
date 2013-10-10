@@ -69,11 +69,12 @@ service "swift-object-expirer-service" do
   only_if { platform_family?("redhat") }
 end
 
-#service "swift-object-expirer-service" do
-#  pattern "swift-object-expirer"
-#  action [:enable, :start]
-#  only_if { platform_family?("debian") }
-#end
+service "swift-object-expirer-service" do
+  pattern "swift-object-expirer"
+  provider Chef::Provider::Service::Upstart
+  action [:enable, :start]
+  only_if { platform_family?("debian") }
+end
 
 # logged bug https://bugs.launchpad.net/ubuntu/+source/swift/+bug/1235495
 # when packages include an upstart job, this should be removed.
