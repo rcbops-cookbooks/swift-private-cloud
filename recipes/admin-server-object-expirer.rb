@@ -25,55 +25,40 @@
 include_recipe "swift-private-cloud::base"
 include_recipe "swift-lite::common"
 
-package "swift-proxy-package" do
-  package_name "openstack-swift-proxy"
+
+if platform_family?("rhel") then
+  object_expirer_bundled_svc = "openstack-swift-proxy"
+  svc = "openstack-swift-object-expirer"
+elsif node["platform"] == "ubuntu"
+  object_expirer_bundled_svc = "swift-object"
+  svc = "swift-object-expirer"
+else
+  Chef::Application.fatal!("Unsupported platform #{node['platform']}")
+end
+
+template "/etc/swift/object-expirer.conf" do
+  source "admin/etc/swift/object-expirer.conf.erb"
+  owner "swift"
+  group "swift"
+  mode "0644"
+  notifies :restart, "service[swift-object-expirer-service]", :delayed
+end
+
+package "swift object expirer package (#{object_expirer_bundled_svc})" do
+  package_name object_expirer_bundled_svc
   action :install
   options node["swift-private-cloud"]["common"]["pkg_options"]
-  only_if { platform_family?("redhat") }
 end
 
-package "swift-object-package" do
-  package_name "swift-object"
-  action :install
-  options node["swift-private-cloud"]["common"]["pkg_options"]
-  only_if { platform_family?("debian") }
-end
-
-file "swift-proxy.conf-file" do
-  path "/etc/swift/proxy-server.conf"
-  action :delete
-  only_if { platform_family?("redhat") }
-end
-
-file "swift-object.conf-file" do
-  path "/etc/swift/object-server.conf"
-  action :delete
-  only_if { platform_family?("debian") }
-end
-
-service "swift-proxy" do
-  pattern "swift-proxy-server"
+service "swift-object-expirer unwanted service" do
+  service_name object_expirer_bundled_svc
   action [:disable, :stop]
-  only_if { platform_family?("debian") }
 end
 
-service "swift-object" do
-  pattern "openstack-swift-object-server"
-  action [:disable, :stop]
-  only_if { platform_family?("debian") }
+file "remove object expirer's unwanted service's conf file" do
+  path "/etc/swift/#{object_expirer_bundled_svc.sub("openstack-","")}.conf"
+  action :delete
 end
-
-service "swift-object-expirer-service" do
-  pattern "openstack-swift-object-expirer"
-  action [:enable, :start]
-  only_if { platform_family?("redhat") }
-end
-
-#service "swift-object-expirer-service" do
-#  pattern "swift-object-expirer"
-#  action [:enable, :start]
-#  only_if { platform_family?("debian") }
-#end
 
 # logged bug https://bugs.launchpad.net/ubuntu/+source/swift/+bug/1235495
 # when packages include an upstart job, this should be removed.
@@ -83,7 +68,7 @@ cookbook_file "object-expirer upstart job" do
   owner "root"
   group "root"
   mode "0644"
-  only_if { platform_family?("debian") }
+  only_if { node['platform'] == "ubuntu" }
 end
 
 link "object expirer init script" do
@@ -92,13 +77,12 @@ link "object expirer init script" do
   owner "root"
   group "root"
   mode "755"
-  only_if { platform_family?("debian") }
+  only_if { node['platform'] == "ubuntu" }
 end
 
-template "/etc/swift/object-expirer.conf" do
-  source "admin/etc/swift/object-expirer.conf.erb"
-  owner "swift"
-  group "swift"
-  mode "0644"
-#  notifies :restart, "service[swift-object-expirer-service]", :delayed
+service "swift-object-expirer-service" do
+  service_name svc
+  action [:enable, :start]
+  only_if "[ -e /etc/swift/object.ring.gz ] && [ -e /etc/swift/object-expirer.conf ]"
 end
+
