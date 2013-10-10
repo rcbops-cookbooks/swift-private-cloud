@@ -25,19 +25,33 @@
 include_recipe "swift-private-cloud::base"
 include_recipe "swift-lite::common"
 
-package "swift-proxy-package" do
-  package_name "openstack-swift-proxy"
+
+if platform_family?("redhat") then
+  object_expirer_bundled_svc = "openstack-swift-proxy"
+  svc = "openstack-swift-object-expirer"
+else
+  object_expirer_bundled_svc = "swift-object"
+  svc = "swift-object-expirer"
+end
+
+package "swift-object-expirer-package" do
+  package_name object_expirer_bundled_svc
   action :install
   options node["swift-private-cloud"]["common"]["pkg_options"]
   only_if { platform_family?("redhat") }
 end
 
-package "swift-object-package" do
-  package_name "swift-object"
-  action :install
-  options node["swift-private-cloud"]["common"]["pkg_options"]
-  only_if { platform_family?("debian") }
+service "swift-object-expirer unwanted service" do
+  service_name object_expirer_bundled_svc
+  action [:disable, :stop]
 end
+
+service "swift-object-expirer-service" do
+  service_name svc
+  action [:enable, :start]
+  only_if "[ -e /etc/swift/object.ring.gz ]"
+end
+
 
 file "swift-proxy.conf-file" do
   path "/etc/swift/proxy-server.conf"
@@ -51,26 +65,16 @@ file "swift-object.conf-file" do
   only_if { platform_family?("debian") }
 end
 
-service "swift-proxy" do
-  pattern "swift-proxy-server"
-  action [:disable, :stop]
-  only_if { platform_family?("debian") }
-end
 
-service "swift-object" do
-  pattern "openstack-swift-object-server"
+
+service "swift-object-admin" do
+  service_name "openstack-swift-object-server"
   action [:disable, :stop]
   only_if { platform_family?("debian") }
 end
 
 service "swift-object-expirer-service" do
-  pattern "openstack-swift-object-expirer"
-  action [:enable, :start]
-  only_if { platform_family?("redhat") }
-end
-
-service "swift-object-expirer-service" do
-  pattern "swift-object-expirer"
+  service_name "swift-object-expirer"
   provider Chef::Provider::Service::Upstart
   action [:enable, :start]
   only_if { platform_family?("debian") }
@@ -101,5 +105,5 @@ template "/etc/swift/object-expirer.conf" do
   owner "swift"
   group "swift"
   mode "0644"
-#  notifies :restart, "service[swift-object-expirer-service]", :delayed
+  notifies :restart, "service[swift-object-expirer-service]", :delayed
 end
