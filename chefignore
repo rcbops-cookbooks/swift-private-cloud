@@ -90,7 +90,14 @@ Strainerfile
 ###########
 .vagrant
 Vagrantfile
+Vagranfile.d
 
 # Travis #
 ##########
 .travis.yml
+
+# Ruby #
+.ruby-version*
+.rvm*
+Gemfile*
+Thorfile
