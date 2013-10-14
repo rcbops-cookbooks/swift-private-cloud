@@ -36,19 +36,19 @@ else
 end
 
 if platform?("centos")
-  default["swift-private-clound"]["common"]["pkg_holds"] = [
+  default["swift-private-cloud"]["common"]["pkg_holds"] = [
     "openstack-swift", "python-swiftclient", "openstack-swift-account",
     "openstack-swift-container", "openstack-swift-object",
     "openstack-swift-proxy", "python-keystoneclient", "python-memcached",
     "python-keystone", "rsync", "memcached"]
 elsif platform?("ubuntu")
-  default["swift-private-clound"]["common"]["pkg_holds"] = [
+  default["swift-private-cloud"]["common"]["pkg_holds"] = [
     "swift", "python-swiftclient", "swift-account",
     "swift-container", "swift-object",
     "swift-proxy", "python-keystoneclient", "python-memcached",
     "python-keystone", "rsync", "memcached"]
 else
-  default["swift-private-clound"]["common"]["pkg_holds"] = []
+  default["swift-private-cloud"]["common"]["pkg_holds"] = []
 end
 
 # network
