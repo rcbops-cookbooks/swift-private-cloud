@@ -209,6 +209,9 @@ default["swift-private-cloud"]["versioning"]["repository_base"] = "/srv/git"
 default["swift-private-cloud"]["versioning"]["repository_name"] = "rings"
 #default["swift-private-cloud"]["versioning"]["repository_host"] = "ip/hostname"
 
+# ring master/minion
+default["swift-private-cloud"]["ring"]["management_host"] = nil # ip or hostname to override
+
 # keystone
 default["swift-private-cloud"]["keystone"]["region"] = "RegionOne"
 #default["swift-private-cloud"]["keystone"]["swift_admin_url"] = http://ip:port/v1/AUTH_%(tenant_id)s"

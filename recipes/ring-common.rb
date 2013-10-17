@@ -17,11 +17,27 @@
 # limitations under the License.
 #
 
-cookbook_file "/usr/local/bin/ringminion_setup.sh" do
-  source "storage/usr/local/bin/ringminion_setup.sh"
-  user "root"
-  mode "0755"
+# cookbook_file "/usr/local/bin/ringminion_setup.sh" do
+#   source "storage/usr/local/bin/ringminion_setup.sh"
+#   user "root"
+#   mode "0755"
+# end
+
+package "swift-ring-master-client" do
+  action :install
 end
+
+service "swift-ring-minion" do
+  action [ :disable, :stop ]
+end
+
+template "/etc/swift/ring-minion.conf" do
+  source "common/etc/swift/ring-minion.conf.erb"
+  variables(
+    :master_server => node["swift-private-cloud"]["ring"]["management_host"]
+  )
+end
+
 
 cron_d "swift-ring-check" do
   mailto "swiftops"
