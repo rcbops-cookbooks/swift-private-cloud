@@ -17,40 +17,67 @@
 # limitations under the License.
 #
 
-template "/etc/apt/preferences" do
-  source "common/etc/apt/preferences.erb"
-  only_if { platform_family?("debian") }
-end
+case node["platform_family"]
+when "rhel"
 
-apt_repository "dell" do
-  uri "http://linux.dell.com/repo/community/deb/latest"
-  distribution "/"
-  key "1285491434D8786F"
-  keyserver "hkps.pool.sks-keyservers.net"
-  only_if { platform_family?("debian") }
-end
+  include_recipe "yum::epel"
 
-apt_repository "megaraid" do
-  uri "http://hwraid.le-vert.net/ubuntu"
-  distribution node["lsb"]["codename"]
-  components ["main"]
-  only_if { platform_family?("debian") }
-end
+  yum_key "RPM-GPG-KEY-swift-extras" do
+    url "http://download.opensuse.org/repositories/home:/rpedde:/openstack/CentOS_CentOS-6/repodata/repomd.xml.key"
+    action :add
+  end
 
-apt_repository "cloudarchive-proposed" do
-  uri "http://ubuntu-cloud.archive.canonical.com/ubuntu"
-  distribution "precise-proposed/grizzly"
-  components ["main"]
-  key "5EDB1B62EC4926EA"
-  keyserver "hkps.pool.sks-keyservers.net"
-  only_if { platform_family?("debian") }
-end
+  yum_repository "swift-extras" do
+    repo_name "swift-extras"
+    key "RPM-GPG-KEY-swift-extras"
+    url "http://download.opensuse.org/repositories/home:/rpedde:/openstack/CentOS_CentOS-6/"
+    type "rpm-md"
+  end
 
-apt_repository "cloudarchive-updates" do
-  uri "http://ubuntu-cloud.archive.canonical.com/ubuntu"
-  distribution "precise-updates/grizzly"
-  components ["main"]
-  key "5EDB1B62EC4926EA"
-  keyserver "hkps.pool.sks-keyservers.net"
-  only_if { platform_family?("debian") }
+when "debian"
+
+  include_recipe "apt::default"
+
+  template "/etc/apt/preferences" do
+    source "common/etc/apt/preferences.erb"
+  end
+
+  apt_repository "dell" do
+    uri "http://linux.dell.com/repo/community/deb/latest"
+    distribution "/"
+    key "1285491434D8786F"
+    keyserver "hkps.pool.sks-keyservers.net"
+  end
+
+  apt_repository "megaraid" do
+    uri "http://hwraid.le-vert.net/ubuntu"
+    key "6005210E23B3D3B4"
+    keyserver "hkps.pool.sks-keyservers.net"
+    distribution node["lsb"]["codename"]
+    components ["main"]
+  end
+
+  apt_repository "cloudarchive-proposed" do
+    uri "http://ubuntu-cloud.archive.canonical.com/ubuntu"
+    distribution "precise-proposed/grizzly"
+    components ["main"]
+    key "5EDB1B62EC4926EA"
+    keyserver "hkps.pool.sks-keyservers.net"
+  end
+
+  apt_repository "cloudarchive-updates" do
+    uri "http://ubuntu-cloud.archive.canonical.com/ubuntu"
+    distribution "precise-updates/grizzly"
+    components ["main"]
+    key "5EDB1B62EC4926EA"
+    keyserver "hkps.pool.sks-keyservers.net"
+  end
+
+  apt_repository "swift-extras" do
+    uri "http://download.opensuse.org/repositories/home:/rpedde:/openstack/xUbuntu_12.04"
+    distribution "/"
+    key "http://download.opensuse.org/repositories/home:/rpedde:/openstack/xUbuntu_12.04/Release.key"
+  end
+
+
 end

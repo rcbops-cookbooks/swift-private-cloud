@@ -31,6 +31,29 @@ package "dsh" do
   only_if { platform_family?("debian") }
 end
 
+directory "/var/log/ring-master" do
+  mode "0700"
+  owner "swift"
+  action :create
+end
+
+package "swift-ring-master-server"
+package "swiftscout"
+
+template "/etc/swift/ring-master.conf" do
+  source "admin/etc/swift/ring-master.conf"
+end
+
+service "swift-ring-master" do
+  supports :status => true, :restart => true
+  action [ :enable, :start ]
+end
+
+service "swift-ring-master-wsgi" do
+  supports :status => true, :restart => true
+  action [ :enable, :start ]
+end
+
 cron_d "swift_recon_reports" do
   mailto "swiftops"
 

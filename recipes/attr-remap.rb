@@ -101,3 +101,12 @@ if not node["swift-private-cloud"]["versioning"]["repository_host"]
 
   node.default["swift-private-cloud"]["versioning"]["repository_host"] = get_ip_for_net("swift-management", admin_node)
 end
+
+# set up the ring master server
+if not node["swift-private-cloud"]["ring"]["management_host"]
+  if not admin_node
+    raise "Must specify swift-private-cloud/ring/management_host"
+  end
+
+  node.default["swift-private-cloud"]["ring"]["management_host"] = get_ip_for_net("swift-management", admin_node)
+end
