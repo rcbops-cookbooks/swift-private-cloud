@@ -2,43 +2,59 @@
 
 #
 # Info:
-#	A simple wrapper for swift dispersion report tool
+#	A simple script that generates daily swift dispersion reports
+#   and saves them under /var/log/swift/swift_info
+#
+#   The script will also take care of cleaning up old files that 
+#   no longer needs to be retained
 #
 
 
-
-### Variables ###
-info_base="/var/www/nginx-default/swift_info"
-dispersion_reports="/var/www/nginx-default/swift_info/dispersion_reports"
-dispersion_bin="/usr/bin/swift-dispersion-report"
-past_reports="/var/www/nginx-default/swift_info/dispersion_reports/previous_reports"
+#################
+### VARIABLES ###
+#################
+info_base="/var/log/swift/swift_info"
+dispersion_reports=${info_base}"/dispersion_reports"
+dispersion_bin=$(which swift-dispersion-report)
+past_reports=${dispersion_reports}"/previous_reports"
 cur_wday=$(date +"%A" | tr [A-Z] [a-z])
 cur_date=$(date +"%Y-%m-%d")
 filename="dispersion_report_${cur_wday}_${cur_date}.txt"
-retention=15
+retention=30
 weekold=7
 
 
-### Checks ###
+##############
+### CHECKS ###
+##############
+if [[ ! -d ${info_base} ]]; then 
+    mkdir ${info_base}
+    chown -R root.root ${info_base}
+fi
+
 if [[ ! -d "${dispersion_reports}" ]]; then
     mkdir ${dispersion_reports}
     mkdir ${past_reports}
-    chown -R www-data.www-data ${dispersion_reports}
+    chown -R root.root ${dispersion_reports}
 fi
 
 if [[ ! -d ${past_reports} ]]; then 
     mkdir ${past_reports}
-    chown -R www-data.www-data ${past_reports}
+    chown -R root.root ${past_reports}
 fi
 
 
-### Retention ###
+#########################
+### OLD FILES CLEANUP ###
+#########################
 /usr/bin/find ${past_reports} -type f -mtime +${retention} -exec rm -f {} \;
 /usr/bin/find ${dispersion_reports} -type f -mtime +${weekold} -exec mv -f {} ${past_reports}/ \;
 
 
-### Main Work ###
+#################
+### MAIN WORK ###
+#################
 ${dispersion_bin} | tee ${dispersion_reports}/${filename} &> /dev/null
-chown www-data.www-data ${dispersion_reports}/${filename} 
+chown root.root ${dispersion_reports}/${filename} 
 
 exit 0

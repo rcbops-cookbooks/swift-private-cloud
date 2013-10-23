@@ -55,8 +55,6 @@ service "swift-ring-master-wsgi" do
 end
 
 cron_d "swift_recon_reports" do
-  mailto "swiftops"
-
   minute "50"
   hour "23"
   user "root"
@@ -65,8 +63,6 @@ cron_d "swift_recon_reports" do
 end
 
 cron_d "swift_dispersion_reports" do
-  mailto "swiftops"
-
   minute "50"
   hour "23"
   user "root"
