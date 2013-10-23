@@ -2,16 +2,22 @@
 
 #
 # Info:
-#	A simple wrapper for recon reports which collects and stores
-#   the swift-recon runs and emails a weekly report on sundays
+#   A simple script that generates daily swift recon reports
+#   and saves them under /var/log/swift/swift_info
+#
+#   The script will also take care of cleaning up old files that 
+#   no longer needs to be retained
+#
+#   The script will also email out a recon report every Monday Morning
 #
 
 
-
-### Variables ###
-info_base="/var/www/nginx-default/swift_info"
-recon_reports="/var/www/nginx-default/swift_info/recon_reports"
-past_reports="/var/www/nginx-default/swift_info/recon_reports/previous_reports"
+#################
+### VARIABLES ###
+#################
+info_base="/var/log/swift/swift_info"
+recon_reports=${info_base}"/recon_reports"
+past_reports=${recon_reports}"/previous_reports"
 cur_wday=$(date +"%A" | tr [A-Z] [a-z])
 cur_date=$(date +"%Y-%m-%d")
 filename="recon_report_${cur_wday}_${cur_date}.txt"
@@ -19,7 +25,9 @@ retention=45
 weekold=7
 
 
-### Email Section ###
+#####################
+### EMAIL SECTION ###
+#####################
 email_subj="Swift Recon Weekly Report"
 email_from="swift_reporter@swift.zeroaccess.org"
 email_to="swiftops"
@@ -38,22 +46,31 @@ else
 fi
 
 
+###############################
 ### Options Passed to Recon ###
-# If provided it will be passed over to recon
+# If provided it will be passed
+# over to recon
 recon_bin="/usr/bin/swift-recon"
 recon_options=($1)
 
 
-### Checks ###
+##############
+### CHECKS ###
+##############
+if [[ ! -d ${info_base} ]]; then            
+    mkdir ${info_base}
+    chown -R root.root ${info_base}
+fi
+
 if [[ ! -d "${recon_reports}" ]]; then
     mkdir ${recon_reports}
     mkdir ${past_reports}
-    chown -R www-data.www-data ${recon_reports}
+    chown -R root.root ${recon_reports}
 fi
 
 if [[ ! -d ${past_reports} ]]; then 
     mkdir ${past_reports}
-    chown -R www-data.www-data ${past_reports}
+    chown -R root.root ${past_reports}
 fi
 
 if [[ -z ${recon_options} ]]; then 
@@ -61,12 +78,16 @@ if [[ -z ${recon_options} ]]; then
 fi
 
 
-### Retention ###
+#########################
+### OLD FILES CLEANUP ###
+#########################
 /usr/bin/find ${past_reports} -type f -mtime +${retention} -exec rm -f {} \;
 /usr/bin/find ${recon_reports} -type f -mtime +${weekold} -exec mv -f {} ${past_reports}/ \;
 
 
-### Main Work ###
+#################
+### MAIN WORK ###
+#################
 if [[ "${recon_options[@]}" == "--all" ]]; then 
     if [[ "${cur_wday}" == "sunday" ]]; then 
         if [[ "${mail_client}" != "None" ]]; then
@@ -78,9 +99,11 @@ if [[ "${recon_options[@]}" == "--all" ]]; then
     else
         ${recon_bin} ${recon_options[@]} | tee ${recon_reports}/${filename} &> /dev/null
     fi
-    chown www-data.www-data ${recon_reports}/${filename} 
+    chown root.root ${recon_reports}/${filename} 
 else
-    ${recon_bin} ${recon_options[@]} | ${mail_client} "${mail_opts[@]}" -s "${email_subj}" ${email_to}
+    if [[ "${mail_client}" != "None" ]]; then
+        ${recon_bin} ${recon_options[@]} | ${mail_client} "${mail_opts[@]}" -s "${email_subj}" ${email_to}
+    fi
 fi
 
 exit 0
