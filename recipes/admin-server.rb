@@ -43,6 +43,7 @@ package "swiftscout"
 template "/etc/swift/ring-master.conf" do
   mode "0644"
   owner "swift"
+  group "swift"
   source "admin/etc/swift/ring-master.conf"
 end
 
