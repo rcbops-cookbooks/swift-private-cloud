@@ -185,4 +185,3 @@ contrib_files.each do |file|
     mode "0755"
   end
 end
-
