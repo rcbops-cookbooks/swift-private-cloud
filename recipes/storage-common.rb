@@ -47,34 +47,25 @@ resources("template[/etc/swift/drive-audit.conf]").variables(
 end
 
 cron_d "storage-drivecheck" do
-  mailto "swiftops"
   user "swift"
-
   minute "1"
   hour "*/2"
-
   command "/usr/local/bin/drive_mount_check.py"
 end
 
 cron_d "swift-device-audit" do
-  mailto "swiftops"
   user "root"
-
   command "/usr/local/bin/swift-drive-audit-nextgen /etc/swift/drive-audit.conf 2>&1 | logger"
 end
 
 cron_d "swift-recon-cron" do
-  mailto "swiftops"
   user "swift"
-
   minute "*/10"
   command "/usr/bin/swift-recon-cron /etc/swift/object-server.conf"
 end
 
 cron_d "xfs-corruption-check" do
-  mailto "swiftops"
   user "root"
-
   minute "*/5"
   command "/usr/local/bin/xfs_corruption_check.sh"
 end

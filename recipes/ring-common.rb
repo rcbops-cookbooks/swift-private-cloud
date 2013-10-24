@@ -32,15 +32,15 @@ service "swift-ring-minion" do
 end
 
 template "/etc/swift/ring-minion.conf" do
+  owner "swift"
+  group "swift"
   source "common/etc/swift/ring-minion.conf.erb"
   variables(
     :master_server => node["swift-private-cloud"]["ring"]["management_host"]
   )
 end
 
-
 cron_d "swift-ring-check" do
-  mailto "swiftops"
   user "swift"
 
   hour "*/1"
