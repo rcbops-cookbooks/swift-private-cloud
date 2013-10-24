@@ -41,6 +41,8 @@ package "swift-ring-master-server"
 package "swiftscout"
 
 template "/etc/swift/ring-master.conf" do
+  mode "0644"
+  owner "swift"
   source "admin/etc/swift/ring-master.conf"
 end
 
@@ -114,10 +116,6 @@ directory "/etc/nginx/sites-available" do  # install nginx!
   recursive true
 end
 
-template "/etc/nginx/sites-available/default" do
-  source "admin/etc/nginx/sites-available/default.erb"
-end
-
 if not node["swift-private-cloud"]["dispersion"]["dis_key"]
   raise "Must set swift-private-cloud/dispersion/dis_key"
 end
@@ -177,10 +175,7 @@ template "/usr/local/bin/swift_recon_wrapper.sh" do
   mode "0500"
 end
 
-contrib_files = [
-  "drivescout_wrapper.sh", "setup_local_swiftops.sh",
-  "setup_remote_swiftops.exp", "udev_drive_rules.sh",
-  "ringmaster_setup.sh", "drivescout_setup.sh"]
+contrib_files = ["drivescout_wrapper.sh"]
 
 contrib_files.each do |file|
   cookbook_file "/usr/local/bin/#{file}" do
@@ -190,34 +185,3 @@ contrib_files.each do |file|
   end
 end
 
-# /var/www/nginx-default
-directory "/var/www/nginx-default/deploy/bonnie" do
-  recursive true
-end
-
-template "/var/www/nginx-default/deploy/bonnie/bonnietest.sh" do
-  source "admin/var/www/nginx-default/deploy/bonnie/bonnietest.sh.erb"
-  mode "0500"
-end
-
-directory "/var/www/nginx-default/deploy/swift" do
-  recursive true
-end
-
-template "/var/www/nginx-default/deploy/swift/set_swift_hold.sh" do
-  source "admin/var/www/nginx-default/deploy/swift/set_swift_hold.sh.erb"
-  mode "0500"
-end
-
-template "/var/www/nginx-default/deploy/swift/set_swift_to_install.sh" do
-  source "admin/var/www/nginx-default/deploy/swift/set_swift_to_install.sh.erb"
-  mode "0500"
-end
-
-directory "/var/www/nginx-default/swift_info" do
-  recursive true
-end
-
-template "/var/www/nginx-default/swift_info/placholder.txt" do
-  source "admin/var/www/nginx-default/swift_info/placholder.txt.erb"
-end
