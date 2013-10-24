@@ -1,0 +1,165 @@
+{
+  "name": "swift_detailed",
+  "description": "Swift Detailed Env",
+  "cookbook_versions": {
+  },
+  "json_class": "Chef::Environment",
+  "chef_type": "environment",
+  "default_attributes": {
+  },
+  "override_attributes": {
+    "swift-private-cloud": {
+      "network": {
+        "management": "192.168.1.0/24",
+        "exnet": "192.168.1.0/24"
+      },
+      "swift_common": {
+        "swift_hash_prefix": "f00b204e9800998ecf8427e",
+        "swift_hash_suffix": ""
+      },
+      "keystone": {
+        "swift_admin_url": "http://snet-myswift.fackecluster.ccc/v1/AUTH_%(tenant_id)s",
+        "swift_internal_url": "http://snet-myswift.fackecluster.ccc/v1/AUTH_%(tenant_id)s",
+        "swift_public_url": "http://pub-myswift.fackecluster.ccc/v1/AUTH_%(tenant_id)s",
+        "auth_user": "tokenvalidator",
+        "auth_tenant": "services",
+        "auth_password": "tokenme",
+        "ops_tenant": "swiftops",
+        "ops_user": "swiftops",
+        "ops_password": "swiftops"
+      },
+      "dispersion": {
+        "auth_url": "http://192.168.1.254:5000/v2.0",
+        "dis_tenant": "dispersion",
+        "dis_user": "reporter",
+        "dis_key": "j4MJBJrsB19bM",
+        "dis_coverage": "1",
+        "concurrency": "5"
+      },
+      "mailing": {
+        "email_addr": "fake@fackecluster.ccc",
+        "pager_addr": "fake@fackecluster.ccc",
+        "smarthost": "192.168.1.254",
+        "relay_net": "192.168.1.0/24",
+        "outgoing_domain": "swift.fackecluster.ccc"
+      },
+      "rsync": {
+        "config": {
+           "account": {"max connections": "5"},
+           "container": {"max connections": "8"},
+           "object": {"max connections": "12"}
+        }
+      },
+      "proxy": {
+        "memcache_maxmem": "2048",
+        "sim_connections": "3072",
+        "config": {
+            "DEFAULT": {
+                "workers": "12"
+            },
+                "pipline:main": {
+                    "pipeline": "catch_errors proxy-logging healthcheck cache ratelimit authtoken keystoneauth proxy-logging proxy-server"
+            },
+            "app:proxy-server": {
+                "node_timeout": "60",
+                "client_timeout": "60",
+                "conn_timeout": "3.5"
+            }
+        }
+      },
+      "object": {
+        "config": {
+            "DEFAULT": {
+                "workers": "12"
+            },
+            "app:object-server": {
+                "node_timeout": "3",
+                "conn_timeout": "0.5"
+            },
+            "object-replicator": {
+                "concurrency": "8",
+                "rsync_timeout": "900",
+                "rsync_io_timeout": "30",
+                "run_pause": "60",
+                "http_timeout": "60"
+            },
+            "object-updater": {
+                "concurrency": "6",
+                "node_timeout": "60",
+                "conn_timeout": "10"
+            }
+        }
+      },
+      "container": {
+        "config": {
+            "DEFAULT": {
+                "workers": "10"
+            },
+            "app:container-server": {
+                "node_timeout": "10",
+                "conn_timeout": "0.5",
+                "allow_versions": "True"
+            },
+            "container-replicator": {
+                "concurrency": "8",
+                "node_timeout": "15",
+                "conn_timeout": "0.5",
+                "run_pause": "60",
+                "reclaim_age": "604800"
+            },
+            "container-updater": {
+                "concurrency": "6",
+                "node_timeout": "15",
+                "conn_timeout": "10"
+            },
+            "container-auditor": {
+                "interval": "1800",
+                "containers_per_second": "200"
+            }
+        }
+      },
+      "account": {
+        "config": {
+            "DEFAULT": {
+                "workers": "10"
+            },
+            "account-replicator": {
+                "concurrency": "6",
+                "node_timeout": "15",
+                "conn_timeout": "0.5",
+                "run_pause": "60",
+                "reclaim_age": "604800"
+            },
+            "account-auditor": {
+                "interval": "1800",
+                "accounts_per_second": "200"
+            },
+            "account-reaper": {
+                "concurrency": "2",
+                "node_timeout": "10",
+                "conn_timeout": "0.5",
+                "delay_reaping": "604800"
+            }
+        }
+      },
+      "drive_audit": {
+        "minutes": "5",
+        "log_file_pattern": "/var/log/kern*",
+        "regex_patterns": [
+          "\\berror\\b.*\\b(sd[a-z]{1,2}\\d?)\\b",
+          "\\b(sd[a-z]{1,2}\d?)\\b.*\\berror\\b",
+          "\\berror\\b.*\\b(dm-[0-9]{1,2}\\d?)\\b",
+          "\\b(dm-[0-9]{1,2}\\d?)\\b.*\\berror\\b"
+        ]
+      }
+    },
+    "swift": {
+      "ntp": {
+        "servers": [
+          "ntp1.fackecluster.ccc",
+          "ntp2.fackecluster.ccc"
+        ]
+      }
+    }
+  }
+}
