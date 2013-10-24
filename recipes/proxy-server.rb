@@ -63,9 +63,7 @@ resources("template[/etc/swift/proxy-server.conf]").instance_exec do
 end
 
 cron_d "memcache-restart" do
-  mailto "swiftops"
   user "root"
-
   minute "*/2"
   command "/usr/local/bin/check_memcache_wrapper.sh"
 end

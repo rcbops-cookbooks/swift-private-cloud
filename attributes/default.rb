@@ -102,7 +102,7 @@ default["swift-private-cloud"]["container"]["config"]["DEFAULT"]["fallocate_rese
 
 default["swift-private-cloud"]["container"]["config"]["app:container-server"]["node_timeout"] = 3
 default["swift-private-cloud"]["container"]["config"]["app:container-server"]["conn_timeout"] = 0.5
-default["swift-private-cloud"]["container"]["config"]["app:container-server"]["allow_versions"] = "false"
+default["swift-private-cloud"]["container"]["config"]["app:container-server"]["allow_versions"] = "true"
 
 default["swift-private-cloud"]["container"]["config"]["container-replicator"]["per_diff"] = 1000
 default["swift-private-cloud"]["container"]["config"]["container-replicator"]["max_diffs"] = 100
