@@ -36,13 +36,51 @@ else
   Chef::Application.fatal!("Unsupported platform #{node['platform']}")
 end
 
+# For more configurable options and information please check either
+# object-expirer.conf manpage or object-expirer.conf-sample provided
+# within the distributed package
+default_options = {
+  "DEFAULT" => {
+    "log_name" => "object-expirer",
+    "log_facility" => "LOG_LOCAL4",
+    "log_level" => "INFO"
+  },
+  "pipeline:main" => {
+    "pipeline" => "catch_errors cache proxy-logging proxy-server"
+  },
+  "object-expirer" => {
+    "interval" => 300
+  },
+  "app:proxy-server" => {
+    "use" => "egg:swift#proxy",
+    "node_timeout" => 60,
+    "conn_timeout" => 2.5,
+    "allow_account_management" => "false"
+  },
+  "filter:cache" => {
+    "use" => "egg:swift#memcache"
+  },
+  "filter:catch_errors" => {
+    "use" => "egg:swift#catch_errors"
+  },
+  "filter:proxy-logging" => {
+    "use" => "egg:swift#proxy_logging"
+  }
+}
+
+overrides = { "DEFAULT" => node["swift-private-cloud"]["swift_common"].select { |k, _| k.start_with?("log_statsd_") }}
+
+if node["swift-private-cloud"]["object-expirer"] and node["swift-private-cloud"]["object-expirer"]["config"]
+  overrides = overrides.merge(node["swift-private-cloud"]["object-expirer"]["config"]) { |k, x, y| x.merge(y) }
+end
+
 template "/etc/swift/object-expirer.conf" do
-  source "admin/etc/swift/object-expirer.conf.erb"
+  source "admin/etc/swift/object-expirer.conf-new.erb"
   owner "swift"
   group "swift"
   mode "0644"
-  notifies :restart, "service[swift-object-expirer-service]", :delayed
-end
+  variables("config_options" => default_options.merge(overrides) { |k, x, y| x.merge(y) })
+end 
 
 package "swift object expirer package (#{object_expirer_bundled_svc})" do
   package_name object_expirer_bundled_svc
