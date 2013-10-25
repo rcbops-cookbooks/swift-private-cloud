@@ -35,7 +35,9 @@ unmounted = drivecount - mounted
 if unmounted > 0:
     outdomain = '<%= @outdomain %>'
     fromaddr = 'swift-alert@' + outdomain
-    toaddr = '<%= @email_addr %>'
+    toaddr = '<%= @email_addr %>' 
+    if not '@' in toaddr:
+        toaddr = toaddr + '@localhost'    
     subject = 'Drive(s) not mounted found on %s' % (gethostname(), )
     header = ('From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n'
               % (fromaddr, toaddr, subject))

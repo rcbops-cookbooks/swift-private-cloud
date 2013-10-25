@@ -24,6 +24,7 @@ starttime=$(date +"%b %e %T")
 endtime=$(date -d "-10 minutes"  +"%b %_d %T")
 
 emails="swiftops"
+fromaddr="swift-alert@localhost"
 
 lockfile="/tmp/.xfs_corruption_check"
 if [ -e $lockfile ]; then
@@ -46,7 +47,7 @@ if [ $? -eq 0 ]; then
 
         echo -e ${msg} > $mailtmp
         cat $tmpf >> $mailtmp
-        cat $mailtmp | mail -s "XFS Corruption detected on $host ($endtime - $starttime)" $emails
+        cat $mailtmp | mail -s "XFS Corruption detected on $host ($endtime - $starttime)" -r "${fromaddr}" $emails
         rm -f $mailtmp
 fi
 
