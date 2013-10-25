@@ -69,10 +69,7 @@ default["swift-private-cloud"]["swift_common"]["log_statsd_default_sample_rate"]
 default["swift-private-cloud"]["swift_common"]["log_statsd_sample_rate_factor"] = 1.0
 default["swift-private-cloud"]["swift_common"]["log_statsd_metric_prefix"] = nil
 
-# object server tuning
-
-# Note that any object-server config can be represented here, but these are the
-# knobs most frequently frobbed.
+# object server tuning -- Note that any object-server config can be represented here
 default["swift-private-cloud"]["object"]["config"]["DEFAULT"]["workers"] = 8
 default["swift-private-cloud"]["object"]["config"]["DEFAULT"]["backlog"] = 4096
 default["swift-private-cloud"]["object"]["config"]["DEFAULT"]["disable_fallocate"] = false
@@ -160,6 +157,19 @@ default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["conn_time
 default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["error_suppression_interval"] = 60
 default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["error_suppression_limit"] = 10
 default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["object_post_as_copy"] = true
+
+# object-expirer tuning -- Note that any object-expirer config can be represented here
+default["swift-private-cloud"]["object-expirer"]["config"]["DEFAULT"]["log_name"] = "object-expirer"
+default["swift-private-cloud"]["object-expirer"]["config"]["DEFAULT"]["log_facility"] = "LOG_LOCAL4"
+default["swift-private-cloud"]["object-expirer"]["config"]["DEFAULT"]["log_level"] = "INFO"
+
+default["swift-private-cloud"]["object-expirer"]["config"]["object-expirer"]["interval"] = 300
+
+default["swift-private-cloud"]["object-expirer"]["config"]["pipeline:main"]["pipeline"] = "catch_errors cache proxy-logging proxy-server"
+
+default["swift-private-cloud"]["object-expirer"]["config"]["app:proxy-server"]["node_timeout"] = 60
+default["swift-private-cloud"]["object-expirer"]["config"]["app:proxy-server"]["conn_timeout"] = 2.5
+default["swift-private-cloud"]["object-expirer"]["config"]["app:proxy-server"]["allow_account_management"] = "false"
 
 # rsync tuning
 default["swift-private-cloud"]["rsync"]["config"]["account"]["max connections"] = 8
