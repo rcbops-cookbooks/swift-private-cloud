@@ -22,6 +22,7 @@ include_recipe "swift-private-cloud::packages"
 include_recipe "swift-lite::ntp"
 include_recipe "swift-private-cloud::logging"
 include_recipe "swift-private-cloud::mail"
+include_recipe "swift-private-cloud::snmp"
 include_recipe "swift-private-cloud::sysctl"
 include_recipe "swift-lite::common"
 include_recipe "git"
@@ -87,6 +88,18 @@ template "/etc/logrotate.d/swift" do
       "/sbin/service syslog-ng reload >/dev/null")
 end
 
+# /etc/snmp
+template "/etc/snmp/snmp.conf" do
+  source "common/etc/snmp/snmp.conf.erb"
+  notifies :restart, "service[#{node['snmp']['platform']['service']}]", :delayed
+end
+
+template "/etc/snmp/snmpd.conf" do
+  source "common/etc/snmp/snmpd.conf.erb"
+  notifies :restart, "service[#{node['snmp']['platform']['service']}]", :delayed
+end
+
+
 # /etc/swift
 template "/etc/swift/mime.types" do
   source "common/etc/swift/mime.types.erb"
@@ -95,16 +108,7 @@ template "/etc/swift/mime.types" do
   mode "0644"
 end
 
-# /etc/syslog-ng
-# Leving old one for now (marcelo)
-##template "/etc/syslog-ng/conf.d/swift-ng.conf" do
-##  source "common/etc/syslog-ng/conf.d/swift-ng.conf.erb"
-##  variables(
-##    :remote_syslog_ip => node["swift-private-cloud"]["swift_common"]["syslog_ip"],
-##    :source => platform_family?("debian") ? "s_src" : "s_sys"
-##  )
-##  notifies :reload, "service[syslog-ng]", :delayed
-##end
+# syslog-ng
 template "/etc/syslog-ng/syslog-ng.conf" do
   source "common/etc/syslog-ng/syslog-ng.conf.erb"
   variables(
@@ -113,12 +117,12 @@ template "/etc/syslog-ng/syslog-ng.conf" do
   notifies :reload, "service[syslog-ng]", :delayed
 end
 
+# Mail
 execute "rehash-aliases" do
   command "exim_dbmbuild /etc/aliases /etc/aliases.db"
   action :nothing
 end
 
-# /etc
 template "/etc/aliases" do
   source "common/etc/aliases.erb"
   variables(
@@ -129,28 +133,13 @@ template "/etc/aliases" do
   notifies :run, "execute[rehash-aliases]", :immediately
 end
 
+# NTP
 resources("template[/etc/ntp.conf]") do
   cookbook "swift-private-cloud"
   source "common/etc/ntp.conf"
 end
 
-# /usr/local/bin
-
-# if the pull-ring sufficies, we'll use that
-#
-
-# template "/usr/local/bin/retrievering.sh" do
-#   source "common/usr/local/bin/retrievering.sh.erb"
-#   user "root"
-#   mode "0700"
-# end
-
-# template "/usr/local/bin/ringverify.sh" do
-#   source "common/usr/local/bin/ringverify.sh.erb"
-#   user "root"
-#   mode "0700"
-# end
-
+# Swift Ring
 template "/usr/local/bin/pull-rings.sh" do
   source "common/usr/local/bin/pull-rings.sh.erb"
   user "swift"
@@ -166,12 +155,12 @@ end
 # Adding some helpful/needed packages
 centos_pkgs = [
   "patch", "dstat", "iptraf", "iptraf-ng", "htop", "sysstat",
-  "strace", "iotop", "mailx", "screen", "bonnie++"]
+  "strace", "iotop", "mailx", "screen", "bonnie++", "sqlite"]
 
 ubuntu_pkgs = [
   "python-software-properties", "patch", "debconf", "bonnie++", "dstat",
   "ethtool", "python-configobj", "curl", "iptraf", "htop", "nmon", "sysstat",
-  "strace", "iotop", "debsums", "python-pip", "bsd-mailx", "screen"]
+  "strace", "iotop", "debsums", "python-pip", "bsd-mailx", "screen", "sqlite3"]
 
 packages = value_for_platform(
   "centos" => { "default" => centos_pkgs },
