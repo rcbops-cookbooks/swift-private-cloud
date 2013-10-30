@@ -36,11 +36,11 @@ Requirements
 ============
 
 Client:
- * CentOS >= 6.3
+ * CentOS >= 6.4
  * Ubuntu >= 12.04
 
 Chef:
- * >= 0.11
+ * >= 11.4.0
 
 Other variants of Ubuntu and Fedora may work, something crazy like
 Solaris probably will not.  YMMV, objects in mirror, etc.
