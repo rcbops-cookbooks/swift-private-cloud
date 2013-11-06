@@ -1,12 +1,6 @@
 4.1.2 -> 4.2.x
 ================
 
-Global changes
----------------
-
-* SNMP has been removed from scope.  The snmp packages and configs can
-  be safely removed.
-
 CentOS notes
 ------------
 
