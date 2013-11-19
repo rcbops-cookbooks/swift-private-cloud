@@ -118,3 +118,15 @@ Chef::Log.error node["keystone"]["users"]
 include_recipe "mysql-openstack::server"
 include_recipe "keystone::setup"
 include_recipe "keystone::keystone-api"
+
+# drop an .openrc
+template "/root/.openrc" do
+  source "admin/root/openrc.erb"
+  variables(
+    :os_username => admin_user,
+    :os_password => admin_password,
+    :os_tenant_name => "admin",
+    :os_auth_url => node["swift-private-cloud"]["keystone"]["keystone_public_url"],
+    :os_region_name => node["swift-private-cloud"]["keystone"]["region"]
+  )
+end

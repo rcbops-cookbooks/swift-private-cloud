@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-pkg_holds = node["swift-private-clound"]["common"]["pkg_holds"]
+pkg_holds = node["swift-private-cloud"]["common"]["pkg_holds"]
 
 if pkg_holds
   case node["platform"]

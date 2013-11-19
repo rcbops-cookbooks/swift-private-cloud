@@ -56,10 +56,10 @@
 # +local_domains, +relay_to_domains, and +relay_from_hosts, respectively. They
 # are all colon-separated lists:
 
-local_interfaces = 127.0.0.1
+local_interfaces = <%= @local_interfaces %>
 domainlist local_domains = @ : localhost : localhost.localdomain
 domainlist relay_to_domains =
-hostlist   relay_from_hosts = 127.0.0.1 : ::::1
+hostlist   relay_from_hosts = <%= @relay_hosts %>
 
 # Most straightforward access control requirements can be obtained by
 # appropriate settings of the above options. In more complicated situations,
@@ -410,7 +410,7 @@ acl_check_rcpt:
   # Deny unless the sender address can be routed. For proper verification of the
   # address, read the documentation on callouts and add the /callout modifier.
 
-  require verify        = sender
+#  require verify        = sender
 
   # Accept if the message comes from one of the hosts for which we are an
   # outgoing relay. It is assumed that such hosts are most likely to be MUAs,
@@ -633,12 +633,21 @@ begin routers
 # If the DNS lookup fails, no further routers are tried because of the no_more
 # setting, and consequently the address is unrouteable.
 
+<% if @smarthost %>
 # dnslookup:
 #   driver = dnslookup
 #   domains = ! +local_domains
 #   transport = remote_smtp
 #   ignore_target_hosts = 0.0.0.0 : 127.0.0.0/8
 #   no_more
+<% else %>
+dnslookup:
+  driver = dnslookup
+  domains = ! +local_domains
+  transport = remote_smtp
+  ignore_target_hosts = 0.0.0.0 : 127.0.0.0/8
+  no_more
+<% end %>
 
 # Alternatively, comment out the above router and uncomment this one to
 # route all mail to a smarthost instead of sending it directly to the
@@ -647,6 +656,7 @@ begin routers
 # later in this file. You might need to change the port number in the
 # remote_msa transport.
 #
+<% if @smarthost %>
 smarthost:
   debug_print = "R: smarthost for $local_part@$domain"
   driver = manualroute
@@ -656,7 +666,14 @@ smarthost:
   host_find_failed = defer
   same_domain_copy_routing = yes
   no_more
-
+<% else %>
+#smarthost:
+#  driver = manualroute
+#  domains = ! +local_domains
+#  transport = remote_smtp
+#  route_data =
+#  no_more
+<% end %>
 
 # The remaining routers handle addresses in the local domain(s), that is those
 # domains that are defined by "domainlist local_domains" above.
@@ -767,6 +784,7 @@ localuser:
 
 begin transports
 
+<% if @smarthost %>
 # This transport is from the debian update conf conf template
 
 remote_smtp_smarthost:
@@ -778,13 +796,14 @@ remote_smtp_smarthost:
         }\
         {} \
       }
-  headers_rewrite = *@+local_domains $1@<%= @outdomain %> frs : *@$primary_hostname $1@<%= @outdomain %> frs
+  headers_rewrite = *@+local_domains $1@<%= @outgoing_domain %> frs : *@$primary_hostname $1@<%= @outgoing_domain %> frs
   return_path = ${if match_domain{$sender_address_domain}{+local_domains}\
         {\
-        ${sender_address_local_part}@<%= @outdomain %>}{\
+        ${sender_address_local_part}@<%= @outgoing_domain %>}{\
         ${if match_domain{$sender_address_domain}{$primary_hostname}{\
-        ${sender_address_local_part}@<%= @outdomain %>}fail}}}
+        ${sender_address_local_part}@<%= @outgoing_domain %>}fail}}}
   helo_data = $primary_hostname
+<% end %>
 
 # This transport is used for delivering messages over SMTP connections.
 

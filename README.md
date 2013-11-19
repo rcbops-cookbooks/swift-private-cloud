@@ -36,11 +36,11 @@ Requirements
 ============
 
 Client:
- * CentOS >= 6.3
+ * CentOS >= 6.4
  * Ubuntu >= 12.04
 
 Chef:
- * >= 0.11
+ * >= 11.4.0
 
 Other variants of Ubuntu and Fedora may work, something crazy like
 Solaris probably will not.  YMMV, objects in mirror, etc.
@@ -48,7 +48,7 @@ Solaris probably will not.  YMMV, objects in mirror, etc.
 This differs from the rcbops OpenStack Swift cookbooks in that it
 tries to do much less with the swift cluster.  Specifically:
 
- * It does not do swath auth.  It just does keystone.
+ * It does not do swauth auth.  It just does keystone.
 
  * It does not do ring management, or set up a repo for storing rings in.
 
@@ -98,7 +98,7 @@ Attributes
      * sysctl - key/value sysctl pairs, like { "net.ipv4.tcp_tw_recycle" => "1" }
    * mailing
      * email_addr - address to send notifications from
-     * pager_addr - ???
+     * pager_addr - used by scripts / crons as a more severe notification email address.
      * smarthost - ip of smarthost
      * outgoing_domain - domain suffix
    * versioning

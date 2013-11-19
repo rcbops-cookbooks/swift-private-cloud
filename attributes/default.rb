@@ -36,19 +36,19 @@ else
 end
 
 if platform?("centos")
-  default["swift-private-clound"]["common"]["pkg_holds"] = [
+  default["swift-private-cloud"]["common"]["pkg_holds"] = [
     "openstack-swift", "python-swiftclient", "openstack-swift-account",
     "openstack-swift-container", "openstack-swift-object",
     "openstack-swift-proxy", "python-keystoneclient", "python-memcached",
     "python-keystone", "rsync", "memcached"]
 elsif platform?("ubuntu")
-  default["swift-private-clound"]["common"]["pkg_holds"] = [
+  default["swift-private-cloud"]["common"]["pkg_holds"] = [
     "swift", "python-swiftclient", "swift-account",
     "swift-container", "swift-object",
     "swift-proxy", "python-keystoneclient", "python-memcached",
     "python-keystone", "rsync", "memcached"]
 else
-  default["swift-private-clound"]["common"]["pkg_holds"] = []
+  default["swift-private-cloud"]["common"]["pkg_holds"] = []
 end
 
 # network
@@ -69,10 +69,7 @@ default["swift-private-cloud"]["swift_common"]["log_statsd_default_sample_rate"]
 default["swift-private-cloud"]["swift_common"]["log_statsd_sample_rate_factor"] = 1.0
 default["swift-private-cloud"]["swift_common"]["log_statsd_metric_prefix"] = nil
 
-# object server tuning
-
-# Note that any object-server config can be represented here, but these are the
-# knobs most frequently frobbed.
+# object server tuning -- Note that any object-server config can be represented here
 default["swift-private-cloud"]["object"]["config"]["DEFAULT"]["workers"] = 8
 default["swift-private-cloud"]["object"]["config"]["DEFAULT"]["backlog"] = 4096
 default["swift-private-cloud"]["object"]["config"]["DEFAULT"]["disable_fallocate"] = false
@@ -102,7 +99,7 @@ default["swift-private-cloud"]["container"]["config"]["DEFAULT"]["fallocate_rese
 
 default["swift-private-cloud"]["container"]["config"]["app:container-server"]["node_timeout"] = 3
 default["swift-private-cloud"]["container"]["config"]["app:container-server"]["conn_timeout"] = 0.5
-default["swift-private-cloud"]["container"]["config"]["app:container-server"]["allow_versions"] = "false"
+default["swift-private-cloud"]["container"]["config"]["app:container-server"]["allow_versions"] = "true"
 
 default["swift-private-cloud"]["container"]["config"]["container-replicator"]["per_diff"] = 1000
 default["swift-private-cloud"]["container"]["config"]["container-replicator"]["max_diffs"] = 100
@@ -161,6 +158,19 @@ default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["error_sup
 default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["error_suppression_limit"] = 10
 default["swift-private-cloud"]["proxy"]["config"]["app:proxy-server"]["object_post_as_copy"] = true
 
+# object-expirer tuning -- Note that any object-expirer config can be represented here
+default["swift-private-cloud"]["object-expirer"]["config"]["DEFAULT"]["log_name"] = "object-expirer"
+default["swift-private-cloud"]["object-expirer"]["config"]["DEFAULT"]["log_facility"] = "LOG_LOCAL4"
+default["swift-private-cloud"]["object-expirer"]["config"]["DEFAULT"]["log_level"] = "INFO"
+
+default["swift-private-cloud"]["object-expirer"]["config"]["object-expirer"]["interval"] = 300
+
+default["swift-private-cloud"]["object-expirer"]["config"]["pipeline:main"]["pipeline"] = "catch_errors cache proxy-logging proxy-server"
+
+default["swift-private-cloud"]["object-expirer"]["config"]["app:proxy-server"]["node_timeout"] = 60
+default["swift-private-cloud"]["object-expirer"]["config"]["app:proxy-server"]["conn_timeout"] = 2.5
+default["swift-private-cloud"]["object-expirer"]["config"]["app:proxy-server"]["allow_account_management"] = "false"
+
 # rsync tuning
 default["swift-private-cloud"]["rsync"]["config"]["account"]["max connections"] = 8
 default["swift-private-cloud"]["rsync"]["config"]["container"]["max connections"] = 12
@@ -197,17 +207,20 @@ default["swift-private-cloud"]["storage"]["sysctl"] = {
 }
 
 # mailing
-default["swift-private-cloud"]["mailing"]["email_addr"] = "me@mydomain.com"
-default["swift-private-cloud"]["mailing"]["pager_addr"] = "mepager@mydomain.com"
+default["swift-private-cloud"]["mailing"]["email_addr"] = "me@example.com"
+default["swift-private-cloud"]["mailing"]["pager_addr"] = "mepager@example.com"
 default["swift-private-cloud"]["mailing"]["smarthost"] = nil
 default["swift-private-cloud"]["mailing"]["relay_nets"] = nil  # array of cidr for relays
-default["swift-private-cloud"]["mailing"]["outgoing_domain"] = "swift.mydomain.com"
+default["swift-private-cloud"]["mailing"]["outgoing_domain"] = "swift.example.com"
 
 # versioning
 default["swift-private-cloud"]["versioning"]["versioning_system"] = "git"
 default["swift-private-cloud"]["versioning"]["repository_base"] = "/srv/git"
 default["swift-private-cloud"]["versioning"]["repository_name"] = "rings"
 #default["swift-private-cloud"]["versioning"]["repository_host"] = "ip/hostname"
+
+# ring master/minion
+default["swift-private-cloud"]["ring"]["management_host"] = nil # ip or hostname to override
 
 # keystone
 default["swift-private-cloud"]["keystone"]["region"] = "RegionOne"
@@ -238,6 +251,7 @@ default["swift-private-cloud"]["dispersion"]["dis_tenant"] = "dispersion"
 default["swift-private-cloud"]["dispersion"]["dis_user"] = "reporter"
 #default["swift-private-cloud"]["dispersion"]["dis_key"] = "<pw>"
 default["swift-private-cloud"]["dispersion"]["dis_coverage"] = "1"
+default["swift-private-cloud"]["dispersion"]["dis_concurrency"] = "5"
 
 # exim
 if platform_family?("rhel")
@@ -262,7 +276,7 @@ if platform_family?("rhel")
   }
 elsif platform_family?("debian")
   default["snmp"]["platform"] = {
-    "packages" => ["snmp", "snmpd"],
+    "packages" => ["snmp", "snmpd" ],
     "service" => "snmpd"
   }
 end

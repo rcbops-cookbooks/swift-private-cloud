@@ -16,7 +16,7 @@
                                                  #  system + hrSystem groups only
 view   systemonly  included   .1.3.6.1.2.1.1
 view   systemonly  included   .1.3.6.1.2.1.25.1
-view   systemview  included   .1  		80
+view   systemview  included   .1        80
 
 
                                                  #  Full access from the local host
@@ -45,6 +45,18 @@ sysLocation    SwiftCluster
 sysContact     swiftops
                                                  # Application + End-to-End layers
 sysServices    72
+
+
+###############################################################################
+#
+# LOGGING
+#
+
+# We do not want annoying "Connection from UDP: " messages in syslog.
+# If the following option is commented out, snmpd will print each incoming
+# connection, which can be useful for debugging.
+
+dontLogTCPWrappersConnects yes
 
 
 #

@@ -19,7 +19,7 @@
 
 
 # pull the management host, for lookups later
-nodelist = get_nodes_by_recipe("swift-private-cloud::admin-server")
+nodelist = get_nodes_by_tag(node["swift"]["tags"]["management-server"])
 admin_node = nil
 if nodelist.length > 0
   admin_node = nodelist[0]
@@ -100,4 +100,13 @@ if not node["swift-private-cloud"]["versioning"]["repository_host"]
   end
 
   node.default["swift-private-cloud"]["versioning"]["repository_host"] = get_ip_for_net("swift-management", admin_node)
+end
+
+# set up the ring master server
+if not node["swift-private-cloud"]["ring"]["management_host"]
+  if not admin_node
+    raise "Must specify swift-private-cloud/ring/management_host"
+  end
+
+  node.default["swift-private-cloud"]["ring"]["management_host"] = get_ip_for_net("swift-management", admin_node)
 end
