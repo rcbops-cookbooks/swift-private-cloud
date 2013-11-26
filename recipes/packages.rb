@@ -23,14 +23,14 @@ when "rhel"
   include_recipe "yum::epel"
 
   yum_key "RPM-GPG-KEY-swift-extras" do
-    url "http://download.opensuse.org/repositories/home:/rpedde:/openstack/CentOS_CentOS-6/repodata/repomd.xml.key"
+    url "http://download.opensuse.org/repositories/home:/rpcops:/grizzly/CentOS_CentOS-6/repodata/repomd.xml.key"
     action :add
   end
 
   yum_repository "swift-extras" do
     repo_name "swift-extras"
     key "RPM-GPG-KEY-swift-extras"
-    url "http://download.opensuse.org/repositories/home:/rpedde:/openstack/CentOS_CentOS-6/"
+    url "http://download.opensuse.org/repositories/home:/rpcops:/grizzly/CentOS_CentOS-6/"
     type "rpm-md"
   end
 
@@ -74,9 +74,9 @@ when "debian"
   end
 
   apt_repository "swift-extras" do
-    uri "http://download.opensuse.org/repositories/home:/rpedde:/openstack/xUbuntu_12.04"
+    uri "http://download.opensuse.org/repositories/home:/rpcops:/grizzly/xUbuntu_12.04"
     distribution "/"
-    key "http://download.opensuse.org/repositories/home:/rpedde:/openstack/xUbuntu_12.04/Release.key"
+    key "http://download.opensuse.org/repositories/home:/rpcops:/grizzly/xUbuntu_12.04/Release.key"
   end
 
 
