@@ -61,7 +61,7 @@ end
 cron_d "swift-recon-cron" do
   user "swift"
   minute "*/10"
-  command "/usr/bin/swift-recon-cron /etc/swift/object-server.conf"
+  command "test ! -f /etc/swift/*.ring.gz || /usr/bin/swift-recon-cron /etc/swift/object-server.conf"
 end
 
 cron_d "xfs-corruption-check" do
