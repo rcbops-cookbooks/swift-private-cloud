@@ -5,7 +5,7 @@
 metadata
 
 # rcbops/chef-cookbooks tagged versions
-cookbook "swift-lite", git: "git://github.com/rcbops-cookbooks/swift-lite", branch: "v4.1.3rc"
+cookbook "swift-lite", git: "git://github.com/rcbops-cookbooks/swift-lite", branch: "v4.1.3"
 cookbook "mysql-openstack", git: "git://github.com/rcbops-cookbooks/mysql-openstack", branch: "v4.1.3"
 cookbook "dsh", git: "git://github.com/rcbops-cookbooks/dsh", branch: "v4.1.3"
 cookbook "osops-utils", git: "git://github.com/rcbops-cookbooks/osops-utils", branch: "v4.1.3"
