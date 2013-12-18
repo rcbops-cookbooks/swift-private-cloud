@@ -1,4 +1,8 @@
-## v4.2.1 (?)
+## v4.2.1 (2013-12-18)
+
+Features:
+
+  - Use v4.2.1 release versions of cookbooks
 
 Bugfixes:
 
