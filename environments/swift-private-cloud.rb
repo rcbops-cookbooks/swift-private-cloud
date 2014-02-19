@@ -1,5 +1,5 @@
-name "swift"
-description "The swift environment"
+name "swift-private-cloud"
+description "Swift Private Cloud Environment"
 override_attributes(
   "vips" => {
     # We currently do not set up a loadbalanced vip--it is assumed that the customer will configure this if he has multiple proxies.
