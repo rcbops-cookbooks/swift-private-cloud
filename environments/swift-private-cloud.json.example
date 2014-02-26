@@ -1,6 +1,6 @@
 {
-  "name": "swift_detailed",
-  "description": "Swift Detailed Env",
+  "name": "swift-private-cloud",
+  "description": "Swift Private Cloud Environment",
   "cookbook_versions": {
   },
   "json_class": "Chef::Environment",
